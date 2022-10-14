@@ -94,5 +94,12 @@ export const replicants = {
 		global: nodecg().Replicant<DisplayableMessage[]>("global", `glimpse-graphics.game-settings.messages`, {defaultValue: []}),
 		team1: nodecg().Replicant<DisplayableMessage[]>("team1", `glimpse-graphics.game-settings.messages`, {defaultValue: []}),
 		team2: nodecg().Replicant<DisplayableMessage[]>("team2", `glimpse-graphics.game-settings.messages`, {defaultValue: []}),
+	},
+	ads: {
+		tvTimeout: {
+			currentTime: nodecg().Replicant<number>("currentTime", "glimpse-graphics.ads.tv-timeout", {defaultValue: 90, persistent: false}),
+			isRunning: nodecg().Replicant<boolean>("isRunning", "glimpse-graphics.ads.tv-timeout", {defaultValue: false, persistent: false}),
+			length: nodecg().Replicant<number>("length", "glimpse-graphics.ads.tv-timeout", {defaultValue: 90}),
+		}
 	}
 }

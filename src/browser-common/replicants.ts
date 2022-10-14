@@ -108,6 +108,13 @@ export async function loadReplicants() {
 			global: await replicant<DisplayableMessage[]>("global", `glimpse-graphics.game-settings.messages`, {defaultValue: []}),
 			team1: await replicant<DisplayableMessage[]>("team1", `glimpse-graphics.game-settings.messages`, {defaultValue: []}),
 			team2: await replicant<DisplayableMessage[]>("team2", `glimpse-graphics.game-settings.messages`, {defaultValue: []}),
+		},
+		ads: {
+			tvTimeout: {
+				currentTime: await replicant<number>("currentTime", `glimpse-graphics.ads.tv-timeout`, {defaultValue: 90, persistent: false}),
+			    isRunning: await replicant<boolean>("isRunning", `glimpse-graphics.ads.tv-timeout`, {defaultValue: false, persistent: false}),
+				length: await replicant<number>("length", `glimpse-graphics.ads.tv-timeout`, {defaultValue: 90}),
+			}
 		}
 	}
 }

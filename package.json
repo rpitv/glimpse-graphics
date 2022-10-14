@@ -101,6 +101,13 @@
         "file": "image-editor.html",
         "workspace": "Images",
         "width": "8"
+      },
+      {
+        "name": "tv-timeout",
+        "title": "TV Timeout",
+        "file": "tv-timeout.html",
+        "workspace": "Ads",
+        "width": "2"
       }
     ],
     "graphics": [

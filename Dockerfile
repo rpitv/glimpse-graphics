@@ -10,8 +10,9 @@ RUN npm install --production
 RUN apt-get update
 RUN apt-get install -y chromium
 
-COPY . ./bundles/glimpse-graphics
+COPY ./package*.json ./bundles/glimpse-graphics/
 RUN cd bundles/glimpse-graphics && npm ci
+COPY . ./bundles/glimpse-graphics/
 RUN cd bundles/glimpse-graphics && npm run build
 
 
