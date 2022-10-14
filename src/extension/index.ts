@@ -13,4 +13,5 @@ export = (nodecg: NodeCG): void => {
    */
   set(nodecg);
   require('./scoreboard-clock');
+  require('./tv-timeout-clock');
 };
