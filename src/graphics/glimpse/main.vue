@@ -33,3 +33,9 @@ body {
 }
 </style>
 
+<style lang="scss">
+body {
+	overflow: hidden;
+}
+</style>
+
