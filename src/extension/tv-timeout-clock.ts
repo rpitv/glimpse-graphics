@@ -35,5 +35,6 @@ replicants.ads.tvTimeout.isRunning.on('change', (newValue: boolean) => {
 			tvTimeoutTimer = null;
 		}
 		tvTimeoutTimerLastModified = null;
+		replicants.ads.tvTimeout.currentTime.value = replicants.ads.tvTimeout.length.value;
 	}
 })

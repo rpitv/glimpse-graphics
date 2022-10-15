@@ -1,22 +1,25 @@
 <template>
-	<div>
+	<div class="tv-timeout-wrapper">
 		<div class="timer-text">
 			{{ Math.ceil(replicants.ads.tvTimeout.currentTime.value) }}s
 		</div>
-		<n-button @click="isTvTimeoutRunning = !isTvTimeoutRunning" large :type="isTvTimeoutRunning ? 'error' : 'primary'">
+		<n-button class="start-stop-btn" @click="isTvTimeoutRunning = !isTvTimeoutRunning" large :type="isTvTimeoutRunning ? 'error' : 'primary'">
 			{{ isTvTimeoutRunning ? "Stop" : "Start" }} TV Timeout
 		</n-button>
-		<n-button @click="replicants.ads.tvTimeout.currentTime.value = replicants.ads.tvTimeout.length.value" large type="info">
-			Reset
-		</n-button>
 		<n-input-number min="0" v-model:value="replicants.ads.tvTimeout.length.value" />
+		<n-checkbox :disabled="!synth" v-model:checked="doCountdown">
+			TTS Countdown
+		</n-checkbox>
+		<div v-if="!synth">
+			TTS is not supported by your browser. Please try Edge, Chrome, or Opera.
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import {NButton, NInputNumber} from "naive-ui";
+import {NButton, NInputNumber, NCheckbox} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
-import {watchEffect} from "vue";
+import {ref, watch, watchEffect} from "vue";
 
 const zeroThruNineteen = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
 	'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
@@ -26,10 +29,12 @@ const alreadySpoken = new Set();
 const replicants = await loadReplicants();
 const isTvTimeoutRunning = replicants.ads.tvTimeout.isRunning;
 
+const doCountdown = ref<boolean>(window.speechSynthesis !== undefined);
 const synth = window.speechSynthesis;
-if(synth) {
+if(doCountdown.value && synth) {
 	watchEffect(() => {
 		if(
+			!doCountdown.value ||
 			!replicants.ads.tvTimeout.isRunning.value ||
 			alreadySpoken.has(Math.ceil(replicants.ads.tvTimeout.currentTime.value))
 		) {
@@ -54,6 +59,12 @@ if(synth) {
 		}
 	})
 }
+
+watch(() => replicants.ads.tvTimeout.length.value, () => {
+	if(!replicants.ads.tvTimeout.isRunning.value) {
+		replicants.ads.tvTimeout.currentTime.value = replicants.ads.tvTimeout.length.value;
+	}
+})
 
 function speakCurrentTime(withSeconds: boolean) {
 	const writtenNumber = numberToWrittenForm(Math.ceil(replicants.ads.tvTimeout.currentTime.value));
@@ -86,7 +97,14 @@ function numberToWrittenForm(num: number): string {
 </script>
 
 <style scoped lang="scss">
+.tv-timeout-wrapper {
+	text-align: center;
+}
 .timer-text {
 	font-size: 4em;
 }
+.start-stop-btn {
+	margin-bottom: 1em;
+}
+
 </style>
