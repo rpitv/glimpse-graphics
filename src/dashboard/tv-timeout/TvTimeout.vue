@@ -21,6 +21,7 @@ import {NButton, NInputNumber, NCheckbox} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
 import {ref, watch, watchEffect} from "vue";
 
+// TTS values
 const zeroThruNineteen = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
 	'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
 const tens = ['zero', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
@@ -29,10 +30,13 @@ const alreadySpoken = new Set();
 const replicants = await loadReplicants();
 const isTvTimeoutRunning = replicants.ads.tvTimeout.isRunning;
 
-const doCountdown = ref<boolean>(window.speechSynthesis !== undefined);
 const synth = window.speechSynthesis;
-if(doCountdown.value && synth) {
+const doCountdown = ref<boolean>(!!synth);
+
+// If browser has TTS support then add TTS watchers
+if(synth) {
 	watchEffect(() => {
+		// If TTS is off, countdown isn't running, or the given number has already been spoken, then skip this number.
 		if(
 			!doCountdown.value ||
 			!replicants.ads.tvTimeout.isRunning.value ||
@@ -41,6 +45,7 @@ if(doCountdown.value && synth) {
 			return;
 		}
 
+		// Speak the number on its own when less than 10s, otherwise say "# seconds" every 30s
 		if (Math.ceil(replicants.ads.tvTimeout.currentTime.value) <= 10) {
 			speakCurrentTime(false)
 		} else if(
@@ -53,6 +58,7 @@ if(doCountdown.value && synth) {
 		alreadySpoken.add(Math.ceil(replicants.ads.tvTimeout.currentTime.value));
 	})
 
+	// Reset list of already said numbers when the timer stops
 	watchEffect(() => {
 		if(replicants.ads.tvTimeout.isRunning.value === false) {
 			alreadySpoken.clear();
@@ -60,13 +66,18 @@ if(doCountdown.value && synth) {
 	})
 }
 
+// Keep the current time synced with the length input whenever the timer isn't running
 watch(() => replicants.ads.tvTimeout.length.value, () => {
 	if(!replicants.ads.tvTimeout.isRunning.value) {
 		replicants.ads.tvTimeout.currentTime.value = replicants.ads.tvTimeout.length.value;
 	}
 })
 
-function speakCurrentTime(withSeconds: boolean) {
+/**
+ * Speak the current time for the TV timeout via TTS
+ * @param withSeconds Whether "seconds" should be included at the end, e.g. "30 seconds" instead of "30"
+ */
+function speakCurrentTime(withSeconds: boolean): void {
 	const writtenNumber = numberToWrittenForm(Math.ceil(replicants.ads.tvTimeout.currentTime.value));
 	const utterThis = new SpeechSynthesisUtterance(writtenNumber + (withSeconds ? " seconds" : ""));
 	utterThis.lang = "en-US";
