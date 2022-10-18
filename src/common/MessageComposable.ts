@@ -8,8 +8,13 @@ export class MessageComposable {
 		this.namespace = namespace ?? "";
 	}
 
-	public async send(argument?: any): Promise<void> {
+	public async send(argument?: any): Promise<any> {
 		// @ts-ignore
-		await nodecg.sendMessage(this.namespace + '.' + this.channel, argument)
+		return await nodecg.sendMessage(this.namespace + '.' + this.channel, argument);
+	}
+
+	public listen(callback: (argument?: any, ack?: (returnVal: any) => void) => void): void {
+		// @ts-ignore
+		nodecg.listenFor(this.namespace + '.' + this.channel, callback)
 	}
 }

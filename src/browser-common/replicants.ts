@@ -89,7 +89,10 @@ export async function loadReplicants() {
 				currentTime: await replicant<number>("currentTime", `glimpse-graphics.ads.tv-timeout`, {defaultValue: 90, persistent: false}),
 			    isRunning: await replicant<boolean>("isRunning", `glimpse-graphics.ads.tv-timeout`, {defaultValue: false, persistent: false}),
 				length: await replicant<number>("length", `glimpse-graphics.ads.tv-timeout`, {defaultValue: 90}),
-			}
+			},
+			timeRemaining: await replicant<number>("timeRemaining", `glimpse-graphics.ads`, {defaultValue: 0, persistent: false}),
+			transitionDelay: await replicant<number>("transitionDelay", `glimpse-graphics.ads`, {defaultValue: 300}),
+			fadeBackIn: await replicant<boolean>("fadeBackIn", `glimpse-graphics.ads`, {defaultValue: true}),
 		}
 	}
 }
