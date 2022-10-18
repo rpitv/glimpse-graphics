@@ -100,6 +100,9 @@ export const replicants = {
 			currentTime: nodecg().Replicant<number>("currentTime", "glimpse-graphics.ads.tv-timeout", {defaultValue: 90, persistent: false}),
 			isRunning: nodecg().Replicant<boolean>("isRunning", "glimpse-graphics.ads.tv-timeout", {defaultValue: false, persistent: false}),
 			length: nodecg().Replicant<number>("length", "glimpse-graphics.ads.tv-timeout", {defaultValue: 90}),
-		}
+		},
+		timeRemaining: nodecg().Replicant<number>("timeRemaining", "glimpse-graphics.ads", {defaultValue: 0, persistent: false}),
+		transitionDelay: nodecg().Replicant<number>("transitionDelay", "glimpse-graphics.ads", {defaultValue: 300}),
+		fadeBackIn: nodecg().Replicant<boolean>("fadeBackIn", "glimpse-graphics.ads", {defaultValue: true}),
 	}
 }

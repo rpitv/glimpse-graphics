@@ -15,4 +15,5 @@ export = (nodecg: NodeCG): void => {
 	require('./daktronics-rtd/sync-controller');
 	require('./scoreboard-clock');
     require('./tv-timeout-clock');
+    require('./ad-controller');
 };
