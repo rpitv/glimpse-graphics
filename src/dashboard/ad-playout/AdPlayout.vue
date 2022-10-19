@@ -34,7 +34,7 @@
 	<h2>Settings</h2>
 	<label :for="transitionDelayId">
 		Transition Delay
-		<n-popover trigger="hover" max-width="200px">
+		<n-popover trigger="hover" :max-width="200">
 			<template #trigger>
 				ⓘ
 			</template>
@@ -44,7 +44,7 @@
 	<n-input-number class="transition-delay-input" :id="transitionDelayId" v-model:value="replicants.ads.transitionDelay.value" />
 	<label :for="fadeBackInSwitchId">
 		Fade Back In
-		<n-popover trigger="hover" max-width="200px">
+		<n-popover trigger="hover" :max-width="200">
 			<template #trigger>
 				ⓘ
 			</template>
