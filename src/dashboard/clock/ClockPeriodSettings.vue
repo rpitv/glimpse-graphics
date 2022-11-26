@@ -2,16 +2,32 @@
 	<div>
 		<n-grid :cols="2">
 			<n-grid-item>
-				<n-checkbox v-model:checked="isClockSynced">Sync Clock</n-checkbox>
+				<n-checkbox v-model:checked="isClockSynced"
+				>Sync Clock
+				</n-checkbox
+				>
 			</n-grid-item>
 			<n-grid-item>
-				<n-checkbox v-model:checked="arePeriodsSynced">Sync Periods</n-checkbox>
+				<n-checkbox v-model:checked="arePeriodsSynced"
+				>Sync Periods
+				</n-checkbox
+				>
 			</n-grid-item>
 			<n-grid-item>
-				<n-checkbox :disabled="isClockSynced" v-model:checked="isClockEnabled">Enable Clock</n-checkbox>
+				<n-checkbox
+					:disabled="isClockSynced"
+					v-model:checked="isClockEnabled"
+				>Enable Clock
+				</n-checkbox
+				>
 			</n-grid-item>
 			<n-grid-item>
-				<n-checkbox :disabled="arePeriodsSynced" v-model:checked="arePeriodsEnabled">Enable Periods</n-checkbox>
+				<n-checkbox
+					:disabled="arePeriodsSynced"
+					v-model:checked="arePeriodsEnabled"
+				>Enable Periods
+				</n-checkbox
+				>
 			</n-grid-item>
 		</n-grid>
 
@@ -22,11 +38,24 @@
 			</n-grid-item>
 			<n-grid-item>
 				<label>Overtime Count</label>
-				<n-input-number :min="0" v-model:value="overtimeCount" :disabled="isOvertimeInfinite" />
+				<n-input-number
+					:min="0"
+					v-model:value="overtimeCount"
+					:disabled="isOvertimeInfinite" />
 
 				<div class="overtime-checkboxes">
-					<n-checkbox :disabled="areShootoutsEnabled" v-model:checked="isOvertimeInfinite">Infinite Overtime</n-checkbox>
-					<n-checkbox :disabled="isOvertimeInfinite" v-model:checked="areShootoutsEnabled">Shootouts</n-checkbox>
+					<n-checkbox
+						:disabled="areShootoutsEnabled"
+						v-model:checked="isOvertimeInfinite"
+					>Infinite Overtime
+					</n-checkbox
+					>
+					<n-checkbox
+						:disabled="isOvertimeInfinite"
+						v-model:checked="areShootoutsEnabled"
+					>Shootouts
+					</n-checkbox
+					>
 				</div>
 			</n-grid-item>
 		</n-grid>
@@ -34,11 +63,10 @@
 </template>
 
 <script setup lang="ts">
+import { NCheckbox, NGrid, NGridItem, NInputNumber } from "naive-ui";
+import { loadReplicants } from "../../browser-common/replicants";
 
-import {NGrid, NGridItem, NCheckbox, NInputNumber} from "naive-ui";
-import {loadReplicants} from "../../browser-common/replicants";
-
-const replicants = await loadReplicants()
+const replicants = await loadReplicants();
 
 const isClockSynced = replicants.sync.values.clock;
 const isClockEnabled = replicants.gameSettings.clock.enabled;
@@ -50,14 +78,14 @@ const overtimeCount = replicants.gameSettings.periods.overtime.count;
 const isOvertimeInfinite = replicants.gameSettings.periods.overtime.isInfinite;
 
 const areShootoutsEnabled = replicants.gameSettings.periods.shootouts;
-
 </script>
 
 <style scoped lang="scss">
-	.mt-10 {
-		margin-top: 10px;
-	}
-	.overtime-checkboxes {
-		text-align: center;
-	}
+.mt-10 {
+	margin-top: 10px;
+}
+
+.overtime-checkboxes {
+	text-align: center;
+}
 </style>

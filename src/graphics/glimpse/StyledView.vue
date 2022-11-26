@@ -12,8 +12,7 @@
 </template>
 
 <script setup lang="ts">
-
-import {loadReplicants} from "../../browser-common/replicants";
+import { loadReplicants } from "../../browser-common/replicants";
 import ESPNScoreboardView from "./styles/espn/ScoreboardView.vue";
 import ESPNImageView from "./styles/espn/ImageView.vue";
 import TVModernScoreboardView from "./styles/rpitv-modern/ScoreboardView.vue";
@@ -22,5 +21,4 @@ import TVModernImageView from "./styles/rpitv-modern/ImageView.vue";
 const replicants = await loadReplicants();
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

@@ -1,14 +1,23 @@
 <template>
-	<div :class="'team team-' + side" :data-message-count="messages.length" :style="backgroundGradient">
+	<div
+		:class="'team team-' + side"
+		:data-message-count="messages.length"
+		:style="backgroundGradient">
 		<div class="score-section" :style="'width: ' + backgroundWidth + 'px'">
 			<div class="score-section-text" ref="scoreSectionTextElem">
-				<div class="team-score" v-if="side === 'right'" ref="teamScoreElem">
+				<div
+					class="team-score"
+					v-if="side === 'right'"
+					ref="teamScoreElem">
 					{{ team.score.value }}
 				</div>
 				<div class="team-abbr" :style="'width:' + teamAbbrWidth">
 					{{ team.abbreviation.value }}
 				</div>
-				<div class="team-score" v-if="side === 'left'" ref="teamScoreElem">
+				<div
+					class="team-score"
+					v-if="side === 'left'"
+					ref="teamScoreElem">
 					{{ team.score.value }}
 				</div>
 			</div>
@@ -20,10 +29,9 @@
 </template>
 
 <script setup lang="ts">
-
-import {computed, defineProps, nextTick, PropType, ref, watch} from "vue";
-import {loadReplicants} from "../../../../browser-common/replicants";
-import {Announcement} from "../../../../common/Announcement";
+import { computed, defineProps, nextTick, PropType, ref, watch } from "vue";
+import { loadReplicants } from "../../../../browser-common/replicants";
+import { Announcement } from "../../../../common/Announcement";
 
 const props = defineProps({
 	teamId: {
@@ -40,16 +48,25 @@ const props = defineProps({
 		type: Number,
 		default: 200
 	}
-})
+});
 
 const replicants = await loadReplicants();
 const team = replicants.teams[props.teamId];
-const messages = replicants.announcements[<'team1' | 'team2'>`team${props.teamId + 1}`];
+const messages =
+	replicants.announcements[<"team1" | "team2">`team${props.teamId + 1}`];
 
 const backgroundGradient = computed(() => {
 	const deg = props.side === "left" ? "-20deg" : "20deg";
-	return 'background-image: linear-gradient(' + deg + ', ' + team.primaryColor.value + ',' + team.secondaryColor.value + ');';
-})
+	return (
+		"background-image: linear-gradient(" +
+		deg +
+		", " +
+		team.primaryColor.value +
+		"," +
+		team.secondaryColor.value +
+		");"
+	);
+});
 
 const scoreSectionTextElem = ref<HTMLElement | null>(null);
 const requiredWidth = ref<number>(0);
@@ -60,45 +77,68 @@ const teamAbbrWidth = ref<string>("initial");
 //   the size of the team name and the size of the score. We compute this and then the parent can take it, compare it with
 //   the other side (if it exists), and then feed back to us the size we need to be in order for both sides to have the
 //   same width.
-watch(() => [team.abbreviation.value, team.score.value, scoreSectionTextElem.value], () => {
-	// Clear the team abbreviation width so we can get an accurate measurement of maximum _required_ width.
-	const tmp = teamAbbrWidth.value;
-	teamAbbrWidth.value = 'initial';
+watch(
+	() => [
+		team.abbreviation.value,
+		team.score.value,
+		scoreSectionTextElem.value
+	],
+	() => {
+		// Clear the team abbreviation width so we can get an accurate measurement of maximum _required_ width.
+		const tmp = teamAbbrWidth.value;
+		teamAbbrWidth.value = "initial";
 
-	nextTick(() => {
-		requiredWidth.value = scoreSectionTextElem.value?.offsetWidth ?? 0;
-		// Restore the abbreviation width.
-		teamAbbrWidth.value = tmp;
-	})
-})
+		nextTick(() => {
+			requiredWidth.value = scoreSectionTextElem.value?.offsetWidth ?? 0;
+			// Restore the abbreviation width.
+			teamAbbrWidth.value = tmp;
+		});
+	}
+);
 
 // Calculate the width of the team abbreviation area so that it can be centered in the available space.
-watch(() => [team.score.value, props.backgroundWidth], () => {
-	nextTick(() => {
-		teamAbbrWidth.value = `calc(${props.backgroundWidth}px - 1em - ${teamScoreElem.value?.offsetWidth ?? 0}px)`;
-	})
-})
+watch(
+	() => [team.score.value, props.backgroundWidth],
+	() => {
+		nextTick(() => {
+			teamAbbrWidth.value = `calc(${props.backgroundWidth}px - 1em - ${
+				teamScoreElem.value?.offsetWidth ?? 0
+			}px)`;
+		});
+	}
+);
 
-defineExpose({requiredWidth});
+defineExpose({ requiredWidth });
 
 function computedMessage(message: Announcement) {
 	return computed(() => {
-		if(!message.timer || !message.timer.visible) {
+		if (!message.timer || !message.timer.visible) {
 			return message.message;
 		} else {
-			const timeRemaining = message.timer.length - (message.timer.startedAt - replicants.scoreboard.clock.time.value);
+			const timeRemaining =
+				message.timer.length -
+				(message.timer.startedAt -
+					replicants.scoreboard.clock.time.value);
 
-			const minutes = Math.max(0, Math.floor(timeRemaining / 60000)).toString();
+			const minutes = Math.max(
+				0,
+				Math.floor(timeRemaining / 60000)
+			).toString();
 			// noinspection TypeScriptUnresolvedFunction - Not sure why this is happening in my IDE
-			let seconds = Math.max(0, Math.floor((timeRemaining % 60000) / 1000)).toString().padStart(2, '0');
+			let seconds = Math.max(
+				0,
+				Math.floor((timeRemaining % 60000) / 1000)
+			)
+				.toString()
+				.padStart(2, "0");
 
-			if(minutes === '0') {
-				return message.message + ' :' + seconds
+			if (minutes === "0") {
+				return message.message + " :" + seconds;
 			} else {
-				return message.message + ' ' + minutes + ':' + seconds
+				return message.message + " " + minutes + ":" + seconds;
 			}
 		}
-	})
+	});
 }
 </script>
 
@@ -143,7 +183,8 @@ function computedMessage(message: Announcement) {
 	white-space: nowrap;
 }
 
-.team-abbr, .team-score {
+.team-abbr,
+.team-score {
 	display: inline;
 
 	font-family: Biryani, sans-serif;
@@ -190,5 +231,4 @@ function computedMessage(message: Announcement) {
 		background-image: linear-gradient(to bottom, #eccb5e, #bda24a);
 	}
 }
-
 </style>

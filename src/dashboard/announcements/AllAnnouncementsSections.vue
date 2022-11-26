@@ -1,26 +1,26 @@
 <template>
-<div>
-	<n-grid :cols="2" :x-gap="10" :y-gap="10">
-		<n-grid-item>
-			<h2>Away Team</h2>
-			<AnnouncementsSection v-model:announcements="awayMessages" />
-		</n-grid-item>
-		<n-grid-item>
-			<h2>Home Team</h2>
-			<AnnouncementsSection v-model:announcements="homeMessages" />
-		</n-grid-item>
-		<n-grid-item>
-			<h2>Global</h2>
-			<AnnouncementsSection v-model:announcements="globalMessages" />
-		</n-grid-item>
-	</n-grid>
-</div>
+	<div>
+		<n-grid :cols="2" :x-gap="10" :y-gap="10">
+			<n-grid-item>
+				<h2>Away Team</h2>
+				<AnnouncementsSection v-model:announcements="awayMessages" />
+			</n-grid-item>
+			<n-grid-item>
+				<h2>Home Team</h2>
+				<AnnouncementsSection v-model:announcements="homeMessages" />
+			</n-grid-item>
+			<n-grid-item>
+				<h2>Global</h2>
+				<AnnouncementsSection v-model:announcements="globalMessages" />
+			</n-grid-item>
+		</n-grid>
+	</div>
 </template>
 
 <script setup lang="ts">
-import {NGrid, NGridItem} from "naive-ui";
+import { NGrid, NGridItem } from "naive-ui";
 import AnnouncementsSection from "./AnnouncementsSection.vue";
-import {loadReplicants} from "../../browser-common/replicants";
+import { loadReplicants } from "../../browser-common/replicants";
 
 const replicants = await loadReplicants();
 

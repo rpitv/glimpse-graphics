@@ -13,19 +13,15 @@
 					</n-collapse-item>
 				</n-collapse>
 			</div>
-			<template #fallback>
-				Loading...
-			</template>
+			<template #fallback> Loading...</template>
 		</Suspense>
 	</n-config-provider>
 </template>
 
 <script setup lang="ts">
-import {NConfigProvider, darkTheme, NCollapse, NCollapseItem} from "naive-ui";
+import { darkTheme, NCollapse, NCollapseItem, NConfigProvider } from "naive-ui";
 import ClockPeriodDisplay from "./ClockPeriodDisplay.vue";
 import ClockPeriodSettings from "./ClockPeriodSettings.vue";
-import ClockPeriodControl from "./ClockPeriodControl.vue";
-</script>
+import ClockPeriodControl from "./ClockPeriodControl.vue";</script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

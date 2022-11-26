@@ -3,22 +3,16 @@
 		<n-message-provider>
 			<Suspense>
 				<div>
-					<AllAnnouncementsSections/>
+					<AllAnnouncementsSections />
 				</div>
-				<template #fallback>
-					Loading...
-				</template>
+				<template #fallback> Loading...</template>
 			</Suspense>
 		</n-message-provider>
 	</n-config-provider>
 </template>
 
 <script setup lang="ts">
+import { darkTheme, NConfigProvider, NMessageProvider } from "naive-ui";
+import AllAnnouncementsSections from "./AllAnnouncementsSections.vue";</script>
 
-import {NConfigProvider, darkTheme, NMessageProvider} from "naive-ui";
-import AllAnnouncementsSections from "./AllAnnouncementsSections.vue";
-
-</script>
-
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

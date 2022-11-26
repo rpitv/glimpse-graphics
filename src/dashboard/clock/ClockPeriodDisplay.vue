@@ -1,23 +1,20 @@
 <template>
-<div>
+	<div>
+		<div class="display-text">
+			{{ formattedCurrentTime }}
+		</div>
 
-	<div class="display-text">
-		{{ formattedCurrentTime }}
+		<div class="display-text">
+			{{ formattedPeriod }}
+		</div>
 	</div>
-
-	<div class="display-text">
-		{{ formattedPeriod }}
-	</div>
-
-</div>
 </template>
 
 <script setup lang="ts">
-
-import {computed} from "vue";
-import {millisToString} from "../util";
-import {loadReplicants} from "../../browser-common/replicants";
-import {formatPeriod} from "../util";
+import { computed } from "vue";
+import { millisToString } from "../util";
+import { loadReplicants } from "../../browser-common/replicants";
+import { formatPeriod } from "../util";
 
 const replicants = await loadReplicants();
 
@@ -31,7 +28,6 @@ const overtimeCount = replicants.gameSettings.periods.overtime.count;
 const isOvertimeInfinite = replicants.gameSettings.periods.overtime.isInfinite;
 const areShootoutsEnabled = replicants.gameSettings.periods.shootouts;
 
-
 const formattedCurrentTime = computed<string>(() => {
 	if (isClockEnabled.value) {
 		return millisToString(currentTime.value);
@@ -44,8 +40,15 @@ const formattedPeriod = computed<string>(() => {
 	if (!arePeriodsEnabled.value) {
 		return "Periods Disabled";
 	}
-	const realOvertimeCount = isOvertimeInfinite.value ? Number.MAX_SAFE_INTEGER : overtimeCount.value;
-	return formatPeriod(currentPeriod.value || 1, periodCount.value, realOvertimeCount, areShootoutsEnabled.value);
+	const realOvertimeCount = isOvertimeInfinite.value
+		? Number.MAX_SAFE_INTEGER
+		: overtimeCount.value;
+	return formatPeriod(
+		currentPeriod.value || 1,
+		periodCount.value,
+		realOvertimeCount,
+		areShootoutsEnabled.value
+	);
 });
 </script>
 

@@ -3,17 +3,26 @@
 		<n-grid :cols="gridColumns">
 			<n-grid-item v-if="isAwayTeamEnabled" :span="4">
 				<div class="team-display">
-					<img v-if="awayTeamLogo" :src="awayTeamLogo" alt="Away Team Logo"/>
+					<img
+						v-if="awayTeamLogo"
+						:src="awayTeamLogo"
+						alt="Away Team Logo" />
 					<h1>{{ awayTeamName }}</h1>
 				</div>
 				<div class="score">{{ awayTeamScore }}</div>
 			</n-grid-item>
-			<n-grid-item v-if="isHomeTeamEnabled && isAwayTeamEnabled" :span="1" class="versus">
+			<n-grid-item
+				v-if="isHomeTeamEnabled && isAwayTeamEnabled"
+				:span="1"
+				class="versus">
 				<p>vs.</p>
 			</n-grid-item>
 			<n-grid-item v-if="isHomeTeamEnabled" :span="4">
 				<div class="team-display">
-					<img v-if="homeTeamLogo" :src="homeTeamLogo" alt="Home Team Logo"/>
+					<img
+						v-if="homeTeamLogo"
+						:src="homeTeamLogo"
+						alt="Home Team Logo" />
 					<h1>{{ homeTeamName }}</h1>
 				</div>
 				<div class="score">{{ homeTeamScore }}</div>
@@ -26,9 +35,9 @@
 </template>
 
 <script setup lang="ts">
-import {NGrid, NGridItem} from "naive-ui";
-import {loadReplicants} from "../../browser-common/replicants";
-import {computed} from "vue";
+import { NGrid, NGridItem } from "naive-ui";
+import { loadReplicants } from "../../browser-common/replicants";
+import { computed } from "vue";
 
 const replicants = await loadReplicants();
 

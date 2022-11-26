@@ -7,10 +7,9 @@
 </template>
 
 <script setup lang="ts">
+import { replicant } from "../../../../browser-common/replicant";
 
-import {replicant} from "../../../../browser-common/replicant";
-
-const images = await replicant('assets:images');
+const images = await replicant("assets:images");
 </script>
 
 <style scoped lang="scss">

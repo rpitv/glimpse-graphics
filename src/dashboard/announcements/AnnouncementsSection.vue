@@ -1,25 +1,39 @@
 <template>
 	<div>
-		<div v-if="selectedRows.length > 0 && tableData.filter(row => row.id !== 'empty').length > 0" class="remove-selected-section">
-			<n-button type="error" round secondary @click="removeSelectedAnnouncements">Remove Selected</n-button>
+		<div
+			v-if="
+				selectedRows.length > 0 &&
+				tableData.filter((row) => row.id !== 'empty').length > 0
+			"
+			class="remove-selected-section">
+			<n-button
+				type="error"
+				round
+				secondary
+				@click="removeSelectedAnnouncements"
+			>Remove Selected
+			</n-button
+			>
 		</div>
 		<n-data-table
 			:columns="tableCols"
 			:data="tableData"
 			:row-key="(row) => row.id"
 			:summary="createFooter"
-			@update:checked-row-keys="(newSelectedRows) => selectedRows = newSelectedRows"/>
+			@update:checked-row-keys="
+				(newSelectedRows) => (selectedRows = newSelectedRows)
+			" />
 	</div>
 </template>
 
 <script setup lang="ts">
-import {DataTableColumns, NButton, NDataTable, NInput, useMessage} from "naive-ui";
-import {computed, defineEmits, defineProps, h, PropType, ref, VNode} from "vue";
-import {Announcement} from "../../common/Announcement";
-import {v4} from "uuid";
-import {loadReplicants} from "../../browser-common/replicants";
-import {millisToString, parseTimeString} from "../util";
-import {RowKey} from "naive-ui/lib/data-table/src/interface";
+import { DataTableColumns, NButton, NDataTable, NInput, useMessage } from "naive-ui";
+import { computed, defineEmits, defineProps, h, PropType, ref, VNode } from "vue";
+import { Announcement } from "../../common/Announcement";
+import { v4 } from "uuid";
+import { loadReplicants } from "../../browser-common/replicants";
+import { millisToString, parseTimeString } from "../util";
+import { RowKey } from "naive-ui/lib/data-table/src/interface";
 import AnnouncementTimerControl from "./AnnouncementTimerControl.vue";
 
 const replicants = await loadReplicants();
@@ -28,11 +42,11 @@ const message = useMessage();
 const props = defineProps({
 	announcements: {
 		type: Array as PropType<Announcement[]>,
-		required: true,
-	},
+		required: true
+	}
 });
 
-const emit = defineEmits(["update:announcements"])
+const emit = defineEmits(["update:announcements"]);
 
 /**
  * Definition of the data for rows within the table. While the table is intended to display
@@ -42,12 +56,12 @@ const emit = defineEmits(["update:announcements"])
  *   string (e.g. an input to edit the value).
  */
 type AnnouncementRow = {
-	id: string, // ID is used not to display, but to identify the row
-	message: VNode | string,
-	timer: VNode | string,
-	actions?: VNode,
-	top?: VNode
-}
+	id: string; // ID is used not to display, but to identify the row
+	message: VNode | string;
+	timer: VNode | string;
+	actions?: VNode;
+	top?: VNode;
+};
 
 const selectedRows = ref<RowKey[]>([]);
 
@@ -55,7 +69,9 @@ const selectedRows = ref<RowKey[]>([]);
 //   To do this we need to store the input value in
 const messageEditInputs = ref<{ [id: string]: string }>({});
 // Casting because the type for the expand column seems to break things for me.
-const tableCols: DataTableColumns<AnnouncementRow> = <DataTableColumns<AnnouncementRow>>[
+const tableCols: DataTableColumns<AnnouncementRow> = <
+	DataTableColumns<AnnouncementRow>
+	>[
 	// An announcement can be sent to the top of the array.
 	{
 		title: "Top",
@@ -66,8 +82,7 @@ const tableCols: DataTableColumns<AnnouncementRow> = <DataTableColumns<Announcem
 				{
 					onClick: () => {
 						// do nothing if there are no announcements
-						if (row.id === "empty")
-							return;
+						if (row.id === "empty") return;
 
 						// find the current announcement and save it for reinsertion
 						let selectedAnnouncement: Announcement = {
@@ -76,13 +91,15 @@ const tableCols: DataTableColumns<AnnouncementRow> = <DataTableColumns<Announcem
 							timer: null,
 							type: "error"
 						};
-						const newAnnouncements = props.announcements.filter(announcement => {
-							if (row.id == announcement.id) {
-								selectedAnnouncement = announcement;
-								return false;
+						const newAnnouncements = props.announcements.filter(
+							(announcement) => {
+								if (row.id == announcement.id) {
+									selectedAnnouncement = announcement;
+									return false;
+								}
+								return true;
 							}
-							return true;
-						});
+						);
 
 						// reinsert the selected announcement to first and let the program know of the change
 						if (selectedAnnouncement.id != "null")
@@ -93,8 +110,8 @@ const tableCols: DataTableColumns<AnnouncementRow> = <DataTableColumns<Announcem
 					secondary: true,
 					circle: true
 				},
-				{default: () => "↑"}
-			)
+				{ default: () => "↑" }
+			);
 		}
 	},
 	// Announcements can be selected and then deleted in bulk
@@ -105,23 +122,24 @@ const tableCols: DataTableColumns<AnnouncementRow> = <DataTableColumns<Announcem
 	// Announcements with timers can be expanded to show timer controls
 	{
 		type: "expand",
-		expandable: (row: AnnouncementRow) => row.timer !== '-' && row.id !== "empty",
+		expandable: (row: AnnouncementRow) =>
+			row.timer !== "-" && row.id !== "empty",
 		renderExpand: (row: AnnouncementRow) => {
 			return h(AnnouncementTimerControl, {
 				announcementId: row.id
-			})
+			});
 		}
 	},
 	{
 		title: "Message",
 		key: "message",
 		// If this is the empty row, timer and actions columns should be hidden
-		colSpan: (row: AnnouncementRow) => row.id === "empty" ? 3 : 1,
+		colSpan: (row: AnnouncementRow) => (row.id === "empty" ? 3 : 1),
 		render: (row: AnnouncementRow) => {
 			// If message isn't just a string (i.e., it's a VNode), just return that VNode.
 			//   Otherwise, we can overwrite that string with our own NInput VNode which allows
 			//   the user to edit the string.
-			if (typeof row.message !== 'string') {
+			if (typeof row.message !== "string") {
 				return row.message;
 			}
 
@@ -133,20 +151,28 @@ const tableCols: DataTableColumns<AnnouncementRow> = <DataTableColumns<Announcem
 			// Return an NInput that allows the user to edit the message. Changes are not
 			//   applied until the NInput loses focus.
 			// noinspection TypeScriptValidateTypes - Incorrect typing?
-			return h(NInput, {
-				value: messageEditInputs.value[row.id],
-				onUpdateValue: (newValue: string) => messageEditInputs.value[row.id] = newValue,
-				onBlur: () => {
-					// Once blurred, find the announcement with the matching ID and update its
-					//  message to the value stored in the input
-					const announcement = props.announcements.find(a => a.id === row.id);
-					if (announcement) {
-						// We can edit the message directly since it's a property, instead of
-						// having to create a copy and then emit the new array
-						announcement.message = messageEditInputs.value[row.id];
+			return h(
+				NInput,
+				{
+					value: messageEditInputs.value[row.id],
+					onUpdateValue: (newValue: string) =>
+						(messageEditInputs.value[row.id] = newValue),
+					onBlur: () => {
+						// Once blurred, find the announcement with the matching ID and update its
+						//  message to the value stored in the input
+						const announcement = props.announcements.find(
+							(a) => a.id === row.id
+						);
+						if (announcement) {
+							// We can edit the message directly since it's a property, instead of
+							// having to create a copy and then emit the new array
+							announcement.message =
+								messageEditInputs.value[row.id];
+						}
 					}
-				}
-			}, {});
+				},
+				{}
+			);
 		}
 	},
 	{
@@ -174,9 +200,9 @@ const tableCols: DataTableColumns<AnnouncementRow> = <DataTableColumns<Announcem
 					secondary: true,
 					circle: true
 				},
-				{default: () => "✕"},
-			)
-		}
+				{ default: () => "✕" }
+			);
+		},
 	},
 ];
 
@@ -185,36 +211,46 @@ const tableData = computed<AnnouncementRow[]>(() => {
 	//   there are no announcements. This is better than the default empty table look, and
 	//   also allows us to use the "Summary" tool of <n-data-table> to be used as a footer which
 	//   contains the add message controls.
-	if(props.announcements.length === 0) {
-		return [{
-			id: "empty",
-			message: h("div", {"class": "no-announcements-text"}, {default: () => "No announcements"}),
-			timer: "-",
-			actions: h("div", {
-			}, {default: () => ""}),
-			top: h("div")
-		}];
+	if (props.announcements.length === 0) {
+		return [
+			{
+				id: "empty",
+				message: h(
+					"div",
+					{ class: "no-announcements-text" },
+					{ default: () => "No announcements" }
+				),
+				timer: "-",
+				actions: h("div", {}, { default: () => "" }),
+				top: h("div")
+			}
+		];
 	}
 
 	// Create a row for each announcement
-	return props.announcements.map((announcement: Announcement): AnnouncementRow => {
-		let timerToDisplay = null;
-		try {
-			if (announcement.timer) {
-				const timeRemaining = announcement.timer.length - (announcement.timer.startedAt - replicants.scoreboard.clock.time.value);
-				timerToDisplay = millisToString(timeRemaining);
+	return props.announcements.map(
+		(announcement: Announcement): AnnouncementRow => {
+			let timerToDisplay = null;
+			try {
+				if (announcement.timer) {
+					const timeRemaining =
+						announcement.timer.length -
+						(announcement.timer.startedAt -
+							replicants.scoreboard.clock.time.value);
+					timerToDisplay = millisToString(timeRemaining);
+				}
+			} catch (e) {
+				console.warn(e);
+				message.error("Invalid timer input");
 			}
-		} catch(e) {
-			console.warn(e);
-			message.error('Invalid timer input');
+			return {
+				id: announcement.id,
+				message: announcement.message,
+				timer: timerToDisplay ?? "-"
+			};
 		}
-		return {
-			id: announcement.id,
-			message: announcement.message,
-			timer: timerToDisplay ?? '-'
-		}
-	});
-})
+	);
+});
 
 /**
  * Add a new announcement to the list of announcements. Emits an update to the parent.
@@ -229,19 +265,21 @@ function addAnnouncement(messageInput: string, timerInput: string) {
 			id: v4(),
 			message: messageInput,
 			type: "info", // TODO allow user to select type
-			timer: timerInput ? {
-				visible: true,
-				startedAt: replicants.scoreboard.clock.time.value,
-				length: parseTimeString(timerInput),
-				timerEndsAction: "removeAnnouncement"
-			} : null,
-		}
+			timer: timerInput
+				? {
+					visible: true,
+					startedAt: replicants.scoreboard.clock.time.value,
+					length: parseTimeString(timerInput),
+					timerEndsAction: "removeAnnouncement"
+				}
+				: null
+		};
 
 		emit("update:announcements", [...props.announcements, newAnnouncement]);
 	} catch (e) {
 		// Failed to parse timer string
 		console.error(e);
-		message.error('Invalid timer input');
+		message.error("Invalid timer input");
 	}
 }
 
@@ -253,7 +291,9 @@ function removeSelectedAnnouncements() {
 	const selectedAnnouncementIds: string[] = tableData.value
 		.filter((row: AnnouncementRow) => selectedRows.value.includes(row.id))
 		.map((row: AnnouncementRow) => row.id);
-	const newAnnouncements = props.announcements.filter(announcement => !(selectedAnnouncementIds).includes(announcement.id));
+	const newAnnouncements = props.announcements.filter(
+		(announcement) => !selectedAnnouncementIds.includes(announcement.id)
+	);
 	emit("update:announcements", newAnnouncements);
 	selectedRows.value = [];
 }
@@ -263,14 +303,16 @@ function removeSelectedAnnouncements() {
  * @param removeId ID of the announcement to remove. If no announcement with this ID exists, does nothing.
  */
 function removeAnnouncement(removeId: string) {
-	const annIndex = props.announcements.findIndex((ann) => ann.id === removeId);
+	const annIndex = props.announcements.findIndex(
+		(ann) => ann.id === removeId
+	);
 	if (annIndex < 0) {
 		return;
 	}
 
 	const announcementsCopy = [...props.announcements];
 	announcementsCopy.splice(annIndex, 1);
-	emit('update:announcements', announcementsCopy);
+	emit("update:announcements", announcementsCopy);
 }
 
 let newAnnouncementMessageInput = "";
@@ -292,8 +334,9 @@ function createFooter() {
 					placeholder: "Message",
 					onUpdateValue: (value) => {
 						newAnnouncementMessageInput = value;
-					},
-				}, {}
+					}
+				},
+				{}
 			)
 		},
 		timer: {
@@ -303,27 +346,32 @@ function createFooter() {
 					placeholder: "mm:ss.S",
 					onUpdateValue: (value) => {
 						newAnnouncementTimerInput = value;
-					},
-				}, {}
+					}
+				},
+				{}
 			)
 		},
 		actions: {
 			value: h(
 				NButton,
 				{
-					onClick: () => addAnnouncement(newAnnouncementMessageInput, newAnnouncementTimerInput),
+					onClick: () =>
+						addAnnouncement(
+							newAnnouncementMessageInput,
+							newAnnouncementTimerInput
+						),
 					circle: true,
 					type: "success",
 					secondary: true,
 					class: "add-announcement-button"
 				},
-				{default: () => "+"}
-			)
+				{ default: () => "+" }
+			),
 		},
 		top: {
 			value: h("div")
 		}
-	}
+	};
 }
 </script>
 

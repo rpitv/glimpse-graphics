@@ -5,7 +5,9 @@
 				<n-input-group>
 					<n-button @click="decrementSecond">-1s</n-button>
 					<n-button @click="incrementSecond">+1s</n-button>
-					<n-input v-model:value="newLengthInput" placeholder="mm:ss.S"/>
+					<n-input
+						v-model:value="newLengthInput"
+						placeholder="mm:ss.S" />
 					<n-button @click="setNewLength">Save</n-button>
 				</n-input-group>
 			</n-grid-item>
@@ -13,23 +15,27 @@
 				<p>When timer ends...</p>
 				<n-radio
 					value="removeAnnouncement"
-					:checked="announcement?.timer?.timerEndsAction ==='removeAnnouncement'"
-					@change="timerEndsActionChanged"
-				>
+					:checked="
+						announcement?.timer?.timerEndsAction ===
+						'removeAnnouncement'
+					"
+					@change="timerEndsActionChanged">
 					Remove announcement
 				</n-radio>
 				<n-radio
 					value="removeTimer"
-					:checked="announcement?.timer?.timerEndsAction ==='removeTimer'"
-					@change="timerEndsActionChanged"
-				>
+					:checked="
+						announcement?.timer?.timerEndsAction === 'removeTimer'
+					"
+					@change="timerEndsActionChanged">
 					Remove timer
 				</n-radio>
 				<n-radio
 					value="nothing"
-					:checked="announcement?.timer?.timerEndsAction ==='nothing'"
-					@change="timerEndsActionChanged"
-				>
+					:checked="
+						announcement?.timer?.timerEndsAction === 'nothing'
+					"
+					@change="timerEndsActionChanged">
 					Do nothing
 				</n-radio>
 			</n-grid-item>
@@ -38,10 +44,10 @@
 </template>
 
 <script setup lang="ts">
-import {NButton, NInput, NInputGroup, NGrid, NGridItem, NRadio, useMessage} from "naive-ui";
-import {loadReplicants} from "../../browser-common/replicants";
-import {computed, ref} from "vue";
-import {parseTimeString} from "../util";
+import { NButton, NGrid, NGridItem, NInput, NInputGroup, NRadio, useMessage } from "naive-ui";
+import { loadReplicants } from "../../browser-common/replicants";
+import { computed, ref } from "vue";
+import { parseTimeString } from "../util";
 
 const replicants = await loadReplicants();
 const message = useMessage();
@@ -54,7 +60,7 @@ const props = defineProps({
 });
 
 // Placeholder variable for the value input by the user, which is applied when they blur the input.
-const newLengthInput = ref<string>('');
+const newLengthInput = ref<string>("");
 
 // Find the announcement that this control is for by looking at all announcements and finding the one
 //  with the matching ID.
@@ -64,8 +70,8 @@ const announcement = computed(() => {
 		...replicants.announcements.team2.value,
 		...replicants.announcements.global.value
 	];
-	return allAnnouncements.find(a => a.id === props.announcementId);
-})
+	return allAnnouncements.find((a) => a.id === props.announcementId);
+});
 
 /**
  * Decrement this announcement's timer by one second. This is accomplished by decreasing the length
@@ -102,11 +108,12 @@ function setNewLength() {
 		const newLength = parseTimeString(newLengthInput.value);
 		if (newLength) {
 			announcement.value.timer.length = newLength;
-			announcement.value.timer.startedAt = replicants.scoreboard.clock.time.value;
+			announcement.value.timer.startedAt =
+				replicants.scoreboard.clock.time.value;
 		}
 	} catch (e) {
 		console.warn(e);
-		message.error('Invalid time format');
+		message.error("Invalid time format");
 	}
 }
 
@@ -116,11 +123,13 @@ function setNewLength() {
  * @param event Event that triggered this method call.
  */
 function timerEndsActionChanged(event: Event) {
-	if(!announcement.value || !announcement.value.timer) {
+	if (!announcement.value || !announcement.value.timer) {
 		return;
 	}
 	// Casting because .value is of type string, but we know it's one of the three options
-	announcement.value.timer.timerEndsAction = <any>(event.target as HTMLInputElement).value
+	announcement.value.timer.timerEndsAction = <any>(
+		(event.target as HTMLInputElement).value
+	);
 }
 </script>
 
