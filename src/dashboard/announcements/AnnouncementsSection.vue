@@ -70,7 +70,12 @@ const tableCols: DataTableColumns<AnnouncementRow> = <DataTableColumns<Announcem
 							return;
 
 						// find the current announcement and save it for reinsertion
-						let selectedAnnouncement: Announcement;
+						let selectedAnnouncement: Announcement = {
+							id: "null",
+							message: "",
+							timer: null,
+							type: "error"
+						};
 						const newAnnouncements = props.announcements.filter(announcement => {
 							if (row.id == announcement.id) {
 								selectedAnnouncement = announcement;
@@ -80,7 +85,7 @@ const tableCols: DataTableColumns<AnnouncementRow> = <DataTableColumns<Announcem
 						});
 
 						// reinsert the selected announcement to first and let the program know of the change
-						if (selectedAnnouncement != undefined)
+						if (selectedAnnouncement.id != "null")
 							newAnnouncements.unshift(selectedAnnouncement);
 						emit("update:announcements", newAnnouncements);
 					},
