@@ -84,6 +84,7 @@
 						 id="endGraphicsTextarea"
 						 :on-update:value="(string) => {replicants.lowerThird.endGraphics.message.value = string; }"
 						 :default-value="replicants.lowerThird.endGraphics.message.value"
+						 :style="{height: `${replicants.lowerThird.endGraphics.message.value.split('\n').length + 15}em`}"
 						 placeholder="Director&#10;Producer&#10;Replay Operator&#10;Graphics Operator&#10;Camera Operator"
 						 ref="endGraphicsTextarea"/>
 			</div>
@@ -109,7 +110,7 @@ watch(number, (n, o) => {
 }
 
 #endGraphicsTextarea {
-	height: 20em;
+	width: 40%
 }
 
 #endGraphicsSlider {
