@@ -2,7 +2,8 @@
 	<div class="body">
 		<div class="fade"></div>
 		<section class="scroll-text">
-			<div ref="crawlMain" :style="{animationDuration: `${replicants.lowerThird.endGraphics.length.value}s`}">
+			<div :class="{crawl: showCrawl}"
+				 :style="{animationDuration: `${replicants.lowerThird.endGraphics.length.value}s`}">
 				<h1 class="title">{{ replicants.lowerThird.endGraphics.title.value }}</h1>
 				<h2>{{ replicants.lowerThird.endGraphics.message.value }}</h2>
 			</div>
@@ -12,45 +13,31 @@
 
 <script setup lang="ts">
 import {loadReplicants} from "../../../../../browser-common/replicants";
-import {onMounted, ref, watch} from "vue";
+import {ref, watch} from "vue";
 
 const replicants = await loadReplicants()
-const crawlMain = ref<HTMLDivElement | null>(null)
 
+const showCrawl = ref<boolean>(false);
 
-onMounted(() => {
-	// on load if enabled start scrolling
-	if (crawlMain.value) {
-		crawlMain.value.classList.add("crawl");
-		crawlMain.value.style.animationName = "";
-	}
-
-	// when the controller toggles the end graphics
-	watch(replicants.lowerThird.endGraphics.show, (newValue, oldValue) => {
-		if (oldValue) {
-			// on end graphics down
-			replicants.lowerThird.endGraphics.disabled.value = true;
-			setTimeout(() => {
-				// wait for fade out before removing class
-				crawlMain.value?.classList.remove("crawl");
-				replicants.lowerThird.endGraphics.disabled.value = false;
-			}, 1100);
-		} else {
-			// on end graphics up
-			if (crawlMain.value) {
-				crawlMain.value.classList.add("crawl");
-				crawlMain.value.style.animationName = "";
-			}
-		}
-	})
+watch(replicants.lowerThird.endGraphics.show, (newValue, oldValue) => {
+	if (oldValue) {
+		replicants.lowerThird.endGraphics.disabled.value = true;
+		setTimeout(() => {
+			replicants.lowerThird.endGraphics.disabled.value = false;
+			replicants.lowerThird.endGraphics.show.value = false;
+			showCrawl.value = false;
+		}, 1000)
+	} else
+		showCrawl.value = true;
 })
+
 </script>
 
 <style scoped>
 /* modified from https://css-tricks.com/snippets/css/star-wars-crawl-text */
 .body {
-	width: 100%;
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 	overflow: hidden;
 	white-space: pre-line;
 	text-align: center;

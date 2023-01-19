@@ -98,10 +98,6 @@ import {loadReplicants} from "../../browser-common/replicants";
 import {ref, watch} from "vue";
 
 const replicants = await loadReplicants();
-const number = ref(30)
-watch(number, (n, o) => {
-	replicants.lowerThird.endGraphics.length.value = number.value
-})
 </script>
 
 <style scoped>
