@@ -119,6 +119,13 @@ export async function loadReplicants() {
 				leftPerson: await replicant<string>("leftPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Bahl"}),
 				rightPerson: await replicant<string>("rightPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Fridgen"})
 			},
+			endGraphics: {
+				disabled: await replicant<boolean>("disabled", `glimpse-graphics.images.endGraphics`, {defaultValue: false}),
+				show: await replicant<boolean>("endGraphics", `glimpse-graphics.images.endGraphics`, {defaultValue: false}),
+				title: await replicant<string>("title", `glimpse-graphics.images.endGraphics`, {defaultValue: "RPI TV Crew"}),
+				message: await replicant<string>("message", `glimpse-graphics.images.endGraphics`, {defaultValue: "Director\nProducer\nReplay Operator\nCamera Operator"}),
+				length: await replicant<number>('length', 'glimpse-graphics.endGraphics', {defaultValue: 30})
+			}
 		}
 	}
 }

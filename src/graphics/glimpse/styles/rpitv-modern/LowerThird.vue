@@ -1,4 +1,7 @@
 <template>
+	<div :class="{show: replicants.lowerThird.endGraphics.show.value, hide: !replicants.lowerThird.endGraphics.show.value}">
+		<EndGraphics/>
+	</div>
 	<div :class="{show: replicants.lowerThird.locator.value, hide: !replicants.lowerThird.locator.value}">
 		<Locator/>
 	</div>
@@ -11,6 +14,7 @@
 import {loadReplicants} from "../../../../browser-common/replicants";
 import Locator from "./lower-third/Locator.vue"
 import Scoreboard from "./lower-third/Scoreboard.vue"
+import EndGraphics from "./lower-third/EndGraphics.vue"
 
 const replicants = await loadReplicants();
 </script>
