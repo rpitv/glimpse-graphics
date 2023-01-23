@@ -45,7 +45,6 @@ function bufferToHexString(data: Buffer) {
 	return hexDataStr.match(/.{1,2}/g)?.join(' ') ?? '';
 }
 
-
 const dumpQueue: (() => Promise<void>)[] = [];
 /**
  * Write an incoming data buffer to the dump file. This is useful for debugging and is enabled by default,
