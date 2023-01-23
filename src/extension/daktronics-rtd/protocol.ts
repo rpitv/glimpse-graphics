@@ -45,8 +45,8 @@ function bufferToHexString(data: Buffer) {
 	return hexDataStr.match(/.{1,2}/g)?.join(' ') ?? '';
 }
 
-let dumpQueue: (() => Promise<void>)[] = [];
 
+const dumpQueue: (() => Promise<void>)[] = [];
 /**
  * Write an incoming data buffer to the dump file. This is useful for debugging and is enabled by default,
  *  but can be disabled by setting the DUMP_RTD environment variable to "false". Data is written in
