@@ -8,6 +8,7 @@ services:
     environment:
       - NODE_ENV=development
       - LOG_LEVEL=trace
+      - DUMP_RTD=false
     volumes:
       - ./.nodecg/cfg:/usr/src/app/cfg
       - ./.nodecg/db:/usr/src/app/db
