@@ -62,7 +62,7 @@ export function daktronicsRtdListener(data: Buffer) {
 	const d = new Date();
 	appendFile(`${__dirname}/_Daktronics_${d.getFullYear()}-${d.getMonth()}-${d.getDay()}.log`,
 		bufferToHexString(data) + "\n", (err) => {
-			logger.trace(
+			logger.trace(err,
 				`failed to save buffer"
 			${bufferToHexString(data)}
 			"to file: ${__dirname}/_Daktronics_${d.getFullYear()}-${d.getMonth()}-${d.getDay()}.log`)
@@ -165,7 +165,11 @@ function handlePacket(packet: Buffer): void {
 	}
 
 	// Call the handler for the packet, if it is defined.
-	const handler = sports[replicants.sync.selectedSport.value][id].handler;
+	const packetDef = sports[replicants.sync.selectedSport.value][id];
+	if(!packetDef) {
+		logger.trace(data, 'No packet definition for packet ID %d. Ignoring packet.', id)
+	}
+	const handler = packetDef.handler;
 	if(!handler) {
 		logger.trace('No handler defined for packet ID %d. Ignoring packet.', id);
 		return;
