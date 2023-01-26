@@ -129,7 +129,8 @@ export async function loadReplicants() {
 				title: await replicant<string>("title", `glimpse-graphics.images.endGraphics`, {defaultValue: "RPI TV Crew"}),
 				message: await replicant<string>("message", `glimpse-graphics.images.endGraphics`, {defaultValue: "Director\nProducer\nReplay Operator\nCamera Operator"}),
 				length: await replicant<number>('length', 'glimpse-graphics.endGraphics', {defaultValue: 30})
-			}
+			},
+			bug: await replicant<boolean>("bug", `glimpse-graphics.images.lowerThird`, {defaultValue: true}),
 		}
 	}
 }

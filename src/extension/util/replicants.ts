@@ -119,6 +119,7 @@ export const replicants = {
 			title: nodecg().Replicant<string>("title", `glimpse-graphics.images.endGraphics`, {defaultValue: "RPI TV Crew"}),
 			message: nodecg().Replicant<string>("message", `glimpse-graphics.images.endGraphics`, {defaultValue: "Director\nProducer\nReplay Operator\nCamera Operator"}),
 			length: nodecg().Replicant<number>('length', 'glimpse-graphics.endGraphics', {defaultValue: 30})
-		}
+		},
+		bug: nodecg().Replicant<boolean>("bug", `glimpse-graphics.images.lowerThird`, {defaultValue: true}),
 	}
 }
