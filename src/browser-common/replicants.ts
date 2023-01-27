@@ -10,10 +10,12 @@ export async function loadReplicants() {
 			}),
 			selectedPort: await replicant<string | null>("selectedPort", "glimpse-graphics.sync-settings", {defaultValue: null}),
 			selectedSport: await replicant<string>("selectedSport", "glimpse-graphics.sync-settings", {defaultValue: 'Hockey/Lacrosse'}),
-			status: await replicant<{ connected: boolean, bitrate: number }>("status", "glimpse-graphics.sync-settings", {
+			status: await replicant<{ connected: boolean, bitrate: number, error: boolean, errorMsg: string }>("status", "glimpse-graphics.sync-settings", {
 				defaultValue: {
 					connected: false,
-					bitrate: 0
+					bitrate: 0,
+					error: false,
+					errorMsg: "Error"
 				}, persistent: false
 			}),
 			values: {
@@ -92,6 +94,7 @@ export async function loadReplicants() {
 				secondaryColor: await replicant<string>("secondaryColor", `glimpse-graphics.game-settings.team0`, {defaultValue: '#aaaaaa'}),
 				logo: await replicant<string>("logo", `glimpse-graphics.game-settings.team0`, {defaultValue: ''}),
 				schoolName: await replicant<string>("schoolName", `glimpse-graphics.game-settings.team0`, {defaultValue: 'School One'}),
+				shots: await replicant<number>("shots", `glimpse-graphics.game-settings.team0`, {defaultValue: 0}),
 			},
 			{
 				enabled: await replicant<boolean>("enabled", `glimpse-graphics.game-settings.team1`, {defaultValue: true}),
@@ -101,7 +104,8 @@ export async function loadReplicants() {
 				primaryColor: await replicant<string>("primaryColor", `glimpse-graphics.game-settings.team1`, {defaultValue: '#ffffff'}),
 				secondaryColor: await replicant<string>("secondaryColor", `glimpse-graphics.game-settings.team1`, {defaultValue: '#aaaaaa'}),
 				logo: await replicant<string>("logo", `glimpse-graphics.game-settings.team1`, {defaultValue: ''}),
-				schoolName: await replicant<string>("schoolName", `glimpse-graphics.game-settings.team1`, {defaultValue: 'School Two'})
+				schoolName: await replicant<string>("schoolName", `glimpse-graphics.game-settings.team1`, {defaultValue: 'School Two'}),
+				shots: await replicant<number>("shots", `glimpse-graphics.game-settings.team1`, {defaultValue: 0}),
 			}
 		],
 		announcements: {

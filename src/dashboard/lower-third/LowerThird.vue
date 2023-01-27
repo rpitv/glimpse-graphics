@@ -96,8 +96,11 @@
 						 ref="endGraphicsTextarea"/>
 			</div>
 		</div>
+		<h2>FOR TESTING PURPOSES</h2>
+		<div>SOG TEAM 1: {{ replicants.teams[0].shots }}</div>
+		<div>SOG TEAM 2: {{ replicants.teams[1].shots }}</div>
 	</div>
-</template>
+</template>0
 
 <script setup lang="ts">
 import {NButton, NGrid, NGridItem, NInput, NSlider} from "naive-ui";
