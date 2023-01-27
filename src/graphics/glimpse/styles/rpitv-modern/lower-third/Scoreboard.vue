@@ -5,14 +5,14 @@
 	<div class="logo" id="leftLogo">
 		<img :src="replicants.lowerThird.school1Logo.value" :alt="replicants.teams[0].name.value">
 	</div>
-	<div class="logo" id="rightLogo" :alt="replicants.teams[1].name.value">
-		<img :src="replicants.lowerThird.school2Logo.value">
+	<div class="logo" id="rightLogo">
+		<img :src="replicants.lowerThird.school2Logo.value" :alt="replicants.teams[1].name.value">
 	</div>
-	<div id="leftTeam"> {{team1Score}} </div>
+	<div id="leftTeam"> {{replicants.teams[0].name.value}} </div>
 	<div id="rightTeam"> {{replicants.teams[1].name.value}} </div>
-	<div id="leftScore"> {{team2Score}} </div>
-	<div id="rightScore"> {{replicants.teams[1].score.value}} </div>
-	<div id="periodText"> {{period}}</div>
+	<div id="leftScore"> {{team0Score}} </div>
+	<div id="rightScore"> {{team1Score}} </div>
+	<div id="periodText"> {{period}} </div>
 </template>
 
 <script setup lang="ts">
@@ -22,14 +22,14 @@ import {ref, watch} from "vue";
 
 const replicants = await loadReplicants()
 
-const team1Score = ref<number>(replicants.teams[0].score.value);
-const team2Score = ref<number>(replicants.teams[1].score.value);
+const team0Score = ref<number>(replicants.teams[0].score.value);
+const team1Score = ref<number>(replicants.teams[1].score.value);
 const period = ref<string>();
 
 watch(replicants.lowerThird.scoreboard, (newValue, oldValue) => {
 	if (newValue) {
-		team1Score.value = replicants.teams[0].score.value;
-		team2Score.value = replicants.teams[1].score.value;
+		team0Score.value = replicants.teams[0].score.value;
+		team1Score.value = replicants.teams[1].score.value;
 		// Periods
 		if (replicants.scoreboard.period.value === 1)
 			period.value = "End of 1st";
@@ -168,19 +168,19 @@ img {
 }
 #leftScore {
 	position: absolute;
-	left: 0;
-	bottom: 18.2vh;
+	left: 0.1vw;
+	bottom: 19vh;
 	width: 89.3vw;
-	font-size: 12.5vh;
+	font-size: 11vh;
 	text-align: center;
 	color: white;
 }
 #rightScore {
 	position: absolute;
-	left: 0;
-	bottom: 18.2vh;
+	left: 0.3vw;
+	bottom: 19vh;
 	width: 110.1vw;
-	font-size: 12.5vh;
+	font-size: 11vh;
 	text-align: center;
 	color: white;
 }

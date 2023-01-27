@@ -4,16 +4,16 @@
 		{{replicants.teams[0].schoolName.value}}
 	</div>
 	<div  id="team1Score" class="lower-third">
-		{{team1Score}}
+		{{team0Score}}
 	</div>
 	<div id="team2Name" class="lower-third" :style="{'color': replicants.teams[1].primaryColor.value}">
 		{{replicants.teams[1].schoolName.value}}
 	</div>
 	<div id="team2Score" class="lower-third">
-		{{team2Score}}
+		{{team1Score}}
 	</div>
 	<div id="gamePeriod" class="lower-third">
-		{{ period }}
+		{{period}}
 	</div>
 	<div class="colors" id="team1PrimaryColor" :style="{'background-color': replicants.teams[0].primaryColor.value}"></div>
 	<div class="colors" id="team1SecondaryColor" :style="{'background-color': replicants.teams[0].secondaryColor.value}"></div>
@@ -34,14 +34,14 @@ import scoreboard from "../../../../../assets/espn/Scoreboard.png";
 
 const replicants = await loadReplicants();
 
-const team1Score = ref<number>(replicants.teams[0].score.value);
-const team2Score = ref<number>(replicants.teams[1].score.value);
+const team0Score = ref<number>(replicants.teams[0].score.value);
+const team1Score = ref<number>(replicants.teams[1].score.value);
 const period = ref<string>();
 
 watch(replicants.lowerThird.scoreboard, (newValue, oldValue) => {
 	if (newValue) {
-		team1Score.value = replicants.teams[0].score.value;
-		team2Score.value = replicants.teams[1].score.value;
+		team0Score.value = replicants.teams[0].score.value;
+		team1Score.value = replicants.teams[1].score.value;
 		// Periods
 		if (replicants.scoreboard.period.value === 1)
 			period.value = "End of 1st";
