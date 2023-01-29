@@ -78,18 +78,20 @@ watch(replicants.lowerThird.scoreboard, (newValue, oldValue) => {
 					period.value = "Final SO";
 			}
 		}
-		// If the team's score are not the same and we're at/past the third period...
-		if (replicants.scoreboard.period.value === 3)
-			period.value = "Final";
-		// If there is no shootout...
-		if (!replicants.gameSettings.periods.shootouts.value && replicants.scoreboard.period.value >= 4)
-			period.value = "Final OT";
-		// If there is shootout...
-		if (replicants.gameSettings.periods.shootouts.value && replicants.scoreboard.period.value >= 4) {
-			if (replicants.scoreboard.period.value >= 4 && replicants.scoreboard.period.value <= 5)
+		else {
+			// If the team's score are not the same and we're at/past the third period...
+			if (replicants.scoreboard.period.value === 3)
+				period.value = "Final";
+			// If there is no shootout...
+			if (!replicants.gameSettings.periods.shootouts.value && replicants.scoreboard.period.value >= 4)
 				period.value = "Final OT";
-			if (replicants.scoreboard.period.value === 6)
-				period.value = "Final SO";
+			// If there is shootout...
+			if (replicants.gameSettings.periods.shootouts.value && replicants.scoreboard.period.value >= 4) {
+				if (replicants.scoreboard.period.value >= 4 && replicants.scoreboard.period.value <= 5)
+					period.value = "Final OT";
+				if (replicants.scoreboard.period.value === 6)
+					period.value = "Final SO";
+			}
 		}
 	}
 })
