@@ -26,10 +26,12 @@ export async function loadReplicants() {
 						score: await replicant<boolean>("score", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
 						name: await replicant<boolean>("name", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
 						abbreviation: await replicant<boolean>("abbreviation", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
+						shots: await replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false})
 					}, {
 						score: await replicant<boolean>("score", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 						name: await replicant<boolean>("name", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 						abbreviation: await replicant<boolean>("abbreviation", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
+						shots: await replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false})
 					}
 				],
 				baseball: {
@@ -124,7 +126,7 @@ export async function loadReplicants() {
 				rightPerson: await replicant<string>("rightPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Fridgen"}),
 				offset: {
 					enabled: await replicant<boolean>("enabled", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
-					number: await replicant<number>("number", `glimpse-graphics.images.lowerThird`, {defaultValue: 0})
+					number: await replicant<number>("number", `glimpse-graphics.images.lowerThird`, {defaultValue: 36})
 				}
 			},
 			endGraphics: {

@@ -39,6 +39,18 @@
 			</n-grid-item>
 		</n-grid>
 		<div v-if="replicants.gameSettings.style.value === 'espn'">
+			<NCheckbox v-model:checked="replicants.lowerThird.commentators.offset.enabled.value"
+					   label="Manually offset the commentators?" />
+				<div v-if="replicants.lowerThird.commentators.offset.enabled.value">
+					<h2>Set offset value:</h2>
+					<n-slider
+						v-model:value="replicants.lowerThird.commentators.offset.number.value"
+						:step="0.1"
+						:min="0"
+						:max="100"
+						:style="{'max-width': '50%'}"
+					/>
+				</div>
 			<h2>
 				<n-button
 					@click="replicants.lowerThird.commentators.show.value = !replicants.lowerThird.commentators.show.value"
@@ -96,16 +108,14 @@
 						 ref="endGraphicsTextarea"/>
 			</div>
 		</div>
-		<h2>FOR TESTING PURPOSES</h2>
 		<div>SOG TEAM 1: {{ replicants.teams[0].shots }}</div>
 		<div>SOG TEAM 2: {{ replicants.teams[1].shots }}</div>
 	</div>
 </template>0
 
 <script setup lang="ts">
-import {NButton, NGrid, NGridItem, NInput, NSlider} from "naive-ui";
+import {NButton, NGrid, NGridItem, NInput, NSlider, NCheckbox} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
-import {ref, watch} from "vue";
 
 const replicants = await loadReplicants();
 </script>
