@@ -151,6 +151,7 @@ export async function loadReplicants() {
 				length: await replicant<number>('length', 'glimpse-graphics.endGraphics', {defaultValue: 30})
 			},
 			bug: await replicant<boolean>("bug", `glimpse-graphics.images.lowerThird`, {defaultValue: true}),
+			showCopyright: await replicant<boolean>("showCopyright", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
 		}
 	}
 }

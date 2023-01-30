@@ -9,7 +9,7 @@ import {methods} from "./method";
  * @param code the HTTP status code
  * @param msg a short informative phrase/sentence
  */
-export const apiResponse = (res: Response, code: number, msg: string): void => {
+export const apiResponseV1 = (res: Response, code: number, msg: string): void => {
 	res.status(code).json({code, msg});
 };
 
@@ -26,20 +26,20 @@ export const createApi = (nodecg: NodeCG): void => {
 	]
 	router.get(v1_routes, (req: Request, res: Response) => {
 		if (req.params.key != replicants.gameSettings.api.key.value) {
-			apiResponse(res, 401, "invalid key");
+			apiResponseV1(res, 401, "invalid key");
 		} else if (!replicants.gameSettings.api.enabled.value) {
-			apiResponse(res, 403, "api not enabled");
+			apiResponseV1(res, 403, "api not enabled");
 		} else if (!req.params.method) {
-			apiResponse(res, 400, "missing method");
+			apiResponseV1(res, 400, "missing method");
 		} else if (!req.params.endpoint) {
 			// the "docs" method does not require an endpoint
 			if (req.params.method === "docs") {
 				methods["docs"](req, res, "");
 			} else {
-				apiResponse(res, 400, "missing endpoint");
+				apiResponseV1(res, 400, "missing endpoint");
 			}
 		} else if (!methods[req.params.method]) {
-			apiResponse(res, 400, "invalid method");
+			apiResponseV1(res, 400, "invalid method");
 		} else {
 			methods[req.params.method](req, res, req.params.endpoint);
 		}
