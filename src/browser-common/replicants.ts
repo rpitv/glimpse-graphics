@@ -135,6 +135,23 @@ export async function loadReplicants() {
 				length: await replicant<number>('length', 'glimpse-graphics.endGraphics', {defaultValue: 30})
 			},
 			bug: await replicant<boolean>("bug", `glimpse-graphics.images.lowerThird`, {defaultValue: true}),
+		},
+		tmpDaktronics: {
+			pak14: await replicant<string>("pak14", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak29: await replicant<string>("pak29", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak40: await replicant<string>("pak40", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak48: await replicant<string>("pak48", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak88: await replicant<string>("pak88", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak160: await replicant<string>("pak160", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak201: await replicant<string>("pak201", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak226: await replicant<string>("pak226", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak228: await replicant<string>("pak228", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak236: await replicant<string>("pak236", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak238: await replicant<string>("pak238", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak278: await replicant<string>("pak278", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak286: await replicant<string>("pak286", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak288: await replicant<string>("pak288", `glimpse-graphics.tmp`, {defaultValue: ""}),
+			pak296: await replicant<string>("pak296", `glimpse-graphics.tmp`, {defaultValue: ""}),
 		}
 	}
 }

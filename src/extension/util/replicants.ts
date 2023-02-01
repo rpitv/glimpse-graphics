@@ -128,5 +128,22 @@ export const replicants = {
 			length: nodecg().Replicant<number>('length', 'glimpse-graphics.endGraphics', {defaultValue: 30})
 		},
 		bug: nodecg().Replicant<boolean>("bug", `glimpse-graphics.images.lowerThird`, {defaultValue: true}),
+	},
+	tmpDaktronics: {
+		pak14: nodecg().Replicant<string>("pak14", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak29: nodecg().Replicant<string>("pak29", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak40: nodecg().Replicant<string>("pak40", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak48: nodecg().Replicant<string>("pak48", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak88: nodecg().Replicant<string>("pak88", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak160: nodecg().Replicant<string>("pak160", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak201: nodecg().Replicant<string>("pak201", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak226: nodecg().Replicant<string>("pak226", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak228: nodecg().Replicant<string>("pak228", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak236: nodecg().Replicant<string>("pak236", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak238: nodecg().Replicant<string>("pak238", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak278: nodecg().Replicant<string>("pak278", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak286: nodecg().Replicant<string>("pak286", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak288: nodecg().Replicant<string>("pak288", `glimpse-graphics.tmp`, {defaultValue: ""}),
+		pak296: nodecg().Replicant<string>("pak296", `glimpse-graphics.tmp`, {defaultValue: ""}),
 	}
 }

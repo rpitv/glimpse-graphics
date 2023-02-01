@@ -99,8 +99,24 @@
 		<h2>FOR TESTING PURPOSES</h2>
 		<div>SOG TEAM 1: {{ replicants.teams[0].shots }}</div>
 		<div>SOG TEAM 2: {{ replicants.teams[1].shots }}</div>
+		<br>
+			<div>(pak14) Main Clock/Time Out/TOD (mm:ss/ss.t ): {{replicants.tmpDaktronics.pak14.value}} </div> <br>
+			<div>(pak29) Main Clock/Time Out Horn (' ' or 'h'): {{replicants.tmpDaktronics.pak29.value}} </div> <br>
+			<div>(pak40) Time of Day (hh:mm:ss): {{replicants.tmpDaktronics.pak40.value}} </div> <br>
+			<div>(pak48) Home Team Name: {{replicants.tmpDaktronics.pak48.value}} </div> <br>
+			<div>(pak88) Home Team Abbreviation: {{replicants.tmpDaktronics.pak88.value}} </div> <br>
+			<div>(pak60) Internal Relay (' ' or 'z', 's', 'h'): {{replicants.tmpDaktronics.pak160.value}} </div> <br>
+			<div>(pak201) Shot Clock Time (mm:ss): {{replicants.tmpDaktronics.pak201.value}} </div> <br>
+			<div>(pak226) Home Player #1-Number: {{replicants.tmpDaktronics.pak226.value}} </div> <br>
+			<div>(pak228) "Home Player #1-Penalty Time (mm:ss)": {{replicants.tmpDaktronics.pak228.value}} </div> <br>
+			<div>(pak236) Home Player #2-Penalty Time (mm:ss): {{replicants.tmpDaktronics.pak238.value}} </div> <br>
+			<div>(pak238) Home Player #2-Number: {{replicants.tmpDaktronics.pak236.value}} </div> <br>
+			<div>(pak286) Guest Player #1-Number: {{replicants.tmpDaktronics.pak286.value}} </div> <br>
+			<div>(pak278) Home Player #6-Penalty Time (mm:ss): {{replicants.tmpDaktronics.pak278.value}} </div> <br>
+			<div>(pak288) "Guest Player #1-Penalty Time (mm:ss)": {{replicants.tmpDaktronics.pak288.value}} </div> <br>
+			<div>(pak296) Guest Player #2-Number: {{replicants.tmpDaktronics.pak296.value}} </div> <br>
 	</div>
-</template>0
+</template>
 
 <script setup lang="ts">
 import {NButton, NGrid, NGridItem, NInput, NSlider} from "naive-ui";

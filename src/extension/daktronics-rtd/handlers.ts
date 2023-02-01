@@ -102,3 +102,63 @@ export function awayShotHandler(value: string): void {
 
 	replicants.teams[1].shots.value = parseInt(value, 10) || 0;
 }
+
+export function pak14(value: string): void {
+	replicants.tmpDaktronics.pak14.value = value || "N/A";
+}
+
+export function pak29(value: string): void {
+	replicants.tmpDaktronics.pak29.value = value || "N/A";
+}
+
+export function pak40(value: string): void {
+	replicants.tmpDaktronics.pak40.value = value || "N/A";
+}
+
+export function pak48(value: string): void {
+	replicants.tmpDaktronics.pak48.value = value || "N/A";
+}
+
+export function pak88(value: string): void {
+	replicants.tmpDaktronics.pak88.value = value || "N/A";
+}
+
+export function pak160(value: string): void {
+	replicants.tmpDaktronics.pak160.value = value || "N/A";
+}
+
+export function pak201(value: string): void {
+	replicants.tmpDaktronics.pak201.value = value || "N/A";
+}
+
+export function pak226(value: string): void {
+	replicants.tmpDaktronics.pak226.value = value || "N/A";
+}
+
+export function pak228(value: string): void {
+	replicants.tmpDaktronics.pak228.value = value || "N/A";
+}
+
+export function pak236(value: string): void {
+	replicants.tmpDaktronics.pak236.value = value || "N/A";
+}
+
+export function pak238(value: string): void {
+	replicants.tmpDaktronics.pak238.value = value || "N/A";
+}
+
+export function pak278(value: string): void {
+	replicants.tmpDaktronics.pak278.value = value || "N/A";
+}
+
+export function pak286(value: string): void {
+	replicants.tmpDaktronics.pak286.value = value || "N/A";
+}
+
+export function pak288(value: string): void {
+	replicants.tmpDaktronics.pak288.value = value || "N/A";
+}
+
+export function pak296(value: string): void {
+	replicants.tmpDaktronics.pak296.value = value || "N/A";
+}
