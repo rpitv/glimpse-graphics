@@ -25,7 +25,17 @@ console.log(matches);
  */
 
 
-import {awayScoreHandler, homeScoreHandler, homeShotHandler, mainClockHandler, periodHandler, awayShotHandler } from "./handlers";
+import {
+	awayScoreHandler,
+	awayShotHandler,
+	homeScoreHandler,
+	homeShotHandler,
+	mainClockHandler,
+	pak14, pak160, pak201, pak226, pak236, pak286,
+	pak29, pak296, pak40,
+	pak48, pak88,
+	periodHandler
+} from "./handlers";
 
 
 type PacketDefinition = { length: number, title: string, justification: 'L'|'R', handler?: (value: string) => void };
@@ -47,7 +57,8 @@ export const sports: { [key: string]: SportDefinition } = {
 		"14": {
 			"length": 5,
 			"justification": "L",
-			"title": "Main Clock/Time Out/TOD (mm:ss/ss.t )"
+			"title": "Main Clock/Time Out/TOD (mm:ss/ss.t )",
+			handler: pak14
 		},
 		"19": {
 			"length": 8,
@@ -67,7 +78,8 @@ export const sports: { [key: string]: SportDefinition } = {
 		"29": {
 			"length": 1,
 			"justification": "L",
-			"title": "Main Clock/Time Out Horn (' ' or 'h')"
+			"title": "Main Clock/Time Out Horn (' ' or 'h')",
+			handler: pak29
 		},
 		"30": {
 			"length": 1,
@@ -87,12 +99,14 @@ export const sports: { [key: string]: SportDefinition } = {
 		"40": {
 			"length": 8,
 			"justification": "L",
-			"title": "Time of Day (hh:mm:ss)"
+			"title": "Time of Day (hh:mm:ss)",
+			handler: pak40
 		},
 		"48": {
 			"length": 20,
 			"justification": "L",
-			"title": "Home Team Name"
+			"title": "Home Team Name",
+			handler: pak48
 		},
 		"68": {
 			"length": 20,
@@ -102,7 +116,8 @@ export const sports: { [key: string]: SportDefinition } = {
 		"88": {
 			"length": 10,
 			"justification": "L",
-			"title": "Home Team Abbreviation"
+			"title": "Home Team Abbreviation",
+			handler: pak88
 		},
 		"98": {
 			"length": 10,
@@ -200,7 +215,8 @@ export const sports: { [key: string]: SportDefinition } = {
 		"160": {
 			"length": 1,
 			"justification": "L",
-			"title": "Internal Relay (' ' or 'z', 's', 'h')"
+			"title": "Internal Relay (' ' or 'z', 's', 'h')",
+			handler: pak160
 		},
 		"161": {
 			"length": 1,
@@ -235,7 +251,8 @@ export const sports: { [key: string]: SportDefinition } = {
 		"201": {
 			"length": 8,
 			"justification": "L",
-			"title": "Shot Clock Time (mm:ss)"
+			"title": "Shot Clock Time (mm:ss)",
+			handler: pak201
 		},
 		"209": {
 			"length": 1,
@@ -255,7 +272,8 @@ export const sports: { [key: string]: SportDefinition } = {
 		"226": {
 			"length": 2,
 			"justification": "R",
-			"title": "Home Player #1-Number"
+			"title": "Home Player #1-Number",
+			handler: pak226
 		},
 		"228": {
 			"length": 8,
@@ -265,7 +283,8 @@ export const sports: { [key: string]: SportDefinition } = {
 		"236": {
 			"length": 2,
 			"justification": "R",
-			"title": "Home Player #2-Number"
+			"title": "Home Player #2-Number",
+			handler: pak236
 		},
 		"238": {
 			"length": 8,
@@ -315,7 +334,8 @@ export const sports: { [key: string]: SportDefinition } = {
 		"286": {
 			"length": 2,
 			"justification": "R",
-			"title": "Guest Player #1-Number"
+			"title": "Guest Player #1-Number",
+			handler: pak286
 		},
 		"288": {
 			"length": 8,
@@ -325,7 +345,8 @@ export const sports: { [key: string]: SportDefinition } = {
 		"296": {
 			"length": 2,
 			"justification": "R",
-			"title": "Guest Player #2-Number"
+			"title": "Guest Player #2-Number",
+			handler: pak296
 		},
 		"298": {
 			"length": 8,
@@ -715,4 +736,4 @@ export const sports: { [key: string]: SportDefinition } = {
 			"title": "Guest Saves - Total"
 		}
 	}
-}
+};
