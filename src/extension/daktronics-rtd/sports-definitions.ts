@@ -25,7 +25,7 @@ console.log(matches);
  */
 
 
-import {awayScoreHandler, homeScoreHandler, homeShotHandler, mainClockHandler, periodHandler, awayShotHandler } from "./handlers";
+import {awayScoreHandler, homeScoreHandler, homeShotHandler, mainClockHandler, periodHandler, awayShotHandler, homePenalty1Handler, homePenalty2Handler, awayPenalty1Handler, awayPenalty2Handler } from "./handlers";
 
 
 type PacketDefinition = { length: number, title: string, justification: 'L'|'R', handler?: (value: string) => void };
@@ -253,9 +253,11 @@ export const sports: { [key: string]: SportDefinition } = {
 			"title": "Inverse/Main/Time Out/TOD (mm:ss)"
 		},
 		"226": {
-			"length": 2,
+			// Length is 10 instead of 2 because the clock is in here for some reason
+			"length": 10,
 			"justification": "R",
-			"title": "Home Player #1-Number"
+			"title": "Home Player #1-Number",
+			handler: homePenalty1Handler
 		},
 		"228": {
 			"length": 8,
@@ -263,9 +265,10 @@ export const sports: { [key: string]: SportDefinition } = {
 			"title": "Home Player #1-Penalty Time (mm:ss)"
 		},
 		"236": {
-			"length": 2,
+			"length": 10,
 			"justification": "R",
-			"title": "Home Player #2-Number"
+			"title": "Home Player #2-Number",
+			handler: homePenalty2Handler
 		},
 		"238": {
 			"length": 8,
@@ -313,9 +316,10 @@ export const sports: { [key: string]: SportDefinition } = {
 			"title": "Home Player #6-Penalty Time (mm:ss)"
 		},
 		"286": {
-			"length": 2,
+			"length": 10,
 			"justification": "R",
-			"title": "Guest Player #1-Number"
+			"title": "Guest Player #1-Number",
+			handler: awayPenalty1Handler
 		},
 		"288": {
 			"length": 8,
@@ -323,9 +327,10 @@ export const sports: { [key: string]: SportDefinition } = {
 			"title": "Guest Player #1-Penalty Time (mm:ss)"
 		},
 		"296": {
-			"length": 2,
+			"length": 10,
 			"justification": "R",
-			"title": "Guest Player #2-Number"
+			"title": "Guest Player #2-Number",
+			handler: awayPenalty2Handler
 		},
 		"298": {
 			"length": 8,
