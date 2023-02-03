@@ -1,5 +1,5 @@
 <template>
-	<h1>API</h1>
+	<h1 @click="openApiLink" title="Open API Docs" id="h1ApiLabel">API</h1>
 	<label>Enable API? </label>
 	<n-checkbox v-model:checked="replicants.gameSettings.api.enabled.value"/>
 	<div v-if="replicants.gameSettings.api.enabled.value">
@@ -12,9 +12,8 @@
 				 @blur="displayKey = false"
 				 readonly="true"
 				 id="apiKeyInput"
+				 title="Click to Copy"
 				 placeholder="Enter an API Key"/>
-		<br>
-		<n-button type="info" @click="copyApiKeyToClipboard" class="mt-10">Copy Key</n-button>
 		<br>
 		<n-button type="error" class="mt-10" @click="regenerateApiKey">Regenerate API Key</n-button>
 	</div>
@@ -32,9 +31,23 @@ const dialog = useDialog();
 
 const displayKey: Ref<boolean> = ref(false);
 
+function openApiLink() {
+	const key = replicants.gameSettings.api.key.value;
+	const wl = window.location
+	window.open(`${wl.protocol}//${wl.host}/glimpse-graphics-api/v1/${key}/docs`, "_blank");
+}
+
 function onApiInputFocus(e: Event): void {
 	displayKey.value = true;
 	copyApiKeyToClipboard();
+
+	// attempts to select the text within the input box
+	try {
+		// @ts-ignore ts compiler warns here, can be ignored
+		e.target.select();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 function regenerateApiKey(): void {
@@ -78,6 +91,10 @@ function copyApiKeyToClipboard(): void {
 }
 
 #apiKeyInput {
-	width: 30vw
+	width: 30vw;
+}
+
+h1 {
+	cursor: pointer;
 }
 </style>

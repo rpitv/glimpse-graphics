@@ -3,8 +3,16 @@ import {Request, Response} from "express"
 import {replicants} from "../../util/replicants";
 import {apiResponseV1} from "../api"
 
-function toggleOption(res: Response, option: Replicant<boolean>) {
-	option.value = !option.value;
+function toggleOption(req: Request,res: Response, option: Replicant<boolean>) {
+	if (req.params.param1) {
+		if(req.params.param1 === "true") {
+			option.value = true;
+		} else if (req.params.param1 === "false") {
+			option.value = false;
+		}
+	} else {
+		option.value = !option.value;
+	}
 	apiResponseV1(res, 200, `toggled [${option.namespace}] (${option.name}) to ${option.value}`)
 }
 
@@ -16,6 +24,8 @@ export const endpoints: { [key: string]: Replicant<boolean> } = {
 	"commentators": replicants.lowerThird.commentators.show,
 	"main-scoreboard": replicants.scoreboard.visible,
 	"copyright": replicants.lowerThird.showCopyright,
+	"team_0_enable": replicants.teams[0].enabled,
+	"team_1_enable": replicants.teams[1].enabled
 }
 
 /**
@@ -28,7 +38,7 @@ export function handleToggle(req: Request, res: Response, endpoint: string): voi
 	if (!endpoints[endpoint]) {
 		apiResponseV1(res, 400, "invalid endpoint");
 	} else {
-		toggleOption(res, endpoints[endpoint]);
+		toggleOption(req, res, endpoints[endpoint]);
 	}
 }
 
