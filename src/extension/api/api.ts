@@ -5,13 +5,22 @@ import {methods} from "./method";
 
 /**
  * The common API response is a json consisting of the HTTP status code and a short message.
- * @param res express Response object
+ * @param res Express response
  * @param code the HTTP status code
  * @param msg a short informative phrase/sentence
  */
 export const apiResponseV1 = (res: Response, code: number, msg: string): void => {
 	res.status(code).json({code, msg});
 };
+
+/**
+ * A panic API response, for use where the API encountered a state that it should not have.
+ * @param req Express request
+ * @param res Express response
+ */
+export const apiFatalPanik = (req: Request, res: Response): void => {
+	apiResponseV1(res, 501, `FATAL ERROR: REPORT TO DEVS THIS URL IMMEDIATELY!!!!! ${req.url}`)
+}
 
 export const createApi = (nodecg: NodeCG): void => {
 	const router = nodecg.Router();
@@ -20,6 +29,8 @@ export const createApi = (nodecg: NodeCG): void => {
 	 * Expects an API key a method and endpoint within the method.
 	 */
 	const v1_routes = [
+		"/v1/:key/:method/:endpoint/:param1/:param2/:param3*",
+		"/v1/:key/:method/:endpoint/:param1/:param2*",
 		"/v1/:key/:method/:endpoint/:param1*",
 		"/v1/:key/:method/:endpoint*",
 		"/v1/:key/:method*",
@@ -37,7 +48,7 @@ export const createApi = (nodecg: NodeCG): void => {
 			if (req.params.method === "docs") {
 				methods["docs"](req, res, "");
 			} else {
-				apiResponseV1(res, 400, "missing endpoint");
+				apiResponseV1(res, 400, "missing endpoint in method");
 			}
 		} else if (!methods[req.params.method]) {
 			apiResponseV1(res, 400, "invalid method");
