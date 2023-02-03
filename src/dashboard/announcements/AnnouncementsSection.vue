@@ -14,12 +14,12 @@
 	<div v-if="!globalAnnouncements" class="quickplay">
 		<NButton @click="addAnnouncement('Power Play', '2:00')">2:00 Power Play</NButton>
 		<NButton @click="addAnnouncement('Power Play', '5:00')">5:00 Power Play</NButton>
-		<NButton @click="addAnnouncement('Timeout')">Timeout</NButton>
+		<NButton @click="addAnnouncement('Timeout', null)">Timeout</NButton>
 	</div>
 	<div v-else>
-		<NButton @click="addAnnouncement('Official Review')">Official Review</NButton>
-		<NButton @click="addAnnouncement('Delayed Penalty')">Delayed Penalty</NButton>
-		<NButton @click="addAnnouncement('Empty Net')">Empty Net</NButton>
+		<NButton @click="addAnnouncement('Official Review', null)">Official Review</NButton>
+		<NButton @click="addAnnouncement('Delayed Penalty', null)">Delayed Penalty</NButton>
+		<NButton @click="addAnnouncement('Empty Net', null)">Empty Net</NButton>
 	</div>
 </template>
 
@@ -32,7 +32,6 @@ import {loadReplicants} from "../../browser-common/replicants";
 import {millisToString, parseTimeString} from "../util";
 import {RowKey} from "naive-ui/lib/data-table/src/interface";
 import AnnouncementTimerControl from "./AnnouncementTimerControl.vue";
-import {isBoolean} from "@vueuse/core";
 
 const replicants = await loadReplicants();
 const message = useMessage();

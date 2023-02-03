@@ -140,7 +140,6 @@ function computedMessage(message: Announcement) {
 
 // POWERPLAY SYNC
 const announcementType = computed(() => {
-	console.log(replicants.sync.values.penalty.value);
 	if (!replicants.sync.values.penalty.value)
 		return "";
 	// If we are in overtime
@@ -212,7 +211,7 @@ const announcementType = computed(() => {
 })
 
 const powerPlayStatus = computed(() => {
-	if (replicants.gameSettings.periods.count.value >= 5 && replicants.gameSettings.periods.shootouts.value === true)
+	if (replicants.gameSettings.periods.count.value >= 5 && replicants.gameSettings.periods.shootouts.value)
 		return "";
 	// If we are in overtime
 	if (replicants.gameSettings.periods.count.value === 4 || (replicants.gameSettings.periods.count.value === 5 &&

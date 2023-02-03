@@ -35,7 +35,7 @@ div {
 	top: 0;
 	left: 0;
 	position: absolute;
-	font-family: Roboto;
+	font-family: Roboto, sans-serif;
 	font-size: 2.2vh;
 }
 
@@ -77,12 +77,12 @@ div {
 }
 .left-team-sogs {
 	top: 3vh;
-	width: 22vw;
-	text-align: center;
+	width: 12.1vw;
+	text-align: right;
 }
 .right-team-sogs {
 	top: 3vh;
-	width: 47.7vw;
+	width: 48.4vw;
 	text-align: center;
 }
 </style>
