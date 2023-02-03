@@ -44,7 +44,8 @@ export async function loadReplicants() {
 					possession: await replicant<boolean>("possession", "glimpse-graphics.sync-settings.values.football", {defaultValue: false}),
 					yardsToGo: await replicant<boolean>("yardsToGo", "glimpse-graphics.sync-settings.values.football", {defaultValue: false}),
 					playClock: await replicant<boolean>("playClock", "glimpse-graphics.sync-settings.values.football", {defaultValue: false}),
-				}
+				},
+				sogs: await replicant<boolean>("sogs", "glimpse-graphics.sync-settings.values", {defaultValue: false})
 			}
 		},
 		gameSettings: {

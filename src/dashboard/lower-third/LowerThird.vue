@@ -112,7 +112,6 @@
 		<div>SOG TEAM 1: {{ replicants.teams[0].shots }}</div>
 		<div>SOG TEAM 2: {{ replicants.teams[1].shots }}</div>
 		<br>
-		<div>{{ replicants.sync.values.teams[0].penalty.value }}</div>
 		<div>Home Penalty 1: #{{ replicants.teams[0].player1PenaltyNumber.value }} for {{ replicants.teams[0].player1PenaltyClock.value }}</div>
 		<div>Home Penalty 2: #{{ replicants.teams[0].player2PenaltyNumber.value }} for {{ replicants.teams[0].player2PenaltyClock.value }}</div>
 		<div>Away Penalty 1: #{{ replicants.teams[1].player1PenaltyNumber.value }} for {{ replicants.teams[1].player1PenaltyClock.value }}</div>

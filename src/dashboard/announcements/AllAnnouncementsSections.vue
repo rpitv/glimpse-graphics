@@ -14,6 +14,10 @@
 			<h2>Global</h2>
 			<AnnouncementsSection v-model:announcements="globalMessages" :global-announcements="true"/>
 		</n-grid-item>
+		<n-grid-item>
+			<h2>Banner</h2>
+			<n-checkbox v-model:checked="replicants.sync.values.sogs.value">Show SOGS</n-checkbox>
+		</n-grid-item>
 	</n-grid>
 </div>
 </template>

@@ -16,9 +16,6 @@
 			<n-grid-item>
 				<n-checkbox class="ml-10" v-model:checked="syncShots">Sync Shots</n-checkbox>
 			</n-grid-item>
-			<n-grid-item>
-				<n-checkbox class="ml-10" v-model:checked="syncPenalties">Sync Penalties</n-checkbox>
-			</n-grid-item>
 		</n-grid>
 
 		<div v-if="isTeamEnabled">
@@ -93,7 +90,6 @@ const syncName = replicants.sync.values.teams[props.id].name;
 const syncAbbreviation = replicants.sync.values.teams[props.id].abbreviation;
 const syncScore = replicants.sync.values.teams[props.id].score;
 const syncShots = replicants.sync.values.teams[props.id].shots;
-const syncPenalties = replicants.sync.values.teams[props.id].penalty;
 
 </script>
 
