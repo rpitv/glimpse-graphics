@@ -4,6 +4,7 @@
 			<ESPNImageView />
 			<ESPNScoreboardView />
 			<ESPNLowerThird />
+			<ESPNBanner />
 		</div>
 		<div v-else-if="replicants.gameSettings.style.value === 'rpitv-modern'">
 			<TVModernImageView />
@@ -18,6 +19,7 @@ import {loadReplicants} from "../../browser-common/replicants";
 import ESPNScoreboardView from "./styles/espn/ScoreboardView.vue";
 import ESPNImageView from "./styles/espn/ImageView.vue";
 import ESPNLowerThird from "./styles/espn/LowerThird.vue";
+import ESPNBanner from "./styles/espn/Banner.vue";
 
 import TVModernScoreboardView from "./styles/rpitv-modern/ScoreboardView.vue";
 import TVModernImageView from "./styles/rpitv-modern/ImageView.vue";

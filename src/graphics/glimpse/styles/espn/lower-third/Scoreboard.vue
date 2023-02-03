@@ -38,8 +38,8 @@ const team0Score = ref<number>(replicants.teams[0].score.value);
 const team1Score = ref<number>(replicants.teams[1].score.value);
 const period = ref<string>();
 
-watch(replicants.lowerThird.scoreboard, (newValue, oldValue) => {
-	if (newValue) {
+watch(replicants.scoreboard.visible, (newValue, oldValue) => {
+	if (oldValue) {
 		team0Score.value = replicants.teams[0].score.value;
 		team1Score.value = replicants.teams[1].score.value;
 		// Periods
