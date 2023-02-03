@@ -27,15 +27,14 @@ export async function loadReplicants() {
 						name: await replicant<boolean>("name", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
 						abbreviation: await replicant<boolean>("abbreviation", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
 						shots: await replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
-						penalty: await replicant<boolean>("penalty", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false})
 					}, {
 						score: await replicant<boolean>("score", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 						name: await replicant<boolean>("name", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 						abbreviation: await replicant<boolean>("abbreviation", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 						shots: await replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
-						penalty: await replicant<boolean>("penalty", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false})
 					}
 				],
+				penalty: await replicant<boolean>("penalty", "glimpse-graphics.sync-settings.values", {defaultValue: true}),
 				baseball: {
 					bottomTop: await replicant<boolean>("bottomTop", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),
 					outsStrikesBalls: await replicant<boolean>("outsStrikesBall", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),

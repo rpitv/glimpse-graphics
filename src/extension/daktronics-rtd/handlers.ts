@@ -104,7 +104,7 @@ export function awayShotHandler(value: string): void {
 }
 
 export function homePenalty1Handler(value: string): void {
-	if (!replicants.sync.values.teams[0].penalty.value) {
+	if (!replicants.sync.values.penalty.value) {
 		logger.trace('Penalty sync is disabled, ignoring penalty updates');
 		return;
 	}
@@ -113,7 +113,7 @@ export function homePenalty1Handler(value: string): void {
 	replicants.teams[0].player1PenaltyClock.value = data[1] || "";
 }
 export function homePenalty2Handler(value: string): void {
-	if (!replicants.sync.values.teams[0].penalty.value) {
+	if (!replicants.sync.values.penalty.value) {
 		logger.trace('Penalty sync is disabled, ignoring penalty updates');
 		return;
 	}
@@ -122,7 +122,7 @@ export function homePenalty2Handler(value: string): void {
 	replicants.teams[0].player2PenaltyClock.value = data[1] || "";
 }
 export function awayPenalty1Handler(value: string): void {
-	if (!replicants.sync.values.teams[1].penalty.value) {
+	if (!replicants.sync.values.penalty.value) {
 		logger.trace('Penalty sync is disabled, ignoring penalty updates');
 		return;
 	}
@@ -131,7 +131,7 @@ export function awayPenalty1Handler(value: string): void {
 	replicants.teams[1].player1PenaltyClock.value = data[1] || "";
 }
 export function awayPenalty2Handler(value: string): void {
-	if (!replicants.sync.values.teams[1].penalty.value) {
+	if (!replicants.sync.values.penalty.value) {
 		logger.trace('Penalty sync is disabled, ignoring penalty updates');
 		return;
 	}

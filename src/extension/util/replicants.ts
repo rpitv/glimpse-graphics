@@ -23,15 +23,14 @@ export const replicants = {
 					name: nodecg().Replicant<boolean>("name", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
 					abbreviation: nodecg().Replicant<boolean>("abbreviation", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
 					shots: nodecg().Replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
-					penalty: nodecg().Replicant<boolean>("penalty", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false})
 				},{
 					score: nodecg().Replicant<boolean>("score", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 					name: nodecg().Replicant<boolean>("name", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 					abbreviation: nodecg().Replicant<boolean>("abbreviation", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 					shots: nodecg().Replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
-					penalty: nodecg().Replicant<boolean>("penalty", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false})
 				}
 			],
+			penalty: nodecg().Replicant<boolean>("penalty", "glimpse-graphics.sync-settings.values", {defaultValue: true}),
 			baseball: {
 				bottomTop: nodecg().Replicant<boolean>("bottomTop", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),
 				outsStrikesBalls: nodecg().Replicant<boolean>("outsStrikesBall", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),

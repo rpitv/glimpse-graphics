@@ -10,6 +10,17 @@
 			:summary="createFooter"
 			@update:checked-row-keys="(newSelectedRows) => selectedRows = newSelectedRows"/>
 	</div>
+	<h4>Quickplay Buttons</h4>
+	<div v-if="!globalAnnouncements" class="quickplay">
+		<NButton @click="addAnnouncement('Power Play', '2:00')">2:00 Power Play</NButton>
+		<NButton @click="addAnnouncement('Power Play', '5:00')">5:00 Power Play</NButton>
+		<NButton @click="addAnnouncement('Timeout')">Timeout</NButton>
+	</div>
+	<div v-else>
+		<NButton @click="addAnnouncement('Official Review')">Official Review</NButton>
+		<NButton @click="addAnnouncement('Delayed Penalty')">Delayed Penalty</NButton>
+		<NButton @click="addAnnouncement('Empty Net')">Empty Net</NButton>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -21,6 +32,7 @@ import {loadReplicants} from "../../browser-common/replicants";
 import {millisToString, parseTimeString} from "../util";
 import {RowKey} from "naive-ui/lib/data-table/src/interface";
 import AnnouncementTimerControl from "./AnnouncementTimerControl.vue";
+import {isBoolean} from "@vueuse/core";
 
 const replicants = await loadReplicants();
 const message = useMessage();
@@ -30,6 +42,7 @@ const props = defineProps({
 		type: Array as PropType<Announcement[]>,
 		required: true,
 	},
+	globalAnnouncements: Boolean
 });
 
 const emit = defineEmits(["update:announcements"])

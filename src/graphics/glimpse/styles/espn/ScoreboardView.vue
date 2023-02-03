@@ -66,9 +66,10 @@ const formattedClockTime = computed<string>(() => {
 })
 
 const formattedPeriod = computed<string>(() => {
-
 	if(period.value > replicants.gameSettings.periods.count.value) {
 		const overtimePeriod = period.value - replicants.gameSettings.periods.count.value;
+		if (period.value > replicants.gameSettings.periods.overtime.count.value + 3)
+			return 'S/O';
 		if(overtimePeriod === 1) {
 			return 'OT';
 		} else {
@@ -139,22 +140,59 @@ function computedMessage(message: Announcement) {
 
 // POWERPLAY SYNC
 const announcementType = computed(() => {
+	console.log(replicants.sync.values.penalty.value);
+	if (!replicants.sync.values.penalty.value)
+		return "";
+	// If we are in overtime
+	if (replicants.gameSettings.periods.overtime.count.value + 3 < period.value)
+		return "";
+	if (replicants.gameSettings.periods.count.value === 4 || (replicants.gameSettings.periods.count.value === 5 &&
+		replicants.gameSettings.periods.shootouts.value !== true)) {
+		// If two away players are on penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value) {
+			// If two home players are on penalty
+			if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value)
+				return "";
+			if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+				return "home";
+			return "home";
+		}
+		// If two home players are on penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value) {
+			// If two home players are on penalty
+			if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value)
+				return "";
+			if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+				return "away";
+			return "away";
+		}
+		// If either away player is on a penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value) {
+			// If either home player is on a penalty...
+			if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+				return "";
+			return "home";
+		}
+		// If either home player is on a penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value) {
+			// If either home player is on a penalty...
+			if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+				return "";
+			return "away";
+		}
+	}
 	if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value) {
 		// If two home players are on penalty
 		if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value)
 			return "global"
-		if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
-			return "home";
-		return "home"; 
+		return "home";
 	}
 	// If two home players are on penalty...
 	if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value) {
 		// If two home players are on penalty
 		if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value)
 			return "global";
-		if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
-			return "away";
-		return "away"; 
+		return "away";
 	}
 	// If either away player is on a penalty...
 	if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value) {
@@ -170,10 +208,48 @@ const announcementType = computed(() => {
 			return "global";
 		return "away";
 	}
+	return "";
 })
 
 const powerPlayStatus = computed(() => {
+	if (replicants.gameSettings.periods.count.value >= 5 && replicants.gameSettings.periods.shootouts.value === true)
+		return "";
 	// If we are in overtime
+	if (replicants.gameSettings.periods.count.value === 4 || (replicants.gameSettings.periods.count.value === 5 &&
+		replicants.gameSettings.periods.shootouts.value !== true)) {
+		// If two away players are on penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value) {
+			// If two home players are on penalty
+			if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value)
+				return "";
+			if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+				return "4 on 3";
+			return "5 on 3";
+		}
+		// If two home players are on penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value) {
+			// If two home players are on penalty
+			if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value)
+				return "";
+			if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+				return "4 on 3";
+			return "5 on 3";
+		}
+		// If either away player is on a penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value) {
+			// If either home player is on a penalty...
+			if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+				return "";
+			return "Power Play";
+		}
+		// If either home player is on a penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value) {
+			// If either home player is on a penalty...
+			if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+				return "";
+			return "Power Play";
+		}
+	}
 	// If two away players are on penalty...
 	if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value) {
 		// If two home players are on penalty
@@ -190,7 +266,7 @@ const powerPlayStatus = computed(() => {
 			return "3 on 3";
 		if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
 			return "4 on 3";
-		return "5 on 3"; 
+		return "5 on 3";
 	}
 	// If either away player is on a penalty...
 	if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value) {
@@ -210,7 +286,7 @@ const powerPlayStatus = computed(() => {
 
 const powerPlayClock = computed(() => {
 	let smallestTime = "";
-	const times = [replicants.teams[0].player1PenaltyClock.value, replicants.teams[0].player2PenaltyClock.value, 
+	const times = [replicants.teams[0].player1PenaltyClock.value, replicants.teams[0].player2PenaltyClock.value,
 					replicants.teams[1].player1PenaltyClock.value, replicants.teams[1].player2PenaltyClock.value];
 
 	for (const time of times) {
@@ -226,7 +302,7 @@ const powerPlayClock = computed(() => {
 
 		// If the minutes of the "smallest time" is equal to the minute of the time...
 		if (smallestTime.split(":")[0] == time.split(":")[0]) {
-			// If the seconds of the "smallest time" is less than the seconds of the time, ignore it 
+			// If the seconds of the "smallest time" is less than the seconds of the time, ignore it
 			if (smallestTime.split(":")[1] < time.split(":")[1] && smallestTime.split(":")[1] != "0")
 				continue;
 			smallestTime = time;
@@ -240,87 +316,88 @@ const powerPlayClock = computed(() => {
 </script>
 
 <style scoped lang="scss">
-	.hidden {
-		opacity: 0;
+.hidden {
+	opacity: 0;
+}
+
+.bordered {
+	border: rgb(157,154,136) 0.15vw solid;
+
+	&.no-left-border {
+		border-left: none;
+	}
+}
+
+.scoreboard {
+	display: flex;
+	justify-content: center;
+
+	position: relative;
+	top: 5vh;
+
+	max-height: 4.2vh;
+
+	transition: opacity 1s;
+}
+
+.time-section {
+	display: flex;
+	align-items: center;
+	font-family: 'Roboto', sans-serif;
+	background-color: rgb(220, 220, 220);
+	height: 3.7vh;
+
+	hr {
+		height: 50%;
+		transform: translateY(50%);
+		border: 0;
+		border-right: rgb(157,154,136) 0.075vw solid;
 	}
 
-	.bordered {
-		border: rgb(157,154,136) 0.15vw solid;
-
-		&.no-left-border {
-			border-left: none;
-		}
+	.period-section, .clock-section {
+		text-align: center;
 	}
 
-	.scoreboard {
-		display: flex;
-		justify-content: center;
-
-		position: relative;
-		top: 5vh;
-
-		max-height: 4.2vh;
-
-		transition: opacity 1s;
-	}
-
-	.time-section {
-		display: flex;
-		align-items: center;
-		font-family: 'Roboto', sans-serif;
-		background-color: rgb(220, 220, 220);
-
-		hr {
-			height: 50%;
-			transform: translateY(50%);
-			border: 0;
-			border-right: rgb(157,154,136) 0.075vw solid;
-		}
-
-		.period-section, .clock-section {
-			text-align: center;
-		}
-
-		.period-section {
-			font-size: 1.4vw;
-			width: 4.1vw;
-		}
-		.clock-section {
-			font-size: 1.4vw;
-			width: 5.9vw;
-		}
-	}
-
-	.announcement-section {
-		position: absolute;
-		top: 2.5vh;
-		border: rgb(157,154,136) 0.15vw solid;
-		font-family: 'Roboto', sans-serif;
+	.period-section {
 		font-size: 1.4vw;
-
-		&.global {
-			text-align: center;
-			background-color: rgb(241,229,76);
-			color: rgb(99,87,24);
-			width: calc(10.1vw);
-			transform: translateX(-0.15vw);
-		}
-
-		&.team1 {
-			text-align: left;
-			padding-left: 1em;
-			background-color: v-bind(team1Color);
-			color: v-bind(team1TextColor);
-			width: calc(21.5vw - 1em);
-		}
-
-		&.team2 {
-			text-align: left;
-			padding-left: 1em;
-			background-color: v-bind(team2Color);
-			color: v-bind(team2TextColor);
-			width: calc(21.5vw - 1em);
-			transform: translateX(-0.075vw);
-		}
+		width: 4.1vw;
 	}
+	.clock-section {
+		font-size: 1.4vw;
+		width: 5.9vw;
+	}
+}
+
+.announcement-section {
+	position: absolute;
+	top: 2.5vh;
+	border: rgb(157,154,136) 0.15vw solid;
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.4vw;
+
+	&.global {
+		text-align: center;
+		background-color: rgb(241,229,76);
+		color: rgb(99,87,24);
+		width: calc(10.1vw);
+		transform: translateX(-0.15vw);
+	}
+
+	&.team1 {
+		text-align: left;
+		padding-left: 1em;
+		background-color: v-bind(team1Color);
+		color: v-bind(team1TextColor);
+		width: calc(21.5vw - 1em);
+	}
+
+	&.team2 {
+		text-align: left;
+		padding-left: 1em;
+		background-color: v-bind(team2Color);
+		color: v-bind(team2TextColor);
+		width: calc(21.5vw - 1em);
+		transform: translateX(-0.075vw);
+	}
+}
 </style>
