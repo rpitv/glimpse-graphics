@@ -13,7 +13,7 @@ function toggleOption(req: Request, res: Response, option: Replicant<boolean>) {
 	} else {
 		option.value = !option.value;
 	}
-	apiResponseV1(res, 200, `toggled [${option.namespace}] (${option.name}) to ${option.value}`)
+	apiResponseV1(res, 200, `toggled [${option.namespace}] (${option.name}) to ${option.value}`);
 }
 
 export const endpointsToggle: { [key: string]: Replicant<boolean> } = {

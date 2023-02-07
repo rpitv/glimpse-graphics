@@ -8,18 +8,22 @@ import {methods} from "./method";
  * @param res Express response
  * @param code the HTTP status code
  * @param msg a short informative phrase/sentence
+ * @param data optional raw data dump, do not output circular JSON objects it will crash.
  */
-export const apiResponseV1 = (res: Response, code: number, msg: string): void => {
-	res.status(code).json({code, msg});
+export const apiResponseV1 = (res: Response, code: number, msg: string, data = {}): void => {
+	res.status(code).json({code, msg, data});
 };
 
 /**
  * A panic API response, for use where the API encountered a state that it should not have.
  * @param req Express request
  * @param res Express response
+ * @param msg optional additional string to provide more info
  */
-export const apiFatalPanik = (req: Request, res: Response): void => {
-	apiResponseV1(res, 501, `FATAL ERROR: REPORT TO DEVS THIS URL IMMEDIATELY!!!!! ${req.url}`)
+export const apiFatalPanik = (req: Request, res: Response, msg = ""): void => {
+	if (!res.headersSent) {
+		apiResponseV1(res, 501, `FATAL ERROR: REPORT TO DEVS THIS URL IMMEDIATELY!!!!!\n!!!REMOVE API KEY FIRST!!!\n${msg}`, req.url)
+	}
 }
 
 export const createApi = (nodecg: NodeCG): void => {
@@ -55,6 +59,11 @@ export const createApi = (nodecg: NodeCG): void => {
 		} else {
 			methods[req.params.method](req, res, req.params.endpoint);
 		}
+
+		// request should be done within ~500ms otherwise send panik msg
+		setTimeout(() => {
+			apiFatalPanik(req, res);
+		}, 500);
 	});
 
 

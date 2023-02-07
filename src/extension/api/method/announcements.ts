@@ -6,15 +6,32 @@ import {v4} from "uuid";
 import {Replicant} from "nodecg-types/types/server";
 
 /**
+ * Convert millisecond-based time to a game clock string, i.e. the format mm:ss.S.
+ * @param time Time in milliseconds to convert.
+ */
+export function millisToString(time: number) {
+	if (Math.abs(time) < 60000) {
+		const seconds = Math.floor((time % 60000) / 1000).toString(10).padStart(2, '0');
+		const millis = Math.floor(Math.abs(time % 1000) / 100).toString(10);
+		return `${seconds}.${millis}`;
+	} else {
+		const minutes = Math.floor(time / 60000).toString(10).padStart(2, '0');
+		const seconds = Math.floor(Math.abs(time % 60000) / 1000).toString(10).padStart(2, '0');
+		const millis = Math.floor(Math.abs(time % 1000) / 100).toString(10);
+		return `${minutes}:${seconds}.${millis}`;
+	}
+}
+
+/**
  * Add an announcement to the appropriate channel and responds to the HTTP request. <br>
  * NOTE: This means the Express response has already been sent here
  * and do NOT send another response further downstream.
  *
  * @param res Express response
- * @param type Is it a global, team0, or team1 announcement?
+ * @param type Is it a global, team1, or team2 Announcement[] being modified?
  * @param messageInput The message string to be displayed.
  * @param timerInput The length of the time to display the announcement for in ms or null for no specified time.
- * @param top If true inserts the new announcement at the top of the queue.
+ * @param top If true inserts the new announcement at the top of the queue, default false.
  */
 function addAnnouncement(res: Response, type: Replicant<Announcement[]>, messageInput: string, timerInput: number | null, top = false) {
 	const newAnnouncement: Announcement = {
@@ -34,7 +51,34 @@ function addAnnouncement(res: Response, type: Replicant<Announcement[]>, message
 	} else {
 		type.value = [...type.value, newAnnouncement];
 	}
-	apiResponseV1(res, 200, `created announcement '${messageInput}' in '${type.name}'`)
+	apiResponseV1(res, 200, `created announcement '${messageInput}' in '${type.name}'`);
+}
+
+/**
+ * Removes an announcement for the appropriate section. <br>
+ * NOTE: This means the Express response has already been sent here
+ * and do NOT send another response further downstream.
+ *
+ * @param res Express response
+ * @param type Is it a global, team1, or team2 Announcement[] being modified?
+ * @param bottom If true remove from the bottom of the queue, default false.
+ */
+function removeOneAnnouncement(res: Response, type: Replicant<Announcement[]>, bottom = false) {
+	console.log(type.value);
+	if (type.value.length === 0) {
+		apiResponseV1(res, 200, "there are no messages to remove here");
+		return;
+	}
+
+	const removed = type.value[bottom ? (type.value.length - 1) : 0]
+	if (bottom) {
+		type.value.splice(type.value.length - 1, 1);
+	} else {
+		type.value.splice(0, 1);
+	}
+	apiResponseV1(res, 200, `removed announcement ${removed.message} w/ ${
+		removed.timer ? `${millisToString(removed.timer.length)} left` : "'NO TIME SPECIFIED'"
+	} from '${type.name}'`, removed);
 }
 
 /**
@@ -59,8 +103,10 @@ function teamSpecific(req: Request, res: Response): void {
 	}
 
 	const parameter2: { [key: string]: { name: string, time: number | null } } = {
-		"powerplay2": {name: "Power Play", time: (2 * 60 * 1000)},
-		"powerplay5": {name: "Power Play", time: (5 * 60 * 1000)},
+		"power_play_2": {name: "Power Play", time: (2 * 60 * 1000)},
+		"power_play_5": {name: "Power Play", time: (5 * 60 * 1000)},
+		"pp_2": {name: "PP", time: (2 * 60 * 1000)},
+		"pp_5": {name: "PP", time: (5 * 60 * 1000)},
 		"delayed_penalty": {name: "Delayed Penalty", time: null},
 		"timeout": {name: "Timeout", time: null},
 	};
@@ -113,18 +159,54 @@ function handleGlobal(req: Request, res: Response): void {
 	}
 }
 
+/**
+ * Handles removing announcements from each type individually or the entire queue. <br>
+ *
+ * <br> /v1/:key/:method/:endpoint/:param1/:param2
+ * <br> param1 is which announcement queue to remove from
+ * <br> param2 is where to remove the announcement (bottom | all)
+ *
+ * @param req Express request
+ * @param res Express response
+ */
+function handleRemove(req: Request, res: Response): void {
+	if (!req.params.param1) {
+		apiResponseV1(res, 400, "missing announcement type to remove announcement from (global | team1 | team2)");
+		return;
+	}
+
+	const parameter1: { [key: string]: Replicant<Announcement[]> } = {
+		"global": replicants.announcements.global,
+		"team1": replicants.announcements.team1,
+		"team2": replicants.announcements.team2,
+	}
+
+	if (parameter1[req.params.param1]) {
+		if (req.params.param2 === "all") {
+			parameter1[req.params.param1].value = [];
+			apiResponseV1(res, 200, `removed all controllable messages from ${parameter1[req.params.param1].name}`);
+		} else {
+			const bottom = req.params.param2 === "bottom";
+			removeOneAnnouncement(res, parameter1[req.params.param1], bottom);
+		}
+	} else {
+		apiResponseV1(res, 400, `invalid announcement type: ${req.params.param1}`)
+	}
+}
+
 export const endpointsAnnouncements: { [key: string]: (req: Request, res: Response) => void } = {
 	"team_specific": teamSpecific,
-	"global": handleGlobal
+	"global": handleGlobal,
+	"remove": handleRemove,
 }
 
 /**
  * Handles creating announcements for global and team specific cases. <br>
- * See the corresponding endpoint for further details on each endpoint's specific parameters.
+ * @see the corresponding endpoint for further details on each endpoint's specific parameters.
  *
- * @param req
- * @param res
- * @param endpoint
+ * @param req Express request
+ * @param res Express response
+ * @param endpoint the endpoint which handles the request
  */
 export function handleAnnouncements(req: Request, res: Response, endpoint: string): void {
 	if (!endpointsAnnouncements[endpoint]) {

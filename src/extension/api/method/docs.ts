@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import {endpointsToggle} from "./toggle";
 import {endpointsAnnouncements} from "./announcements";
+import {endpointsScore} from "./score";
 
 /**
  * Returns JSON of all endpoints.
@@ -19,6 +20,7 @@ export function handleDocs(req: Request, res: Response, endpoint: string): void 
 				docs: ["/"],
 				toggle: Object.keys(endpointsToggle),
 				announcements: Object.keys(endpointsAnnouncements),
+				score: Object.keys(endpointsScore),
 			}
 		}
 	});
