@@ -50,8 +50,9 @@ export async function loadReplicants() {
 		},
 		gameSettings: {
 			api: {
-				enabled: await replicant<boolean>("enabled", "glimpse-graphics.game-settings.api.key", {defaultValue: false}),
-				key: await replicant<string>("key", `glimpse-graphics.game-settings.api.key`, {defaultValue: 'CHANGE_ME_API_KEY'}),
+				enabled: await replicant<boolean>("enabled", "glimpse-graphics.game-settings.api", {defaultValue: false}),
+				key: await replicant<string>("key", `glimpse-graphics.game-settings.api`, {defaultValue: 'CHANGE_ME_API_KEY'}),
+				forceReload: await replicant<boolean>("forceReload", "glimpse-graphics.game-settings.api", {defaultValue: false}),
 			},
 			style: await replicant<'espn' | 'rpitv-modern' | 'rpitv-classic'>('style', 'glimpse-graphics.game-settings.style', {defaultValue: 'rpitv-modern'}),
 			clock: {

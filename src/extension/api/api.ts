@@ -2,6 +2,7 @@ import {NodeCG} from "nodecg-types/types/server";
 import {Request, Response} from "express"
 import {replicants} from "../util/replicants";
 import {methods} from "./method";
+import {generateDocs} from "./method/docs";
 
 /**
  * The common API response is a json consisting of the HTTP status code and a short message.
@@ -74,6 +75,12 @@ export const createApi = (nodecg: NodeCG): void => {
 
 	// mounts base router url at "localhost:PORT/glimpse-graphics-api"
 	nodecg.mount("/glimpse-graphics-api", router);
+
+	// documentation can be statically generated at initialization
+	generateDocs();
+
+	// "force-reload" must be init to false for state detector to work properly
+	replicants.gameSettings.api.forceReload.value = false;
 };
 
 

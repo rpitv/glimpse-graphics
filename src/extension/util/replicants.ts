@@ -1,4 +1,4 @@
-import { get as nodecg } from './nodecg';
+import {get as nodecg} from './nodecg';
 import {Announcement} from "./Announcement";
 
 export const replicants = {
@@ -46,8 +46,9 @@ export const replicants = {
 	},
 	gameSettings: {
 		api: {
-			enabled: nodecg().Replicant<boolean>("enabled", "glimpse-graphics.game-settings.api.key", {defaultValue: false}),
-			key: nodecg().Replicant<string>("key", `glimpse-graphics.game-settings.api.key`, {defaultValue: 'CHANGE_ME_API_KEY'}),
+			enabled: nodecg().Replicant<boolean>("enabled", "glimpse-graphics.game-settings.api", {defaultValue: false}),
+			key: nodecg().Replicant<string>("key", `glimpse-graphics.game-settings.api`, {defaultValue: 'CHANGE_ME_API_KEY'}),
+			forceReload: nodecg().Replicant<boolean>("forceReload", "glimpse-graphics.game-settings.api", {defaultValue: false}),
 		},
 		style: nodecg().Replicant<'espn'|'rpitv-modern'|'rpitv-classic'>('style', "glimpse-graphics.game-settings.style", {defaultValue: 'rpitv-modern'}),
 		clock: {

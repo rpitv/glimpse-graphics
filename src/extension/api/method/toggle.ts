@@ -16,16 +16,26 @@ function toggleOption(req: Request, res: Response, option: Replicant<boolean>) {
 	apiResponseV1(res, 200, `toggled [${option.namespace}] (${option.name}) to ${option.value}`);
 }
 
+export function forceReload(req: Request, res: Response) {
+	const option = replicants.gameSettings.api.forceReload;
+	option.value = true;
+	apiResponseV1(res, 200, "refreshed all instances of 'glimpse.html'");
+
+	setTimeout(() => {
+		option.value = false;
+	}, 1000);
+}
+
 export const endpointsToggle: { [key: string]: Replicant<boolean> } = {
-	"lt-scoreboard": replicants.lowerThird.scoreboard,
-	"lt-locator": replicants.lowerThird.locator,
 	"bug": replicants.lowerThird.bug,
-	"end-credits": replicants.lowerThird.endGraphics.show,
 	"commentators": replicants.lowerThird.commentators.show,
-	"main-scoreboard": replicants.scoreboard.visible,
 	"copyright": replicants.lowerThird.showCopyright,
-	"team_0_enable": replicants.teams[0].enabled,
-	"team_1_enable": replicants.teams[1].enabled
+	"end-credits": replicants.lowerThird.endGraphics.show,
+	"lt-locator": replicants.lowerThird.locator,
+	"lt-scoreboard": replicants.lowerThird.scoreboard,
+	"main-scoreboard": replicants.scoreboard.visible,
+	"team_1_enable": replicants.teams[0].enabled,
+	"team_2_enable": replicants.teams[1].enabled
 }
 
 /**
@@ -35,6 +45,11 @@ export const endpointsToggle: { [key: string]: Replicant<boolean> } = {
  * @param endpoint the key within "endpoints" to toggle
  */
 export function handleToggle(req: Request, res: Response, endpoint: string): void {
+	if (endpoint === "force-reload") {
+		forceReload(req, res);
+		return;
+	}
+
 	if (!endpointsToggle[endpoint]) {
 		apiResponseV1(res, 400, "invalid endpoint");
 	} else {

@@ -22,6 +22,24 @@ export function millisToString(time: number) {
 	}
 }
 
+export const announcement_global_param1: { [key: string]: string } = {
+	"4on4": "4 on 4",
+	"3on3": "3 on 3",
+	"3on5": "3 on 5",
+	"5on3": "5 on 3",
+	"empty_net": "Empty Net",
+	"official_review": "Official Review",
+}
+
+export const announcement_teamSpecific_param2: { [key: string]: { name: string, time: number | null } } = {
+	"delayed_penalty": {name: "Delayed Penalty", time: null},
+	"power_play_2": {name: "Power Play", time: (2 * 60 * 1000)},
+	"power_play_5": {name: "Power Play", time: (5 * 60 * 1000)},
+	"pp_2": {name: "PP", time: (2 * 60 * 1000)},
+	"pp_5": {name: "PP", time: (5 * 60 * 1000)},
+	"timeout": {name: "Timeout", time: null},
+};
+
 /**
  * Add an announcement to the appropriate channel and responds to the HTTP request. <br>
  * NOTE: This means the Express response has already been sent here
@@ -64,7 +82,6 @@ function addAnnouncement(res: Response, type: Replicant<Announcement[]>, message
  * @param bottom If true remove from the bottom of the queue, default false.
  */
 function removeOneAnnouncement(res: Response, type: Replicant<Announcement[]>, bottom = false) {
-	console.log(type.value);
 	if (type.value.length === 0) {
 		apiResponseV1(res, 200, "there are no messages to remove here");
 		return;
@@ -102,21 +119,13 @@ function teamSpecific(req: Request, res: Response): void {
 		return;
 	}
 
-	const parameter2: { [key: string]: { name: string, time: number | null } } = {
-		"power_play_2": {name: "Power Play", time: (2 * 60 * 1000)},
-		"power_play_5": {name: "Power Play", time: (5 * 60 * 1000)},
-		"pp_2": {name: "PP", time: (2 * 60 * 1000)},
-		"pp_5": {name: "PP", time: (5 * 60 * 1000)},
-		"delayed_penalty": {name: "Delayed Penalty", time: null},
-		"timeout": {name: "Timeout", time: null},
-	};
-	if (!parameter2[req.params.param2]) {
+	if (!announcement_teamSpecific_param2[req.params.param2]) {
 		apiResponseV1(res, 400, `'${req.params.param2}' is an invalid message to display on team: '${req.params.param1}'`);
 		return;
 	}
 
 	const top = req.params.param3 === "top";
-	const selected = parameter2[req.params.param2];
+	const selected = announcement_teamSpecific_param2[req.params.param2];
 	if (req.params.param1 === "team1") {
 		addAnnouncement(res, replicants.announcements.team1, selected.name, selected.time, top);
 	} else if (req.params.param1 === "team2") {
@@ -142,18 +151,9 @@ function handleGlobal(req: Request, res: Response): void {
 		return;
 	}
 
-	const parameter1: { [key: string]: string } = {
-		"official_review": "Official Review",
-		"empty_net": "Empty Net",
-		"4on4": "4 on 4",
-		"3on3": "3 on 3",
-		"3on5": "3 on 5",
-		"5on3": "5 on 3"
-	}
-
 	const bottom = req.params.param2 === "bottom";
-	if (parameter1[req.params.param1]) {
-		addAnnouncement(res, replicants.announcements.global, parameter1[req.params.param1], null, !bottom);
+	if (announcement_global_param1[req.params.param1]) {
+		addAnnouncement(res, replicants.announcements.global, announcement_global_param1[req.params.param1], null, !bottom);
 	} else {
 		apiResponseV1(res, 400, `invalid global announcement param: '${req.params.param1}'`);
 	}
@@ -175,19 +175,19 @@ function handleRemove(req: Request, res: Response): void {
 		return;
 	}
 
-	const parameter1: { [key: string]: Replicant<Announcement[]> } = {
+	const announcement_handleRemove_param1: { [key: string]: Replicant<Announcement[]> } = {
 		"global": replicants.announcements.global,
 		"team1": replicants.announcements.team1,
 		"team2": replicants.announcements.team2,
 	}
 
-	if (parameter1[req.params.param1]) {
+	if (announcement_handleRemove_param1[req.params.param1]) {
 		if (req.params.param2 === "all") {
-			parameter1[req.params.param1].value = [];
-			apiResponseV1(res, 200, `removed all controllable messages from ${parameter1[req.params.param1].name}`);
+			announcement_handleRemove_param1[req.params.param1].value = [];
+			apiResponseV1(res, 200, `removed all controllable messages from ${announcement_handleRemove_param1[req.params.param1].name}`);
 		} else {
 			const bottom = req.params.param2 === "bottom";
-			removeOneAnnouncement(res, parameter1[req.params.param1], bottom);
+			removeOneAnnouncement(res, announcement_handleRemove_param1[req.params.param1], bottom);
 		}
 	} else {
 		apiResponseV1(res, 400, `invalid announcement type: ${req.params.param1}`)

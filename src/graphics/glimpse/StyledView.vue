@@ -29,7 +29,16 @@ import TVModernScoreboardView from "./styles/rpitv-modern/ScoreboardView.vue";
 import TVModernImageView from "./styles/rpitv-modern/ImageView.vue";
 import TGVModernLowerThird from "./styles/rpitv-modern/LowerThird.vue"
 
+import {watch} from "vue";
+
 const replicants = await loadReplicants();
+
+// from false to true then reload page
+watch(replicants.gameSettings.api.forceReload, (newV, oldV) => {
+	if (!oldV && newV) {
+		location.reload();
+	}
+});
 </script>
 
 <style scoped lang="scss">
