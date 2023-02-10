@@ -66,6 +66,13 @@
 					 :default-value="replicants.lowerThird.commentators.rightPerson.value" style="max-width: 40%"
 					 placeholder="Right Person"/>
 		</div>
+		<h2>
+			<n-button @click="replicants.lowerThird.showCopyright.value = !replicants.lowerThird.showCopyright.value"
+					  :type="replicants.lowerThird.showCopyright.value ? 'error' : 'success'">
+				{{ replicants.lowerThird.showCopyright.value ? "Hide" : "Show" }}
+			</n-button>
+			Display Copyright
+		</h2>
 		<div v-if="replicants.gameSettings.style.value === 'rpitv-modern'">
 			<h2>
 				<n-button

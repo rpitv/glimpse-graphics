@@ -1,4 +1,4 @@
-import { get as nodecg } from './nodecg';
+import {get as nodecg} from './nodecg';
 import {Announcement} from "./Announcement";
 
 export const replicants = {
@@ -45,6 +45,11 @@ export const replicants = {
 		}
 	},
 	gameSettings: {
+		api: {
+			enabled: nodecg().Replicant<boolean>("enabled", "glimpse-graphics.game-settings.api", {defaultValue: false}),
+			key: nodecg().Replicant<string>("key", `glimpse-graphics.game-settings.api`, {defaultValue: 'CHANGE_ME_API_KEY'}),
+			forceReload: nodecg().Replicant<boolean>("forceReload", "glimpse-graphics.game-settings.api", {defaultValue: false}),
+		},
 		style: nodecg().Replicant<'espn'|'rpitv-modern'|'rpitv-classic'>('style', "glimpse-graphics.game-settings.style", {defaultValue: 'rpitv-modern'}),
 		clock: {
 			enabled: nodecg().Replicant<boolean>("enabled", "glimpse-graphics.game-settings.clock", {defaultValue: true}),
@@ -138,5 +143,6 @@ export const replicants = {
 			length: nodecg().Replicant<number>('length', 'glimpse-graphics.endGraphics', {defaultValue: 30})
 		},
 		bug: nodecg().Replicant<boolean>("bug", `glimpse-graphics.images.lowerThird`, {defaultValue: true}),
+		showCopyright: nodecg().Replicant<boolean>("showCopyright", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
 	}
 }

@@ -3,7 +3,8 @@
 		<n-grid x-gap="12" :cols="4">
 			<n-grid-item>
 				<h1>Style</h1>
-				<n-select :options="styles" v-model:value="replicants.gameSettings.style.value" />
+				<n-select :options="styles" v-model:value="replicants.gameSettings.style.value"/>
+
 				<h1>Presets</h1>
 				<n-select disabled title="Coming Soon" filterable :options="sportsPresetList"
 						  v-model:value="selectedSportPreset"/>
@@ -11,22 +12,29 @@
 			</n-grid-item>
 
 			<n-grid-item>
-				<FootballSettings />
+				<FootballSettings/>
 			</n-grid-item>
 
 			<n-grid-item>
-				<BaseballSettings />
+				<BaseballSettings/>
 			</n-grid-item>
 		</n-grid>
+
+		<n-message-provider>
+			<n-dialog-provider>
+				<api-settings/>
+			</n-dialog-provider>
+		</n-message-provider>
 	</div>
 </template>
 
 <script setup lang="ts">
 import {ref} from "vue";
 import {loadReplicants} from "../../browser-common/replicants";
-import {NSelect, NButton, NGrid, NGridItem} from "naive-ui";
+import {NButton, NGrid, NGridItem, NSelect, NMessageProvider, NDialogProvider} from "naive-ui";
 import FootballSettings from "./FootballSettings.vue";
 import BaseballSettings from "./BaseballSettings.vue";
+import ApiSettings from "./ApiSettings.vue"
 
 const replicants = await loadReplicants();
 
@@ -85,6 +93,7 @@ const sportsPresetList = ref([
 .game-settings {
 	min-height: 400px;
 }
+
 .mt-10 {
 	margin-top: 10px;
 }

@@ -192,7 +192,7 @@ const tableData = computed<AnnouncementRow[]>(() => {
  *   are not guaranteed to successfully be parsed and may result in undesired output or errors being displayed to
  *   the user.
  */
-function addAnnouncement(messageInput: string, timerInput: string) {
+function addAnnouncement(messageInput: string, timerInput: string | null) {
 	try {
 		const newAnnouncement: Announcement = {
 			id: v4(),
