@@ -14,12 +14,12 @@
 	<div v-if="!globalAnnouncements" class="quickplay">
 		<NButton @click="addAnnouncement('Power Play', '2:00')">2:00 Power Play</NButton>
 		<NButton @click="addAnnouncement('Power Play', '5:00')">5:00 Power Play</NButton>
-		<NButton @click="addAnnouncement('Timeout', null)">Timeout</NButton>
+		<NButton @click="addAnnouncement('Timeout', '')">Timeout</NButton>
 	</div>
 	<div v-else>
-		<NButton @click="addAnnouncement('Official Review', null)">Official Review</NButton>
-		<NButton @click="addAnnouncement('Delayed Penalty', null)">Delayed Penalty</NButton>
-		<NButton @click="addAnnouncement('Empty Net', null)">Empty Net</NButton>
+		<NButton @click="addAnnouncement('Official Review', '')">Official Review</NButton>
+		<NButton @click="addAnnouncement('Delayed Penalty', '')">Delayed Penalty</NButton>
+		<NButton @click="addAnnouncement('Empty Net', '')">Empty Net</NButton>
 	</div>
 </template>
 
