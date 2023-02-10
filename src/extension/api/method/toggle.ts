@@ -34,6 +34,8 @@ export const endpointsToggle: { [key: string]: Replicant<boolean> } = {
 	"lt-locator": replicants.lowerThird.locator,
 	"lt-scoreboard": replicants.lowerThird.scoreboard,
 	"main-scoreboard": replicants.scoreboard.visible,
+	"penalty": replicants.sync.values.penalty,
+	"sogs": replicants.sync.values.sogs,
 	"team_1_enable": replicants.teams[0].enabled,
 	"team_2_enable": replicants.teams[1].enabled
 }

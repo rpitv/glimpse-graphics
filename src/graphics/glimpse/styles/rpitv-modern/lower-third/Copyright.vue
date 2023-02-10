@@ -35,6 +35,7 @@ const replicants = await loadReplicants();
 
 #background {
 	background: #DC001C;
+	color: white;
 	padding: 1vw;
 	border-radius: 1em;
 	//border: 0.1em solid black;

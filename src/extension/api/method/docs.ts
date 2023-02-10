@@ -7,7 +7,7 @@ import * as fs from "fs-extra";
 import {apiFatalPanik} from "../api";
 
 /**
- * Returns HTML file of the statically generated doc.
+ * Serves the statically generated HTML file of the documentation.
  *
  * @param req Express request object
  * @param res Express response object
@@ -27,9 +27,10 @@ export function handleDocs(req: Request, res: Response, endpoint: string): void 
 }
 
 /**
- * Generates the static documentation file when NodeCG inits. It is a simple HTML table
+ * Generates the static documentation file when NodeCG inits. It is a simple HTML table.
  */
 export async function generateDocs() {
+	// generate the beginning HTML code
 	const body = [`<html lang="en"><head><title>Glimpse Graphics API</title><style>`,
 		"body { text-align: center; font-size: 1vmin; position: relative; }",
 		"table { font-size: 2em; text-align: left; position: relative;}",
@@ -44,12 +45,14 @@ export async function generateDocs() {
 		"<noscript><h1 id='warn'>WARNING JAVASCRIPT SHOULD BE ENABLED FOR PROPER FUNCTIONALITY</h1></noscript>",
 		"<table><tbody><tr><th>Endpoint</th><th>__URL__</th><th>Click to Copy</th></tr>"];
 
+	// insert global announcements endpoint
 	const a_ep_ann_global = Object.keys(announcement_global_param1);
 	for (const e in a_ep_ann_global) {
 		body.push(`<tr><td>announcements</td><td>announcements/global/${a_ep_ann_global[e]}</td></tr>`);
 		body.push(`<tr><td>announcements</td><td>announcements/global/${a_ep_ann_global[e]}/bottom</td></tr>`);
 	}
 
+	// insert team specific announcements endpoint
 	const a_ep_ann_team = Object.keys(announcement_teamSpecific_param2);
 	for (const e in a_ep_ann_team) {
 		body.push(`<tr><td>announcements</td><td>announcements/team_specific/team1/${a_ep_ann_team[e]}</td></tr>`);
@@ -60,6 +63,7 @@ export async function generateDocs() {
 		body.push(`<tr><td>announcements</td><td>announcements/team_specific/team2/${a_ep_ann_team[e]}/bottom</td></tr>`);
 	}
 
+	// insert remove announcement endpoints
 	body.push("<tr><td>announcements</td><td>announcements/remove/global</td></tr>");
 	body.push("<tr><td>announcements</td><td>announcements/remove/global/all</td></tr>");
 	body.push("<tr><td>announcements</td><td>announcements/remove/global/bottom</td></tr>");
@@ -70,18 +74,17 @@ export async function generateDocs() {
 	body.push("<tr><td>announcements</td><td>announcements/remove/team2/all</td></tr>");
 	body.push("<tr><td>announcements</td><td>announcements/remove/team2/bottom</td></tr>");
 
+	// insert the link to this documentation
 	body.push("<tr><td>docs</td><td>docs</td></tr>");
 
+	// insert changing scores endpoint
 	const a_ep_score = Object.keys(endpointsScore);
 	for (const e in a_ep_score) {
 		body.push(`<tr><td>score</td><td>score/${a_ep_score[e]}/team1/<b>__NUMBER__</b></td></tr>`);
-		body.push(`<tr><td>score</td><td>score/${a_ep_score[e]}/team1/<b>__NUMBER__</b></td></tr>`);
-		body.push(`<tr><td>score</td><td>score/${a_ep_score[e]}/team1/<b>__NUMBER__</b></td></tr>`);
-		body.push(`<tr><td>score</td><td>score/${a_ep_score[e]}/team2/<b>__NUMBER__</b></td></tr>`);
-		body.push(`<tr><td>score</td><td>score/${a_ep_score[e]}/team2/<b>__NUMBER__</b></td></tr>`);
 		body.push(`<tr><td>score</td><td>score/${a_ep_score[e]}/team2/<b>__NUMBER__</b></td></tr>`);
 	}
 
+	// insert the available toggle endpoints
 	const a_ep_toggle = Object.keys(endpointsToggle);
 	for (const e in a_ep_toggle) {
 		body.push(`<tr><td>toggle</td><td>toggle/${a_ep_toggle[e]}</td></tr>`);
@@ -90,6 +93,7 @@ export async function generateDocs() {
 	}
 	body.push("<tr><td>toggle</td><td>toggle/force-reload</td></tr>");
 
+	// end of table and insert the JS to enhance the page on load
 	body.push("</tbody></table>");
 	body.push(`<script type="text/javascript">
 const API_KEY = window.location.pathname.split("/")[3];
@@ -126,6 +130,7 @@ window.addEventListener("load", (e) => {
 	body.push("")
 	body.push("</body></html>");
 
+	// save static file to disk
 	try {
 		const directory = path.join(__dirname, '..', '_static');
 		const filePath = path.join(directory, "_docs.html");
