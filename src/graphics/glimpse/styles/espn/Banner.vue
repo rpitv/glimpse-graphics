@@ -1,16 +1,16 @@
 <template>
-	<div class="banner" :class="{show: replicants.sync.values.sogs.value, hide: !replicants.sync.values.sogs.value}">
+	<div class="banner" :class="{show: replicants.sync.values.sogs.value && replicants.scoreboard.visible.value, hide: !replicants.sync.values.sogs.value || !replicants.scoreboard.visible.value}">
 		<div class="title">SHOTS ON GOAL</div>
 		<div class="bottom"></div>
 		<div class="upward-line"></div>
-		<div class="left-team-name" :style="{color: replicants.teams[0].primaryColor.value}">
-			{{ replicants.teams[0].schoolName.value }}
-		</div>
-		<div class="right-team-name" :style="{color: replicants.teams[1].primaryColor.value}">
+		<div class="left-team-name" :style="{color: replicants.teams[1].primaryColor.value}">
 			{{ replicants.teams[1].schoolName.value }}
 		</div>
-		<div class="left-team-sogs"> {{ replicants.teams[0].shots.value }}</div>
+		<div class="right-team-name" :style="{color: replicants.teams[0].primaryColor.value}">
+			{{ replicants.teams[0].schoolName.value }}
+		</div>
 		<div class="right-team-sogs"> {{ replicants.teams[1].shots.value }}</div>
+		<div class="left-team-sogs"> {{ replicants.teams[0].shots.value }}</div>
 	</div>
 </template>
 
