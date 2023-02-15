@@ -13,6 +13,10 @@
 			<TVModernScoreboardView />
 			<TGVModernLowerThird />
 		</div>
+		<div v-else-if="replicants.gameSettings.style.value === 'rpitv-style7'">
+			<TVStyle7ImageView />
+			<TVStyle7Scoreboard />
+		</div>
 	</div>
 </template>
 
@@ -27,7 +31,10 @@ import ESPNBanner from "./styles/espn/Banner.vue";
 import TVModernCopyright from "./styles/rpitv-modern/lower-third/Copyright.vue"
 import TVModernScoreboardView from "./styles/rpitv-modern/ScoreboardView.vue";
 import TVModernImageView from "./styles/rpitv-modern/ImageView.vue";
-import TGVModernLowerThird from "./styles/rpitv-modern/LowerThird.vue"
+import TGVModernLowerThird from "./styles/rpitv-modern/LowerThird.vue";
+
+import TVStyle7Scoreboard from "./styles/rpitv-style7/ScoreboardView.vue";
+import TVStyle7ImageView from "./styles/rpitv-style7/ImageView.vue";
 
 import {watch} from "vue";
 
