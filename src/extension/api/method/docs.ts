@@ -56,11 +56,11 @@ export async function generateDocs() {
 	const a_ep_ann_team = Object.keys(announcement_teamSpecific_param2);
 	for (const e in a_ep_ann_team) {
 		body.push(`<tr><td>announcements</td><td>announcements/team_specific/team1/${a_ep_ann_team[e]}</td></tr>`);
-		body.push(`<tr><td>announcements</td><td>announcements/team_specific/team1/${a_ep_ann_team[e]}/bottom</td></tr>`);
+		body.push(`<tr><td>announcements</td><td>announcements/team_specific/team1/${a_ep_ann_team[e]}/top</td></tr>`);
 	}
 	for (const e in a_ep_ann_team) {
 		body.push(`<tr><td>announcements</td><td>announcements/team_specific/team2/${a_ep_ann_team[e]}</td></tr>`);
-		body.push(`<tr><td>announcements</td><td>announcements/team_specific/team2/${a_ep_ann_team[e]}/bottom</td></tr>`);
+		body.push(`<tr><td>announcements</td><td>announcements/team_specific/team2/${a_ep_ann_team[e]}/top</td></tr>`);
 	}
 
 	// insert remove announcement endpoints

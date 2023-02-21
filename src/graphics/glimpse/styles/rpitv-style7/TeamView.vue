@@ -1,13 +1,16 @@
 <template>
-	<div id="mainTeamView">
-		<div id="containerTeamView">
-			<img id="logo" ref="teamLogoImg" :src="team.logo.value" :alt="team.schoolName.value">
-			<span id="teamViewAbbreviation">{{ team.abbreviation.value }}</span>
-			<span id="teamViewScore">{{ team.score.value }}</span>
+	<div class="mainTeamView">
+		<div class="containerTeamView" :style="backgroundGradient">
+			<img class="logo" ref="teamLogoImg" :src="team.logo.value" :alt="team.schoolName.value">
+			<span class="teamViewAbbreviation">{{ computeAbbreviation(team.abbreviation.value) }}</span>
+			<span class="teamViewScore">{{ computeScore(team.score.value) }}</span>
 		</div>
-		<div id="containerTeamAnnouncements" v-for="msg in messages" class="teamAnnouncement">
-			{{ computedMessage(msg).value }}
-		</div>
+		<TransitionGroup tag="div" name="animation-team-msg">
+			<div v-for="(msg, i) in messages" :key="msg.id" :style="{'z-index': BASE_Z_INDEX - i}"
+				 :class="['teamAnnouncement', (i === 0 ? '' : 'fade-in'), (i === messages.length - 1 ? 'fade-out' : '')]">
+				{{ computedMessage(msg).value }}
+			</div>
+		</TransitionGroup>
 	</div>
 </template>
 
@@ -32,7 +35,7 @@ const team = replicants.teams[props.teamId];
 const messages = replicants.announcements[<"team1" | "team2">`team${props.teamId + 1}`];
 const teamPrimaryColor = team.primaryColor;
 const teamTextColor = props.textColor;
-const teamAbbreviationOffset = "-1.4vw";
+const BASE_Z_INDEX = 69;
 
 const teamLogoImg = ref<HTMLImageElement>();
 const teamViewHeight = ref<string>("5vh");
@@ -52,60 +55,112 @@ function computedMessage(message: Announcement) {
 			const seconds = Math.max(0, Math.floor((timeRemaining % 60000) / 1000)).toString().padStart(2, "0");
 
 			if (minutes === "0") {
-				return message.message + " :" + seconds;
+				return message.message + " 0:" + seconds;
 			} else {
 				return message.message + " " + minutes + ":" + seconds;
 			}
 		}
 	})
 }
+
+const backgroundGradient = computed(() => {
+	return "background-image: linear-gradient(135deg," + team.primaryColor.value + "," + team.secondaryColor.value + ");";
+});
+
+const computeScore = (score: number) => {
+	// noinspection TypeScriptUnresolvedFunction - Not sure why this is happening in my IDE
+	return score.toString().padStart(2, "\x00");
+}
+
+const computeAbbreviation = (abbr: string) => {
+	const max = Math.max(replicants.teams[0].abbreviation.value.length, replicants.teams[1].abbreviation.value.length);
+	// noinspection TypeScriptUnresolvedFunction - Not sure why this is happening in my IDE
+	return abbr.padEnd(max, "\x00");
+}
 </script>
 
 <style scoped lang="scss">
-#mainTeamView {
+.mainTeamView {
 	--announcement-font-size: 1.6vh;
+	--announcement-font-size-inverted: -1.7vh;
 	--padding: 0.1vh;
+	--team-font-size: 2.5vh;
+	z-index: calc(v-bind(BASE_Z_INDEX) + 1);
 }
 
-#logo {
-	height: 4.8vh;
-	padding-top: calc(1.5 * var(--padding));
-	transform: translateX(-4.4vw);
+.logo {
+	height: 4.3vh;
+	padding: calc(2 * var(--padding));
 	opacity: 1;
-	position: absolute;
-	z-index: 1;
+	z-index: calc(v-bind(BASE_Z_INDEX) + 1);
+	display: flex;
+	filter: drop-shadow(0.3vh 0.3vw 1vh black);
 }
 
-#containerTeamView {
+.containerTeamView {
 	height: calc(v-bind(teamViewHeight) + var(--padding));
 	padding-bottom: var(--padding);
+	background-color: v-bind(teamPrimaryColor);
+	z-index: calc(v-bind(BASE_Z_INDEX) + 3);
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 
 	span {
-		font-size: 2.8vh;
-		z-index: 3;
-		position: absolute;
+		font-size: var(--team-font-size);
+		z-index: calc(v-bind(BASE_Z_INDEX) + 2);
 	}
 }
 
-#teamViewAbbreviation {
-	transform: scaleY(1.8) translateX(v-bind(teamAbbreviationOffset)) translateY(0.4vh);
+.teamViewAbbreviation {
+	transform: scaleY(1.8);
+	padding: var(--padding);
 }
 
-#teamViewScore {
+.teamViewScore {
 	text-align: right;
-	transform: scaleY(1.8) translateX(-13.75vw) translateY(0.4vh);
+	transform: scaleY(1.8) translateX(-0.2vw);
 	width: 100%;
-}
-
-#containerTeamAnnouncements {
-	background-color: v-bind(teamPrimaryColor);
+	padding: var(--padding);
 }
 
 .teamAnnouncement {
 	padding-top: var(--padding);
 	padding-bottom: var(--padding);
 	font-size: var(--announcement-font-size);
-
+	background-color: v-bind(teamPrimaryColor);
+	position: relative;
+	font-weight: bold;
 	color: v-bind(teamTextColor);
+}
+
+// Vue animation classes for insertion and removing team announcements
+.animation-team-msg-move,
+.animation-team-msg-enter-active,
+.animation-team-msg-leave-active {
+	transition: all 1s ease-out;
+}
+
+.animation-team-msg-leave-active {
+	position: absolute;
+	width: 50%;
+
+	&:not(.fade-out) {
+		padding-bottom: calc(2 * var(--padding));
+	}
+}
+
+.animation-team-msg-enter-from {
+	transform: translateY(-100%);
+
+	&.fade-in {
+		opacity: 0;
+	}
+}
+
+.animation-team-msg-leave-to {
+	transform: translateY(-100%);
 }
 </style>

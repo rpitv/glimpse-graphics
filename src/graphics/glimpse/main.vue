@@ -25,6 +25,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700;900&display=swap');
 </style>
 
 <style lang="scss">
