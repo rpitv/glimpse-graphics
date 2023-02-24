@@ -15,7 +15,9 @@
 		</div>
 		<div v-else-if="replicants.gameSettings.style.value === 'rpitv-style7'">
 			<TVStyle7ImageView />
+			<TVModernCopyright />
 			<TVStyle7Scoreboard />
+			<TVStyle7LowerThird />
 		</div>
 	</div>
 </template>
@@ -35,6 +37,7 @@ import TGVModernLowerThird from "./styles/rpitv-modern/LowerThird.vue";
 
 import TVStyle7Scoreboard from "./styles/rpitv-style7/ScoreboardView.vue";
 import TVStyle7ImageView from "./styles/rpitv-style7/ImageView.vue";
+import TVStyle7LowerThird from "./styles/rpitv-style7/LowerThird.vue";
 
 import {watch} from "vue";
 

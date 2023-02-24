@@ -31,6 +31,7 @@ onMounted(() => {
 <style lang="scss">
 body {
 	overflow: hidden;
+	margin: 0;
 }
 </style>
 
