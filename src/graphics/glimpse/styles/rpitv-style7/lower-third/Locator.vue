@@ -12,7 +12,7 @@
 	<div id="rightTeam">{{ replicants.teams[1].schoolName.value }}</div>
 	<div id="containerLocation">
 		<div id="center">
-			<span class="locationECAVt">ECAV Stadium</span>
+			<span class="locationECAV">ECAV Stadium</span>
 		</div>
 	</div>
 </template>
@@ -28,7 +28,7 @@ const replicants = await loadReplicants()
 
 @font-face {
 	font-family: "Rubik";
-	src: url('../../../../../assets/rpitv-modern/Rubik.ttf');
+	src: url("../../../../../assets/rpitv-modern/Rubik.ttf");
 }
 
 div {
@@ -124,7 +124,7 @@ img {
 		transform: translateY(-13.7vh);
 	}
 
-	.locationECAVt {
+	.locationECAV {
 		background-color: black;
 		color: #ee3124;
 		padding-left: 3vw;

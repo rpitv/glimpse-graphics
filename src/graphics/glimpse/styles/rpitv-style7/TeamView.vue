@@ -80,17 +80,18 @@ const computeAbbreviation = (abbr: string) => {
 </script>
 
 <style scoped lang="scss">
+$announcement-font-size: 1.6vh;
+$announcement-font-size-inverted: -1.7vh;
+$padding-var: 0.1vh;
+$team-font-size: 2.5vh;
+
 .mainTeamView {
-	--announcement-font-size: 1.6vh;
-	--announcement-font-size-inverted: -1.7vh;
-	--padding: 0.1vh;
-	--team-font-size: 2.5vh;
 	z-index: calc(v-bind(BASE_Z_INDEX) + 1);
 }
 
 .logo {
 	height: 4.3vh;
-	padding: calc(2 * var(--padding));
+	padding: 2 * $padding-var;
 	opacity: 1;
 	z-index: calc(v-bind(BASE_Z_INDEX) + 1);
 	display: flex;
@@ -98,8 +99,8 @@ const computeAbbreviation = (abbr: string) => {
 }
 
 .containerTeamView {
-	height: calc(v-bind(teamViewHeight) + var(--padding));
-	padding-bottom: var(--padding);
+	height: calc(v-bind(teamViewHeight) + $padding-var);
+	padding-bottom: $padding-var;
 	background-color: v-bind(teamPrimaryColor);
 	z-index: calc(v-bind(BASE_Z_INDEX) + 3);
 	position: relative;
@@ -109,27 +110,27 @@ const computeAbbreviation = (abbr: string) => {
 	align-items: center;
 
 	span {
-		font-size: var(--team-font-size);
+		font-size: $team-font-size;
 		z-index: calc(v-bind(BASE_Z_INDEX) + 2);
 	}
 }
 
 .teamViewAbbreviation {
 	transform: scaleY(1.8);
-	padding: var(--padding);
+	padding: $padding-var;
 }
 
 .teamViewScore {
 	text-align: right;
 	transform: scaleY(1.8) translateX(-0.2vw);
 	width: 100%;
-	padding: var(--padding);
+	padding: $padding-var;
 }
 
 .teamAnnouncement {
-	padding-top: var(--padding);
-	padding-bottom: var(--padding);
-	font-size: var(--announcement-font-size);
+	padding-top: $padding-var;
+	padding-bottom: $padding-var;
+	font-size: $announcement-font-size;
 	background-color: v-bind(teamPrimaryColor);
 	position: relative;
 	font-weight: bold;
@@ -148,7 +149,7 @@ const computeAbbreviation = (abbr: string) => {
 	width: 50%;
 
 	&:not(.fade-out) {
-		padding-bottom: calc(2 * var(--padding));
+		padding-bottom: 2 * $padding-var;
 	}
 }
 

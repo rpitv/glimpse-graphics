@@ -411,7 +411,7 @@ const powerPlayClock = computed(() => {
 	width: 44.4%;
 	height: 90%;
 	font-weight: 900;
-	font-size: 160%;
+	font-size: 220%;
 	text-align: right;
 	font-family: 'Roboto', sans-serif;
 	color: rgb(73,73,68);
@@ -423,7 +423,7 @@ const powerPlayClock = computed(() => {
 	width: 66%;
 	height: 90%;
 	font-weight: 900;
-	font-size: 160%;
+	font-size: 220%;
 	text-align: right;
 	font-family: 'Roboto', sans-serif;
 	color: rgb(73,73,68);

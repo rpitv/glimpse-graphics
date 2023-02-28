@@ -45,7 +45,7 @@ img {
 }
 #rightPerson {
 	left: 50vw;
-	width: 36vw;
+	width: 36.5vw;
 	text-align: center;
 	font-size: 3.5vh;
 }

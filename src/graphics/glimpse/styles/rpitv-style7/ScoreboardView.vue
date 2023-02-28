@@ -159,24 +159,26 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 </script>
 
 <style scoped lang="scss">
+@use "sass:math";
+
+$announcement-font-size: 1.6vh;
+$padding-var: 0.1vh;
+$scoreboard-width: 18vw;
+$main-pos-left: 4vw;
+$main-pos-top: 4vh;
+$clock-font-size: 2.8vh;
+$announcement-global-color: rgb(91, 79, 14);
+$announcement-global-bg: rgb(240, 224, 88);
+$clock-row-bg: rgb(27, 25, 25);
+$clock-row-color: white;
+$clock-zero-red: #862f28;
+
 .hidden {
 	opacity: 0;
 }
 
 #containerScoreboardView {
-	--announcement-font-size: 1.6vh;
-	--padding: 0.1vh;
-	--scoreboard-width: 18vw;
-	--main-pos-left: 4vw;
-	--main-pos-top: 4vh;
-	--clock-font-size: 2.8vh;
-	--announcement-global-color: rgb(91, 79, 14);
-	--announcement-global-bg: rgb(240, 224, 88);
-	--clock-row-bg: rgb(27, 25, 25);
-	--clock-row-color: white;
-	--clock-zero-red: #862f28;
-
-	font-family: 'Roboto Mono', monospace;
+	font-family: "Roboto Mono", monospace;
 	transition: opacity 1s;
 }
 
@@ -184,9 +186,9 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 #bannerScore {
 	position: absolute;
 	z-index: 3;
-	left: var(--main-pos-left);
-	top: calc(var(--main-pos-top) + v-bind(elmClockHeight));
-	width: var(--scoreboard-width);
+	left: $main-pos-left;
+	top: calc($main-pos-top + v-bind(elmClockHeight));
+	width: $scoreboard-width;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -196,11 +198,11 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 	}
 
 	.tga-visible {
-		width: var(--scoreboard-width);
+		width: $scoreboard-width;
 		text-align: center;
-		font-size: var(--clock-font-size);
+		font-size: $clock-font-size;
 		height: v-bind(elmTeamViewContainerHeight);
-		padding: var(--padding);
+		padding: $padding-var;
 		background: linear-gradient(to right, v-bind(tga_color_secondary), v-bind(tga_color_primary), v-bind(tga_color_secondary));
 		color: white;
 		animation: expand_center 4s ease-out 2 alternate;
@@ -222,9 +224,9 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 }
 
 #mainScoreboardView {
-	width: var(--scoreboard-width);
-	left: var(--main-pos-left);
-	top: var(--main-pos-top);
+	width: $scoreboard-width;
+	left: $main-pos-left;
+	top:  $main-pos-top;
 	position: absolute;
 	z-index: 1;
 
@@ -238,18 +240,18 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 
 #announcementGlobalRow {
 	text-align: center;
-	color: var(--announcement-global-color);
-	background-color: var(--announcement-global-bg);
-	left: calc(var(--main-pos-left) + var(--scoreboard-width));
-	top: calc(1px + var(--main-pos-top));
-	height: calc(v-bind(elmClockHeight) - 1px);
-	padding: var(--padding);
-	padding-left: calc(3 * var(--padding));
-	padding-right: calc(3 * var(--padding));
+	color: $announcement-global-color;
+	background-color: $announcement-global-bg;
+	left: $main-pos-left + $scoreboard-width;
+	top: calc(1px + $main-pos-top);
+	height: v-bind(elmClockHeight) - 1px;
+	padding: $padding-var;
+	padding-left: calc(3 * $padding-var);
+	padding-right: calc(3 * $padding-var);
 	border-top: 1px;
 	position: absolute;
 	z-index: 1;
-	font-size: var(--clock-font-size);
+	font-size: $clock-font-size;
 	font-weight: bold;
 }
 
@@ -258,14 +260,14 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
-	font-size: var(--clock-font-size);
-	color: var(--clock-row-color);
-	padding: var(--padding);
-	padding-bottom: calc(2 * var(--padding));
+	font-size: $clock-font-size;
+	color: $clock-row-color;
+	padding: $padding-var;
+	padding-bottom: 2 * $padding-var;
 	background: linear-gradient(180deg, #625858, #0d0505, #625858);
 
 	#clockLogo {
-		height: calc(1.1 * var(--clock-font-size));
+		height: (1.1 * $clock-font-size);
 		width: auto;
 	}
 
@@ -277,11 +279,11 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 
 	@keyframes animation-clock-zero-start {
 		0% {
-			background-color: var(--clock-row-bg);
+			background-color: $clock-row-bg;
 		}
 
 		30%, 100% {
-			background-color: var(--clock-zero-red);
+			background-color: $clock-zero-red;
 		}
 	}
 
@@ -301,7 +303,7 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 	text-align: center;
 
 	#teamLeft, #teamRight {
-		font-size: var(--announcement-font-size);
+		font-size: $announcement-font-size;
 		width: 50%;
 	}
 
@@ -321,17 +323,17 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 	text-align: center;
 
 	#announcementTeamRowLeft {
-		padding-top: var(--padding);
-		padding-bottom: var(--padding);
-		font-size: var(--announcement-font-size);
+		padding-top: $padding-var;
+		padding-bottom: $padding-var;
+		font-size: $announcement-font-size;
 		float: left;
 		width: 50%;
 	}
 
 	#announcementTeamRowRight {
-		padding-top: var(--padding);
-		padding-bottom: var(--padding);
-		font-size: var(--announcement-font-size);
+		padding-top: $padding-var;
+		padding-bottom: $padding-var;
+		font-size: $announcement-font-size;
 		float: right;
 		width: 50%;
 	}
