@@ -34,10 +34,3 @@ body {
 	margin: 0;
 }
 </style>
-
-<style lang="scss">
-body {
-	overflow: hidden;
-}
-</style>
-

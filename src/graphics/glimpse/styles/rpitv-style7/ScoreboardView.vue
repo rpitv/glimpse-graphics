@@ -192,6 +192,7 @@ $clock-zero-red: #862f28;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-direction: column;
 
 	.tga-hidden {
 		opacity: 0;
@@ -226,7 +227,7 @@ $clock-zero-red: #862f28;
 #mainScoreboardView {
 	width: $scoreboard-width;
 	left: $main-pos-left;
-	top:  $main-pos-top;
+	top: $main-pos-top;
 	position: absolute;
 	z-index: 1;
 
@@ -314,7 +315,7 @@ $clock-zero-red: #862f28;
 
 	#teamRight {
 		float: right;
-		color: v-bind(teamLeftTextColor);
+		color: v-bind(teamRightTextColor);
 	}
 }
 
@@ -348,9 +349,6 @@ $clock-zero-red: #862f28;
 .animation-global-enter-from {
 	transform: translateX(-100%);
 	opacity: 0;
-}
-
-.animation-global-leave-from {
 }
 
 .animation-global-leave-to {

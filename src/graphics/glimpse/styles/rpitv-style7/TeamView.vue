@@ -87,6 +87,7 @@ $team-font-size: 2.5vh;
 
 .mainTeamView {
 	z-index: calc(v-bind(BASE_Z_INDEX) + 1);
+	color: v-bind(teamTextColor);
 }
 
 .logo {
@@ -134,7 +135,6 @@ $team-font-size: 2.5vh;
 	background-color: v-bind(teamPrimaryColor);
 	position: relative;
 	font-weight: bold;
-	color: v-bind(teamTextColor);
 }
 
 // Vue animation classes for insertion and removing team announcements

@@ -14,6 +14,11 @@
 	<div v-if="!globalAnnouncements" class="quickplay">
 		<NButton @click="addAnnouncement('Power Play', '2:00')">2:00 Power Play</NButton>
 		<NButton @click="addAnnouncement('Power Play', '5:00')">5:00 Power Play</NButton>
+		<NButton @click="addAnnouncement('Man Up', '0:30')">0:30 Man Up</NButton>
+		<NButton @click="addAnnouncement('Man Up', '1:00')">1:00 Man Up</NButton>
+		<NButton @click="addAnnouncement('Man Up', '2:00')">2:00 Man Up</NButton>
+		<NButton @click="addAnnouncement('Man Up', '3:00')">3:00 Man Up</NButton>
+		<NButton @click="addAnnouncement('Man Up', '5:00')">5:00 Man Up</NButton>
 		<NButton @click="addAnnouncement('Timeout', '')">Timeout</NButton>
 	</div>
 	<div v-else>

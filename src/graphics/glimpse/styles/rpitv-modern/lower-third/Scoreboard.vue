@@ -8,17 +8,18 @@
 	<div class="logo" id="rightLogo">
 		<img :src="replicants.lowerThird.school2Logo.value" :alt="replicants.teams[1].name.value">
 	</div>
-	<div id="leftTeam"> {{replicants.teams[0].name.value}} </div>
-	<div id="rightTeam"> {{replicants.teams[1].name.value}} </div>
-	<div id="leftScore"> {{team0Score}} </div>
-	<div id="rightScore"> {{team1Score}} </div>
-	<div id="periodText"> {{period}} </div>
+	<div id="leftTeam"> {{ replicants.teams[0].name.value }}</div>
+	<div id="rightTeam"> {{ replicants.teams[1].name.value }}</div>
+	<div id="leftScore"> {{ team0Score }}</div>
+	<div id="rightScore"> {{ team1Score }}</div>
+	<div id="periodText"> {{ period }}</div>
 </template>
 
 <script setup lang="ts">
 import Scoreboard from "../../../../../assets/rpitv-modern/Scoreboard.png"
 import {loadReplicants} from "../../../../../browser-common/replicants";
 import {ref, watch} from "vue";
+import * as repl from "repl";
 
 const replicants = await loadReplicants()
 
@@ -30,53 +31,72 @@ watch(replicants.lowerThird.scoreboard, (newValue, oldValue) => {
 	if (newValue) {
 		team0Score.value = replicants.teams[0].score.value;
 		team1Score.value = replicants.teams[1].score.value;
-		// Periods
-		if (replicants.scoreboard.period.value === 1)
+
+		// fixme tmp for 4 period game
+		const scoreboardPeriod = replicants.scoreboard.period.value;
+		if (scoreboardPeriod === 1)
 			period.value = "End of 1st";
-		if (replicants.scoreboard.period.value === 2)
+		else if (scoreboardPeriod === 2)
+			period.value = "End of 2nd";
+		else if (scoreboardPeriod === 3)
+			period.value = "End of 3rd";
+		else if (scoreboardPeriod === 4 && team0Score.value === team1Score.value)
+			period.value = "End of Regulation";
+		else if (scoreboardPeriod === 4)
+			period.value = "Final";
+		else if (scoreboardPeriod === 5)
+			period.value = "End of OT";
+
+
+		return; // fixme for general sports, below is hockey code
+
+		// Periods
+		if (scoreboardPeriod === 1)
+			period.value = "End of 1st";
+		if (scoreboardPeriod === 2)
 			period.value = "End of 2nd";
 		// If the team's score are the same and we're nearing the third period...
 		if (replicants.teams[0].score.value === replicants.teams[1].score.value) {
-			if (replicants.scoreboard.period.value === 3)
+			if (scoreboardPeriod === 3)
 				period.value = "End of Reg.";
 			// If there is no shootout...
 			if (!replicants.gameSettings.periods.shootouts.value) {
 				// If there is no 2nd overtime...
-				if (replicants.scoreboard.period.value === 4 && replicants.gameSettings.periods.overtime.count.value < 2)
+				if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value < 2)
 					period.value = "Final OT";
 				// If there is 2nd overtime...
-				if (replicants.scoreboard.period.value === 4 && replicants.gameSettings.periods.overtime.count.value >= 2)
+				if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value >= 2)
 					period.value = "End 1st OT";
-				if (replicants.scoreboard.period.value === 5)
+				if (scoreboardPeriod === 5)
 					period.value = "Final OT";
 			}
 			// If there is shootout...
 			if (replicants.gameSettings.periods.shootouts.value) {
 				// If there is no 2nd overtime...
-				if (replicants.scoreboard.period.value === 4 && replicants.gameSettings.periods.overtime.count.value < 2)
+				if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value < 2)
 					period.value = "End of OT";
-				if (replicants.scoreboard.period.value === 5 && replicants.gameSettings.periods.overtime.count.value < 2)
+				if (scoreboardPeriod === 5 && replicants.gameSettings.periods.overtime.count.value < 2)
 					period.value = "Final SO";
 				// If there is 2nd overtime...
-				if (replicants.scoreboard.period.value === 4 && replicants.gameSettings.periods.overtime.count.value === 2)
+				if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value === 2)
 					period.value = "End 1st OT";
-				if (replicants.scoreboard.period.value === 5 && replicants.gameSettings.periods.overtime.count.value === 2)
+				if (scoreboardPeriod === 5 && replicants.gameSettings.periods.overtime.count.value === 2)
 					period.value = "End 2nd OT";
-				if (replicants.scoreboard.period.value === 6 && replicants.gameSettings.periods.overtime.count.value === 2)
+				if (scoreboardPeriod === 6 && replicants.gameSettings.periods.overtime.count.value === 2)
 					period.value = "Final SO";
 			}
 		} else {
 			// If the team's score are not the same and we're at/past the third period...
-			if (replicants.scoreboard.period.value === 3)
+			if (scoreboardPeriod === 3)
 				period.value = "Final";
 			// If there is no shootout...
-			if (!replicants.gameSettings.periods.shootouts.value && replicants.scoreboard.period.value >= 4)
+			if (!replicants.gameSettings.periods.shootouts.value && scoreboardPeriod >= 4)
 				period.value = "Final OT";
 			// If there is shootout...
-			if (replicants.gameSettings.periods.shootouts.value && replicants.scoreboard.period.value >= 4) {
-				if (replicants.scoreboard.period.value >= 4 && replicants.scoreboard.period.value <= 5)
+			if (replicants.gameSettings.periods.shootouts.value && scoreboardPeriod >= 4) {
+				if (scoreboardPeriod >= 4 && scoreboardPeriod <= 5)
 					period.value = "Final OT";
-				if (replicants.scoreboard.period.value === 6)
+				if (scoreboardPeriod === 6)
 					period.value = "Final SO";
 			}
 		}
@@ -86,14 +106,16 @@ watch(replicants.lowerThird.scoreboard, (newValue, oldValue) => {
 
 
 <style scoped>
-@font-face{
+@font-face {
 	font-family: "Rubik";
 	src: url('../../../../../assets/rpitv-modern/Rubik.ttf');
 }
+
 div {
 	font-family: 'Rubik', sans-serif;
 
 }
+
 img {
 	position: absolute;
 	width: 100vw;
@@ -149,6 +171,7 @@ img {
 #rightLogo > img {
 	position: relative;
 }
+
 #leftTeam {
 	position: absolute;
 	left: 0;
@@ -158,6 +181,7 @@ img {
 	text-align: center;
 	color: white;
 }
+
 #rightTeam {
 	position: absolute;
 	left: 0;
@@ -167,6 +191,7 @@ img {
 	text-align: center;
 	color: white;
 }
+
 #leftScore {
 	position: absolute;
 	left: 0.1vw;
@@ -176,6 +201,7 @@ img {
 	text-align: center;
 	color: white;
 }
+
 #rightScore {
 	position: absolute;
 	left: 0.3vw;
@@ -185,6 +211,7 @@ img {
 	text-align: center;
 	color: white;
 }
+
 #periodText {
 	position: absolute;
 	left: 0;
