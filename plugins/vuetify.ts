@@ -8,5 +8,8 @@ export default createVuetify({
 		defaultSet: 'fa',
 		aliases,
 		sets: { fa }
+	},
+	theme: {
+		defaultTheme: 'dark'
 	}
 })

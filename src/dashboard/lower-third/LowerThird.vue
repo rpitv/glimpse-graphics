@@ -1,40 +1,146 @@
 <template>
 	<div>
-		<n-input :on-update-value="(string) => replicants.lowerThird.school1Logo.value = string"
-				 :default-value="replicants.lowerThird.school1Logo.value"
-				 :style="{'max-width': '40%', 'margin-right': '20px'}" placeholder="URL for Home/Left team's logo"/>
-		<n-input :on-update-value="(string) => replicants.lowerThird.school2Logo.value = string"
-				 :default-value="replicants.lowerThird.school2Logo.value"
-				 :style="{'max-width': '40%', 'margin-right': '20px'}" placeholder="URL for Away/Right logo"/>
-		<h2>Display Scoreboard</h2>
-		<n-button @click="replicants.lowerThird.scoreboard.value = !replicants.lowerThird.scoreboard.value"
-				  :type="replicants.lowerThird.scoreboard.value ? 'error' : 'success'">
-			{{ replicants.lowerThird.scoreboard.value ? "Hide" : "Show" }}
-		</n-button>
-		<h2>Display Commentators/Interviewer and Interviewee</h2>
-		<n-input :on-update:value="(string) => replicants.lowerThird.commentators.leftPerson.value = string"
-				 :default-value="replicants.lowerThird.commentators.leftPerson.value"
-				 :style="{'max-width': '40%', 'margin-right': '20px'}" placeholder="Left Person"/>
-		<n-input :on-update:value="(string) => replicants.lowerThird.commentators.rightPerson.value = string"
-				 :default-value="replicants.lowerThird.commentators.rightPerson.value" style="max-width: 40%"
-				 placeholder="Right Person"/>
-		<n-button @click="replicants.lowerThird.commentators.show.value = !replicants.lowerThird.commentators.show.value"
-				  style="margin-left: 20px"
-				  :type="replicants.lowerThird.commentators.show.value ? 'error' : 'success'">
-			{{ replicants.lowerThird.commentators.show.value ? "Hide" : "Show" }}
-		</n-button>
-		<h2>Display Locator</h2>
-		<n-button @click="replicants.lowerThird.locator.value = !replicants.lowerThird.locator.value"
-				  :type="replicants.lowerThird.locator.value ? 'error' : 'success'">
-			{{ replicants.lowerThird.locator.value ? "Hide" : "Show" }}
-		</n-button>
+		<h2>
+			<v-btn @click="replicants.lowerThird.bug.value = !replicants.lowerThird.bug.value"
+				  	:color="replicants.lowerThird.bug.value ? 'red' : 'green'"
+				   	class="text-none"
+			>
+				{{ replicants.lowerThird.bug.value ? "Hide" : "Show" }}
+			</v-btn>
+			Display Bug
+		</h2>
+		<br>
+		<h2>
+			<v-btn @click="replicants.lowerThird.scoreboard.value = !replicants.lowerThird.scoreboard.value"
+				  	:color="replicants.lowerThird.scoreboard.value ? 'red' : 'green'"
+					class="text-none"
+			>
+				{{ replicants.lowerThird.scoreboard.value ? "Hide" : "Show" }}
+			</v-btn>
+			Display Scoreboard
+		</h2>
+		<br>
+		<h2>
+			<v-btn @click="replicants.lowerThird.locator.value = !replicants.lowerThird.locator.value"
+				 	:color="replicants.lowerThird.locator.value ? 'red' : 'green'"
+					class="text-none"
+			>
+				{{ replicants.lowerThird.locator.value ? "Hide" : "Show" }}
+			</v-btn>
+			Display Locator
+		</h2>
+		<br>
+		<v-row>
+			<v-col cols="6">
+				<v-text-field label="Home/Left Team Logo (Only input trusted URLS)"
+				  v-model="replicants.lowerThird.school1Logo.value"
+				/>
+			</v-col>
+			<v-col cols="6">
+				<v-text-field label="Away/Right Team Logo (Only input trusted URLS)"
+				  v-model="replicants.lowerThird.school2Logo.value"/>
+			</v-col>
+		</v-row>
+		<div v-if="replicants.gameSettings.style.value === 'espn'">
+			<v-checkbox v-model="replicants.lowerThird.commentators.offset.enabled.value"
+					   label="Manually offset the commentators?" />
+				<div v-if="replicants.lowerThird.commentators.offset.enabled.value">
+					<h2>Set offset value:</h2>
+					<v-slider
+						v-model="replicants.lowerThird.commentators.offset.number.value"
+						:step="0.1"
+						:min="0"
+						:max="100"
+						thumb-label
+					/>
+					<br>
+				</div>
+			<h2>
+				<v-btn
+					@click="replicants.lowerThird.commentators.show.value = !replicants.lowerThird.commentators.show.value"
+					:color="replicants.lowerThird.commentators.show.value ? 'red' : 'green'"
+					class="text-none"
+				>
+					{{ replicants.lowerThird.commentators.show.value ? "Hide" : "Show" }}
+				</v-btn>
+				Display Commentators/Interviewer and Interviewee
+			</h2>
+			<br>
+			<v-row>
+				<v-col cols="6">
+					<v-text-field v-model="replicants.lowerThird.commentators.leftPerson.value"
+						label="Left Person"/>
+				</v-col>
+				<v-col cols="6">
+					<v-text-field v-model="replicants.lowerThird.commentators.rightPerson.value"
+					 	label="Right Person"/>
+				</v-col>
+			</v-row>
+		</div>
+		<h2>
+			<v-btn @click="replicants.lowerThird.showCopyright.value = !replicants.lowerThird.showCopyright.value"
+				 	:color="replicants.lowerThird.showCopyright.value ? 'red' : 'green'"
+					class="text-none"
+			>
+				{{ replicants.lowerThird.showCopyright.value ? "Hide" : "Show" }}
+			</v-btn>
+			Display Copyright
+		</h2>
+		<br>
+		<div v-if="replicants.gameSettings.style.value === 'rpitv-modern'">
+			<h2>
+				<v-btn
+					@click="replicants.lowerThird.endGraphics.show.value = !replicants.lowerThird.endGraphics.show.value"
+					:color="replicants.lowerThird.endGraphics.disabled.value ? 'warning' : (replicants.lowerThird.endGraphics.show.value ? 'red' : 'green')"
+					:disabled="replicants.lowerThird.endGraphics.disabled.value"
+					class="text-none"
+				>
+					{{
+						replicants.lowerThird.endGraphics.disabled.value ? "Wait" : (replicants.lowerThird.endGraphics.show.value ? "Hide" : "Show")
+					}}
+				</v-btn>
+				Display End Graphics (Credits)
+			</h2>
+			<div class="mt-10" id="endGraphicsSlider">
+				<label>Duration of One Scroll in Seconds ({{ replicants.lowerThird.endGraphics.length.value }}
+					seconds)</label>
+				<br>
+				<v-slider
+					:min="5"
+					:max="60*5"
+					v-model="replicants.lowerThird.endGraphics.length.value"
+					:step="5"
+					thumb-label
+				/>
+			</div>
+			<div>
+				<br>
+				<v-text-field v-model="replicants.lowerThird.endGraphics.title.value" style="max-width: 40%"
+					 label="End Graphics Title"/>
+			</div>
+			<div>
+				<br>
+				<v-textarea
+					id="endGraphicsTextarea"
+					label="End Graphics Positions and Names"
+					v-model="replicants.lowerThird.endGraphics.message.value"
+					:style="{height: `${replicants.lowerThird.endGraphics.message.value.split('\n').length + 15}em`}"
+				/>
+			</div>
+		</div>
+		<br>
+<!--		<div>SOG TEAM 1: {{ replicants.teams[0].shots }}</div>-->
+<!--		<div>SOG TEAM 2: {{ replicants.teams[1].shots }}</div>-->
+<!--		<br>-->
+<!--		<div>Home Penalty 1: #{{ replicants.teams[0].player1PenaltyNumber.value }} for {{ replicants.teams[0].player1PenaltyClock.value }}</div>-->
+<!--		<div>Home Penalty 2: #{{ replicants.teams[0].player2PenaltyNumber.value }} for {{ replicants.teams[0].player2PenaltyClock.value }}</div>-->
+<!--		<div>Away Penalty 1: #{{ replicants.teams[1].player1PenaltyNumber.value }} for {{ replicants.teams[1].player1PenaltyClock.value }}</div>-->
+<!--		<div>Away Penalty 2: #{{ replicants.teams[1].player2PenaltyNumber.value }} for {{ replicants.teams[1].player2PenaltyClock.value }}</div>-->
 	</div>
 </template>
 
 <script setup lang="ts">
-import {NButton, NInput} from "naive-ui"
-import { loadReplicants } from "../../browser-common/replicants";
-import {ref} from "vue";
+import {loadReplicants} from "../../browser-common/replicants";
 
 const replicants = await loadReplicants();
 
