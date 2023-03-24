@@ -25,6 +25,7 @@
 		<NButton @click="addAnnouncement('Official Review', '')">Official Review</NButton>
 		<NButton @click="addAnnouncement('Delayed Penalty', '')">Delayed Penalty</NButton>
 		<NButton @click="addAnnouncement('Empty Net', '')">Empty Net</NButton>
+		<NButton @click="addAnnouncement('Timeout', '')">Timeout</NButton>
 	</div>
 </template>
 

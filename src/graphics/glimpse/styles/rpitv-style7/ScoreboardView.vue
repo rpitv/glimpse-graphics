@@ -9,13 +9,19 @@
 			<span :class="tga_enabled ? 'tga-visible' : 'tga-hidden'">{{ tga_school_name }} GOAL</span>
 		</div>
 		<div id="mainScoreboardView">
-			<div id="clockRow" ref="elmClockRow" :class="timeRef === '00.00' ? 'clockZero' : ''">
-				<img :src="RPITVLogo" alt="RPI TV Logo" id="clockLogo">
-				<span id="clockClock" :class="clock.time.value < 10000 ? 'low-time' : ''">
-					{{ formattedClockTime }}
-				</span>
-				<span id="clockPeriod">{{ formattedPeriod }}</span>
-			</div>
+			<n-grid id="clockRow" cols="3">
+				<n-grid-item id="clockRowLogo">
+					<img :src="RPITVLogo" alt="RPI TV Logo" id="clockLogo">
+				</n-grid-item>
+				<n-grid-item id="clockRowTime">
+					<span id="clockClock" :class="clock.time.value < 10000 ? 'low-time' : ''">
+						{{ formattedClockTime }}
+					</span>
+				</n-grid-item>
+				<n-grid-item id="clockRowPeriod">
+					<span id="clockPeriod">{{ formattedPeriod }}</span>
+				</n-grid-item>
+			</n-grid>
 			<div id="teamRow">
 				<TeamView :team-id="1" :text-color="teamLeftTextColor" id="teamLeft"/>
 				<TeamView :team-id="0" :text-color="teamRightTextColor" id="teamRight"/>
@@ -29,6 +35,7 @@ import {loadReplicants} from "../../../../browser-common/replicants";
 import RPITVLogo from "../../../../assets/rpitv-modern/rpitv_logo.svg";
 import TeamView from "./TeamView.vue";
 import {computed, onMounted, ref, watch} from "vue";
+import {NGrid, NGridItem} from "naive-ui";
 
 const replicants = await loadReplicants();
 const clock = replicants.scoreboard.clock;
@@ -64,7 +71,7 @@ const announcementGlobalMsg = computed<string>(() => {
 
 const timeRef = ref<string>("00:00");
 const formattedClockTime = computed<string>(() => {
-	// zero pads '1' to '01' for monospace font alignment
+	// zero pads '1' to '01' for alignment
 	const zeroPad = (n: string) => {
 		// noinspection TypeScriptUnresolvedFunction - Not sure why this is happening in my IDE
 		return timeRef.value = n.padStart(2, "0");
@@ -178,16 +185,16 @@ $clock-zero-red: #862f28;
 }
 
 #containerScoreboardView {
-	font-family: "Roboto Mono", monospace;
+	font-family: "Open Sans", sans-serif;
+	font-weight: bold;
 	transition: opacity 1s;
 }
-
 
 #bannerScore {
 	position: absolute;
 	z-index: 3;
 	left: $main-pos-left;
-	top: calc($main-pos-top + v-bind(elmClockHeight));
+	top: calc($main-pos-top + v-bind(elmClockHeight) + 6 * $padding-var);
 	width: $scoreboard-width;
 	display: flex;
 	align-items: center;
@@ -202,8 +209,7 @@ $clock-zero-red: #862f28;
 		width: $scoreboard-width;
 		text-align: center;
 		font-size: $clock-font-size;
-		height: v-bind(elmTeamViewContainerHeight);
-		padding: $padding-var;
+		height: calc(v-bind(elmTeamViewContainerHeight) - 4 * $padding-var);
 		background: linear-gradient(to right, v-bind(tga_color_secondary), v-bind(tga_color_primary), v-bind(tga_color_secondary));
 		color: white;
 		animation: expand_center 4s ease-out 2 alternate;
@@ -246,9 +252,7 @@ $clock-zero-red: #862f28;
 	left: $main-pos-left + $scoreboard-width;
 	top: calc(1px + $main-pos-top);
 	height: v-bind(elmClockHeight) - 1px;
-	padding: $padding-var;
-	padding-left: calc(3 * $padding-var);
-	padding-right: calc(3 * $padding-var);
+	padding: $padding-var calc($padding-var);
 	border-top: 1px;
 	position: absolute;
 	z-index: 1;
@@ -257,19 +261,22 @@ $clock-zero-red: #862f28;
 }
 
 #clockRow {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	align-items: center;
 	font-size: $clock-font-size;
 	color: $clock-row-color;
-	padding: $padding-var;
-	padding-bottom: 2 * $padding-var;
 	background: linear-gradient(180deg, #625858, #0d0505, #625858);
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	align-content: center;
+	position: relative;
 
 	#clockLogo {
 		height: (1.1 * $clock-font-size);
 		width: auto;
+		position: absolute;
+		transform: translateY(-50%);
 	}
 
 	// when clock is 00.00 flash change the bg color
@@ -322,22 +329,6 @@ $clock-zero-red: #862f28;
 #announcementTeamRow {
 	justify-content: space-evenly;
 	text-align: center;
-
-	#announcementTeamRowLeft {
-		padding-top: $padding-var;
-		padding-bottom: $padding-var;
-		font-size: $announcement-font-size;
-		float: left;
-		width: 50%;
-	}
-
-	#announcementTeamRowRight {
-		padding-top: $padding-var;
-		padding-bottom: $padding-var;
-		font-size: $announcement-font-size;
-		float: right;
-		width: 50%;
-	}
 }
 
 // for slide transitioning in and out global announcement

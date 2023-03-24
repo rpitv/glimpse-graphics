@@ -1,10 +1,16 @@
 <template>
 	<div class="mainTeamView">
-		<div class="containerTeamView" :style="backgroundGradient">
-			<img class="logo" ref="teamLogoImg" :src="team.logo.value" :alt="team.schoolName.value">
-			<span class="teamViewAbbreviation">{{ computeAbbreviation(team.abbreviation.value) }}</span>
-			<span class="teamViewScore">{{ computeScore(team.score.value) }}</span>
-		</div>
+		<n-grid class="containerTeamView" :style="backgroundGradient" cols="3">
+			<n-grid-item>
+				<img class="logo" ref="teamLogoImg" :src="team.logo.value" :alt="team.schoolName.value">
+			</n-grid-item>
+			<n-grid-item class="teamViewAbbreviation">
+				{{ team.abbreviation.value }}
+			</n-grid-item>
+			<n-grid-item class="teamViewScore">
+				{{ team.score.value }}
+			</n-grid-item>
+		</n-grid>
 		<TransitionGroup tag="div" name="animation-team-msg">
 			<div v-for="(msg, i) in messages" :key="msg.id" :style="{'z-index': BASE_Z_INDEX - i}"
 				 :class="['teamAnnouncement', (i === 0 ? '' : 'fade-in'), (i === messages.length - 1 ? 'fade-out' : '')]">
@@ -18,6 +24,7 @@
 import {loadReplicants} from "../../../../browser-common/replicants";
 import {Announcement} from "../../../../common/Announcement";
 import {computed, onMounted, ref} from "vue";
+import {NGrid, NGridItem} from "naive-ui";
 
 const props = defineProps({
 	teamId: {
@@ -67,16 +74,6 @@ const backgroundGradient = computed(() => {
 	return "background-image: linear-gradient(135deg," + team.primaryColor.value + "," + team.secondaryColor.value + ");";
 });
 
-const computeScore = (score: number) => {
-	// noinspection TypeScriptUnresolvedFunction - Not sure why this is happening in my IDE
-	return score.toString().padStart(2, "\x00");
-}
-
-const computeAbbreviation = (abbr: string) => {
-	const max = Math.max(replicants.teams[0].abbreviation.value.length, replicants.teams[1].abbreviation.value.length);
-	// noinspection TypeScriptUnresolvedFunction - Not sure why this is happening in my IDE
-	return abbr.padEnd(max, "\x00");
-}
 </script>
 
 <style scoped lang="scss">
@@ -90,14 +87,6 @@ $team-font-size: 2.5vh;
 	color: v-bind(teamTextColor);
 }
 
-.logo {
-	height: 4.3vh;
-	padding: 2 * $padding-var;
-	opacity: 1;
-	z-index: calc(v-bind(BASE_Z_INDEX) + 1);
-	display: flex;
-	filter: drop-shadow(0.3vh 0.3vw 1vh black);
-}
 
 .containerTeamView {
 	height: calc(v-bind(teamViewHeight) + $padding-var);
@@ -109,23 +98,29 @@ $team-font-size: 2.5vh;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+	font-size: $team-font-size;
+	align-content: center;
 
-	span {
-		font-size: $team-font-size;
-		z-index: calc(v-bind(BASE_Z_INDEX) + 2);
+	.logo {
+		height: 4.3vh;
+		padding: $padding-var;
+		opacity: 1;
+		z-index: calc(v-bind(BASE_Z_INDEX) + 1);
+		filter: drop-shadow(0.3vh 0.3vw 1vh black);
+		transform: translateY(3 * $padding-var);
 	}
-}
 
-.teamViewAbbreviation {
-	transform: scaleY(1.8);
-	padding: $padding-var;
-}
+	.teamViewAbbreviation {
+		padding: $padding-var;
+		text-align: center;
+	}
 
-.teamViewScore {
-	text-align: right;
-	transform: scaleY(1.8) translateX(-0.2vw);
-	width: 100%;
-	padding: $padding-var;
+	.teamViewScore {
+		text-align: right;
+		transform: translateX(-0.3vw);
+		width: 100%;
+		padding: $padding-var;
+	}
 }
 
 .teamAnnouncement {
