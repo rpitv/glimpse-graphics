@@ -1,27 +1,44 @@
 <template>
 	<div>
 		<div v-if="replicants.gameSettings.style.value === 'espn'">
+			<ESPNCopyright />
 			<ESPNImageView />
 			<ESPNScoreboardView />
 			<ESPNLowerThird />
+			<ESPNBanner />
 		</div>
 		<div v-else-if="replicants.gameSettings.style.value === 'rpitv-modern'">
+			<TVModernCopyright />
 			<TVModernImageView />
 			<TVModernScoreboardView />
+			<TGVModernLowerThird />
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-
 import {loadReplicants} from "../../browser-common/replicants";
+import ESPNCopyright from "./styles/espn/lower-third/Copyright.vue"
 import ESPNScoreboardView from "./styles/espn/ScoreboardView.vue";
 import ESPNImageView from "./styles/espn/ImageView.vue";
+import ESPNLowerThird from "./styles/espn/LowerThird.vue";
+import ESPNBanner from "./styles/espn/Banner.vue";
+
+import TVModernCopyright from "./styles/rpitv-modern/lower-third/Copyright.vue"
 import TVModernScoreboardView from "./styles/rpitv-modern/ScoreboardView.vue";
 import TVModernImageView from "./styles/rpitv-modern/ImageView.vue";
-import ESPNLowerThird from "./styles/espn/LowerThird.vue";
+import TGVModernLowerThird from "./styles/rpitv-modern/LowerThird.vue"
+
+import {watch} from "vue";
 
 const replicants = await loadReplicants();
+
+// from false to true then reload page
+watch(replicants.gameSettings.api.forceReload, (newV, oldV) => {
+	if (!oldV && newV) {
+		location.reload();
+	}
+});
 </script>
 
 <style scoped lang="scss">

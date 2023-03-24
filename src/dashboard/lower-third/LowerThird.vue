@@ -2,8 +2,8 @@
 	<div>
 		<h2>
 			<v-btn @click="replicants.lowerThird.bug.value = !replicants.lowerThird.bug.value"
-				  	:color="replicants.lowerThird.bug.value ? 'red' : 'green'"
-				   	class="text-none"
+				   :color="replicants.lowerThird.bug.value ? 'red' : 'green'"
+				   class="text-none"
 			>
 				{{ replicants.lowerThird.bug.value ? "Hide" : "Show" }}
 			</v-btn>
@@ -12,8 +12,8 @@
 		<br>
 		<h2>
 			<v-btn @click="replicants.lowerThird.scoreboard.value = !replicants.lowerThird.scoreboard.value"
-				  	:color="replicants.lowerThird.scoreboard.value ? 'red' : 'green'"
-					class="text-none"
+				   :color="replicants.lowerThird.scoreboard.value ? 'red' : 'green'"
+				   class="text-none"
 			>
 				{{ replicants.lowerThird.scoreboard.value ? "Hide" : "Show" }}
 			</v-btn>
@@ -22,8 +22,8 @@
 		<br>
 		<h2>
 			<v-btn @click="replicants.lowerThird.locator.value = !replicants.lowerThird.locator.value"
-				 	:color="replicants.lowerThird.locator.value ? 'red' : 'green'"
-					class="text-none"
+				   :color="replicants.lowerThird.locator.value ? 'red' : 'green'"
+				   class="text-none"
 			>
 				{{ replicants.lowerThird.locator.value ? "Hide" : "Show" }}
 			</v-btn>
@@ -33,28 +33,28 @@
 		<v-row>
 			<v-col cols="6">
 				<v-text-field label="Home/Left Team Logo (Only input trusted URLS)"
-				  v-model="replicants.lowerThird.school1Logo.value"
+							  v-model="replicants.lowerThird.school1Logo.value"
 				/>
 			</v-col>
 			<v-col cols="6">
 				<v-text-field label="Away/Right Team Logo (Only input trusted URLS)"
-				  v-model="replicants.lowerThird.school2Logo.value"/>
+							  v-model="replicants.lowerThird.school2Logo.value"/>
 			</v-col>
 		</v-row>
 		<div v-if="replicants.gameSettings.style.value === 'espn'">
 			<v-checkbox v-model="replicants.lowerThird.commentators.offset.enabled.value"
-					   label="Manually offset the commentators?" />
-				<div v-if="replicants.lowerThird.commentators.offset.enabled.value">
-					<h2>Set offset value:</h2>
-					<v-slider
-						v-model="replicants.lowerThird.commentators.offset.number.value"
-						:step="0.1"
-						:min="0"
-						:max="100"
-						thumb-label
-					/>
-					<br>
-				</div>
+						label="Manually offset the commentators?" />
+			<div v-if="replicants.lowerThird.commentators.offset.enabled.value">
+				<h2>Set offset value:</h2>
+				<v-slider
+					v-model="replicants.lowerThird.commentators.offset.number.value"
+					:step="0.1"
+					:min="0"
+					:max="100"
+					thumb-label
+				/>
+				<br>
+			</div>
 			<h2>
 				<v-btn
 					@click="replicants.lowerThird.commentators.show.value = !replicants.lowerThird.commentators.show.value"
@@ -69,18 +69,18 @@
 			<v-row>
 				<v-col cols="6">
 					<v-text-field v-model="replicants.lowerThird.commentators.leftPerson.value"
-						label="Left Person"/>
+								  label="Left Person"/>
 				</v-col>
 				<v-col cols="6">
 					<v-text-field v-model="replicants.lowerThird.commentators.rightPerson.value"
-					 	label="Right Person"/>
+								  label="Right Person"/>
 				</v-col>
 			</v-row>
 		</div>
 		<h2>
 			<v-btn @click="replicants.lowerThird.showCopyright.value = !replicants.lowerThird.showCopyright.value"
-				 	:color="replicants.lowerThird.showCopyright.value ? 'red' : 'green'"
-					class="text-none"
+				   :color="replicants.lowerThird.showCopyright.value ? 'red' : 'green'"
+				   class="text-none"
 			>
 				{{ replicants.lowerThird.showCopyright.value ? "Hide" : "Show" }}
 			</v-btn>
@@ -116,7 +116,7 @@
 			<div>
 				<br>
 				<v-text-field v-model="replicants.lowerThird.endGraphics.title.value" style="max-width: 40%"
-					 label="End Graphics Title"/>
+							  label="End Graphics Title"/>
 			</div>
 			<div>
 				<br>
@@ -129,22 +129,19 @@
 			</div>
 		</div>
 		<br>
-<!--		<div>SOG TEAM 1: {{ replicants.teams[0].shots }}</div>-->
-<!--		<div>SOG TEAM 2: {{ replicants.teams[1].shots }}</div>-->
-<!--		<br>-->
-<!--		<div>Home Penalty 1: #{{ replicants.teams[0].player1PenaltyNumber.value }} for {{ replicants.teams[0].player1PenaltyClock.value }}</div>-->
-<!--		<div>Home Penalty 2: #{{ replicants.teams[0].player2PenaltyNumber.value }} for {{ replicants.teams[0].player2PenaltyClock.value }}</div>-->
-<!--		<div>Away Penalty 1: #{{ replicants.teams[1].player1PenaltyNumber.value }} for {{ replicants.teams[1].player1PenaltyClock.value }}</div>-->
-<!--		<div>Away Penalty 2: #{{ replicants.teams[1].player2PenaltyNumber.value }} for {{ replicants.teams[1].player2PenaltyClock.value }}</div>-->
+		<!--		<div>SOG TEAM 1: {{ replicants.teams[0].shots }}</div>-->
+		<!--		<div>SOG TEAM 2: {{ replicants.teams[1].shots }}</div>-->
+		<!--		<br>-->
+		<!--		<div>Home Penalty 1: #{{ replicants.teams[0].player1PenaltyNumber.value }} for {{ replicants.teams[0].player1PenaltyClock.value }}</div>-->
+		<!--		<div>Home Penalty 2: #{{ replicants.teams[0].player2PenaltyNumber.value }} for {{ replicants.teams[0].player2PenaltyClock.value }}</div>-->
+		<!--		<div>Away Penalty 1: #{{ replicants.teams[1].player1PenaltyNumber.value }} for {{ replicants.teams[1].player1PenaltyClock.value }}</div>-->
+		<!--		<div>Away Penalty 2: #{{ replicants.teams[1].player2PenaltyNumber.value }} for {{ replicants.teams[1].player2PenaltyClock.value }}</div>-->
 	</div>
 </template>
 
 <script setup lang="ts">
 import {loadReplicants} from "../../browser-common/replicants";
-
 const replicants = await loadReplicants();
-
-
 </script>
 
 <style scoped>
