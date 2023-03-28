@@ -43,6 +43,14 @@
 			</div>
 
 			<div class="mt-10">
+				<label :for="teamScoreboardColorsId">Scoreboard Colors</label>
+				<n-input-group :id="teamScoreboardColorsId">
+					<n-color-picker :show-alpha="false" :show-preview="true" :modes="['hex']" v-model:value="teamScoreboardPrimaryColor" />
+					<n-color-picker :show-alpha="false" :show-preview="true" :modes="['hex']" v-model:value="teamScoreboardSecondaryColor" />
+				</n-input-group>
+			</div>
+
+			<div class="mt-10">
 				<label :for="teamLogoId">Team Logo <small>(Only input trusted URLs.)</small></label>
 				<n-input :id="teamLogoId" v-model:value="teamLogo"/>
 			</div>
@@ -65,6 +73,7 @@ import {loadReplicants} from "../../browser-common/replicants";
 const teamNameId = v4();
 const teamAbbrId = v4();
 const teamColorsId = v4();
+const teamScoreboardColorsId = v4();
 const schoolNameId = v4();
 const teamLogoId = v4();
 
@@ -84,6 +93,8 @@ const teamAbbr = team.abbreviation;
 const teamSchoolName = team.schoolName;
 const teamPrimaryColor = team.primaryColor;
 const teamSecondaryColor = team.secondaryColor;
+const teamScoreboardPrimaryColor = team.scoreboardPrimaryColor;
+const teamScoreboardSecondaryColor = team.scoreboardSecondaryColor;
 const teamLogo = team.logo;
 
 const syncName = replicants.sync.values.teams[props.id].name;

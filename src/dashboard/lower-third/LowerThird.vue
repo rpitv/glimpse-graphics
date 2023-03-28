@@ -86,9 +86,8 @@
 			</v-btn>
 			Display Copyright
 		</h2>
-		<br>
-		<div v-if="replicants.gameSettings.style.value === 'rpitv-modern'">
-			<h2>
+		<div v-if="replicants.gameSettings.style.value !== 'espn'">
+				<h2>
 				<v-btn
 					@click="replicants.lowerThird.endGraphics.show.value = !replicants.lowerThird.endGraphics.show.value"
 					:color="replicants.lowerThird.endGraphics.disabled.value ? 'warning' : (replicants.lowerThird.endGraphics.show.value ? 'red' : 'green')"
@@ -101,7 +100,10 @@
 				</v-btn>
 				Display End Graphics (Credits)
 			</h2>
-			<div class="mt-10" id="endGraphicsSlider">
+			<span>Type of End Graphic</span>
+			<n-select id="endGraphicsTypeSelector" v-model:value="replicants.lowerThird.endGraphics.type.value"
+					  :options="availableCreditsOptions"/>
+			<div class="mt-10" id="endGraphicsSlider" v-if="replicants.lowerThird.endGraphics.type.value === 'scroll'">
 				<label>Duration of One Scroll in Seconds ({{ replicants.lowerThird.endGraphics.length.value }}
 					seconds)</label>
 				<br>
@@ -140,9 +142,34 @@
 </template>
 
 <script setup lang="ts">
+import {NButton, NGrid, NGridItem, NInput, NSlider, NCheckbox, NSelect} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
+import {computed} from "vue";
+
 const replicants = await loadReplicants();
+
+const availableCreditsOptions = computed<{ label: string, value: string }[]>(() => {
+	return [
+		{label: "Box", value: "box"},
+		{label: "Scroll", value: "scroll"}
+	]
+});
 </script>
 
 <style scoped>
+.mt-10 {
+	margin-top: 10px;
+}
+
+#endGraphicsTypeSelector {
+	width: 20%;
+}
+
+#endGraphicsTextarea {
+	width: 40%
+}
+
+#endGraphicsSlider {
+	width: 40%;
+}
 </style>

@@ -71,7 +71,7 @@ function computedMessage(message: Announcement) {
 }
 
 const backgroundGradient = computed(() => {
-	return "background-image: linear-gradient(135deg," + team.primaryColor.value + "," + team.secondaryColor.value + ");";
+	return "background-image: linear-gradient(135deg," + team.scoreboardPrimaryColor.value + "," + team.scoreboardSecondaryColor.value + ");";
 });
 
 </script>

@@ -1,8 +1,15 @@
 <template>
-	<div :class="{show: replicants.lowerThird.showCopyright.value, hide: !replicants.lowerThird.showCopyright.value}"
-		 id="container">
-		<div id="center">
-			<span id="background">© RPI TV ALL RIGHTS RESERVED</span>
+	<div class="copyright-main">
+		<div v-if="creditsType === 'box'" :class="{show: creditsEnabled, hide: !creditsEnabled, 'center-credits': true}">
+			<div class="background">
+				<span class="header">{{ creditsHeader }}</span>
+				<br>
+				<span class="text">{{ creditsText.trimEnd() }}</span>
+			</div>
+		</div>
+
+		<div :class="{show: showCopyright, hide: !showCopyright, 'center-copyright': true}">
+			<span class="background">© RPI TV ALL RIGHTS RESERVED</span>
 		</div>
 	</div>
 </template>
@@ -11,6 +18,12 @@
 import {loadReplicants} from "../../../../../browser-common/replicants";
 
 const replicants = await loadReplicants();
+const showCopyright = replicants.lowerThird.showCopyright;
+
+const creditsType = replicants.lowerThird.endGraphics.type;
+const creditsEnabled = replicants.lowerThird.endGraphics.show;
+const creditsHeader = replicants.lowerThird.endGraphics.title;
+const creditsText = replicants.lowerThird.endGraphics.message;
 </script>
 
 <style scoped lang="scss">
@@ -19,26 +32,58 @@ const replicants = await loadReplicants();
 	src: url('../../../../../assets/rpitv-modern/Rubik.ttf');
 }
 
-#container {
-	position: relative;
+.copyright-main {
+	font-family: "Rubik", sans-serif;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 10vh;
 }
 
-#center {
-	font-family: 'Rubik', sans-serif;
-	position: absolute;
-	width: 100%;
-	top: 85vh;
+.center-credits {
 	text-align: center;
-	font-size: 2em;
-	font-weight: bold;
+	font-size: 3vh;
+	display: flex;
+	justify-content: center;
+	white-space: pre-line;
+
+	.background {
+		background-color: #b7b7b7;
+		padding: 1vh;
+
+		.header {
+			width: 100%;
+			color: #d6001c;
+			font-size: 4vh;
+			font-weight: bold;
+			padding-bottom: 1vh;
+		}
+
+		.text {
+			font-size: 3vh;
+		}
+	}
 }
 
-#background {
-	background: #DC001C;
-	color: white;
-	padding: 1vw;
-	border-radius: 1em;
-	//border: 0.1em solid black;
+.center-copyright {
+	text-align: center;
+	font-size: 3vh;
+	font-weight: bold;
+	padding-top: 6vh;
+
+	.background {
+		background: #DC001C;
+		color: white;
+		padding: 1vw;
+		font-size: 3vh;
+		border-radius: 3vh;
+	}
 }
 
 .hide {
