@@ -101,8 +101,7 @@
 				Display End Graphics (Credits)
 			</h2>
 			<span>Type of End Graphic</span>
-			<n-select id="endGraphicsTypeSelector" v-model:value="replicants.lowerThird.endGraphics.type.value"
-					  :options="availableCreditsOptions"/>
+			<v-select v-model:value="replicants.lowerThird.endGraphics.type.value" :items="availableCreditsOptions" style="width: 20%" />
 			<div class="mt-10" id="endGraphicsSlider" v-if="replicants.lowerThird.endGraphics.type.value === 'scroll'">
 				<label>Duration of One Scroll in Seconds ({{ replicants.lowerThird.endGraphics.length.value }}
 					seconds)</label>
@@ -113,6 +112,7 @@
 					v-model="replicants.lowerThird.endGraphics.length.value"
 					:step="5"
 					thumb-label
+					style="width: 40%"
 				/>
 			</div>
 			<div>
@@ -123,35 +123,33 @@
 			<div>
 				<br>
 				<v-textarea
-					id="endGraphicsTextarea"
 					label="End Graphics Positions and Names"
 					v-model="replicants.lowerThird.endGraphics.message.value"
-					:style="{height: `${replicants.lowerThird.endGraphics.message.value.split('\n').length + 15}em`}"
+					style="width: 40%"
 				/>
 			</div>
 		</div>
 		<br>
-		<!--		<div>SOG TEAM 1: {{ replicants.teams[0].shots }}</div>-->
-		<!--		<div>SOG TEAM 2: {{ replicants.teams[1].shots }}</div>-->
-		<!--		<br>-->
-		<!--		<div>Home Penalty 1: #{{ replicants.teams[0].player1PenaltyNumber.value }} for {{ replicants.teams[0].player1PenaltyClock.value }}</div>-->
-		<!--		<div>Home Penalty 2: #{{ replicants.teams[0].player2PenaltyNumber.value }} for {{ replicants.teams[0].player2PenaltyClock.value }}</div>-->
-		<!--		<div>Away Penalty 1: #{{ replicants.teams[1].player1PenaltyNumber.value }} for {{ replicants.teams[1].player1PenaltyClock.value }}</div>-->
-		<!--		<div>Away Penalty 2: #{{ replicants.teams[1].player2PenaltyNumber.value }} for {{ replicants.teams[1].player2PenaltyClock.value }}</div>-->
+			<div>SOG TEAM 1: {{ replicants.teams[0].shots }}</div>
+			<div>SOG TEAM 2: {{ replicants.teams[1].shots }}</div>
+			<br>
+			<div>Home Penalty 1: #{{ replicants.teams[0].player1PenaltyNumber.value }} for {{ replicants.teams[0].player1PenaltyClock.value }}</div>
+			<div>Home Penalty 2: #{{ replicants.teams[0].player2PenaltyNumber.value }} for {{ replicants.teams[0].player2PenaltyClock.value }}</div>
+			<div>Away Penalty 1: #{{ replicants.teams[1].player1PenaltyNumber.value }} for {{ replicants.teams[1].player1PenaltyClock.value }}</div>
+			<div>Away Penalty 2: #{{ replicants.teams[1].player2PenaltyNumber.value }} for {{ replicants.teams[1].player2PenaltyClock.value }}</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import {NButton, NGrid, NGridItem, NInput, NSlider, NCheckbox, NSelect} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
 import {computed} from "vue";
 
 const replicants = await loadReplicants();
 
-const availableCreditsOptions = computed<{ label: string, value: string }[]>(() => {
+const availableCreditsOptions = computed<{ title: string, value: string }[]>(() => {
 	return [
-		{label: "Box", value: "box"},
-		{label: "Scroll", value: "scroll"}
+		{title: "Box", value: "box"},
+		{title: "Scroll", value: "scroll"}
 	]
 });
 </script>
@@ -159,17 +157,5 @@ const availableCreditsOptions = computed<{ label: string, value: string }[]>(() 
 <style scoped>
 .mt-10 {
 	margin-top: 10px;
-}
-
-#endGraphicsTypeSelector {
-	width: 20%;
-}
-
-#endGraphicsTextarea {
-	width: 40%
-}
-
-#endGraphicsSlider {
-	width: 40%;
 }
 </style>
