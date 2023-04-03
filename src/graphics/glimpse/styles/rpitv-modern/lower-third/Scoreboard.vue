@@ -19,7 +19,6 @@
 import Scoreboard from "../../../../../assets/rpitv-modern/Scoreboard.png"
 import {loadReplicants} from "../../../../../browser-common/replicants";
 import {ref, watch} from "vue";
-import * as repl from "repl";
 
 const replicants = await loadReplicants()
 
@@ -27,77 +26,82 @@ const team0Score = ref<number>(replicants.teams[0].score.value);
 const team1Score = ref<number>(replicants.teams[1].score.value);
 const period = ref<string>();
 
+
+function periodTextHockey() {
+	const scoreboardPeriod = replicants.scoreboard.period.value;
+	if (scoreboardPeriod === 1)
+		period.value = "End of 1st";
+	if (scoreboardPeriod === 2)
+		period.value = "End of 2nd";
+	// If the team's score are the same and we're nearing the third period...
+	if (replicants.teams[0].score.value === replicants.teams[1].score.value) {
+		if (scoreboardPeriod === 3)
+			period.value = "End of Reg.";
+		// If there is no shootout...
+		if (!replicants.gameSettings.periods.shootouts.value) {
+			// If there is no 2nd overtime...
+			if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value < 2)
+				period.value = "Final OT";
+			// If there is 2nd overtime...
+			if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value >= 2)
+				period.value = "End 1st OT";
+			if (scoreboardPeriod === 5)
+				period.value = "Final OT";
+		}
+		// If there is shootout...
+		if (replicants.gameSettings.periods.shootouts.value) {
+			// If there is no 2nd overtime...
+			if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value < 2)
+				period.value = "End of OT";
+			if (scoreboardPeriod === 5 && replicants.gameSettings.periods.overtime.count.value < 2)
+				period.value = "Final SO";
+			// If there is 2nd overtime...
+			if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value === 2)
+				period.value = "End 1st OT";
+			if (scoreboardPeriod === 5 && replicants.gameSettings.periods.overtime.count.value === 2)
+				period.value = "End 2nd OT";
+			if (scoreboardPeriod === 6 && replicants.gameSettings.periods.overtime.count.value === 2)
+				period.value = "Final SO";
+		}
+	} else {
+		// If the team's score are not the same and we're at/past the third period...
+		if (scoreboardPeriod === 3)
+			period.value = "Final";
+		// If there is no shootout...
+		if (!replicants.gameSettings.periods.shootouts.value && scoreboardPeriod >= 4)
+			period.value = "Final OT";
+		// If there is shootout...
+		if (replicants.gameSettings.periods.shootouts.value && scoreboardPeriod >= 4) {
+			if (scoreboardPeriod >= 4 && scoreboardPeriod <= 5)
+				period.value = "Final OT";
+			if (scoreboardPeriod === 6)
+				period.value = "Final SO";
+		}
+	}
+}
+
 watch(replicants.lowerThird.scoreboard, (newValue, oldValue) => {
 	if (newValue) {
 		team0Score.value = replicants.teams[0].score.value;
 		team1Score.value = replicants.teams[1].score.value;
 
-		// fixme tmp for 4 period game
-		const scoreboardPeriod = replicants.scoreboard.period.value;
-		if (scoreboardPeriod === 1)
-			period.value = "End of 1st";
-		else if (scoreboardPeriod === 2)
-			period.value = "End of 2nd";
-		else if (scoreboardPeriod === 3)
-			period.value = "End of 3rd";
-		else if (scoreboardPeriod === 4 && team0Score.value === team1Score.value)
-			period.value = "End of Regulation";
-		else if (scoreboardPeriod === 4)
-			period.value = "Final";
-		else if (scoreboardPeriod === 5)
-			period.value = "End of OT";
-
-
-		return; // fixme for general sports, below is hockey code
-
-		// Periods
-		if (scoreboardPeriod === 1)
-			period.value = "End of 1st";
-		if (scoreboardPeriod === 2)
-			period.value = "End of 2nd";
-		// If the team's score are the same and we're nearing the third period...
-		if (replicants.teams[0].score.value === replicants.teams[1].score.value) {
-			if (scoreboardPeriod === 3)
-				period.value = "End of Reg.";
-			// If there is no shootout...
-			if (!replicants.gameSettings.periods.shootouts.value) {
-				// If there is no 2nd overtime...
-				if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value < 2)
-					period.value = "Final OT";
-				// If there is 2nd overtime...
-				if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value >= 2)
-					period.value = "End 1st OT";
-				if (scoreboardPeriod === 5)
-					period.value = "Final OT";
-			}
-			// If there is shootout...
-			if (replicants.gameSettings.periods.shootouts.value) {
-				// If there is no 2nd overtime...
-				if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value < 2)
+		if (replicants.sync.selectedSport.value === "Hockey/Lacrosse") {
+			if (replicants.gameSettings.periods.count.value === 3) {
+				periodTextHockey();
+			} else { // assuming 4 period max for all other cases (lacrosse)
+				const scoreboardPeriod = replicants.scoreboard.period.value;
+				if (scoreboardPeriod === 1)
+					period.value = "End of 1st";
+				else if (scoreboardPeriod === 2)
+					period.value = "End of 2nd";
+				else if (scoreboardPeriod === 3)
+					period.value = "End of 3rd";
+				else if (scoreboardPeriod === 4 && team0Score.value === team1Score.value)
+					period.value = "End of Regulation";
+				else if (scoreboardPeriod === 4)
+					period.value = "Final";
+				else if (scoreboardPeriod === 5)
 					period.value = "End of OT";
-				if (scoreboardPeriod === 5 && replicants.gameSettings.periods.overtime.count.value < 2)
-					period.value = "Final SO";
-				// If there is 2nd overtime...
-				if (scoreboardPeriod === 4 && replicants.gameSettings.periods.overtime.count.value === 2)
-					period.value = "End 1st OT";
-				if (scoreboardPeriod === 5 && replicants.gameSettings.periods.overtime.count.value === 2)
-					period.value = "End 2nd OT";
-				if (scoreboardPeriod === 6 && replicants.gameSettings.periods.overtime.count.value === 2)
-					period.value = "Final SO";
-			}
-		} else {
-			// If the team's score are not the same and we're at/past the third period...
-			if (scoreboardPeriod === 3)
-				period.value = "Final";
-			// If there is no shootout...
-			if (!replicants.gameSettings.periods.shootouts.value && scoreboardPeriod >= 4)
-				period.value = "Final OT";
-			// If there is shootout...
-			if (replicants.gameSettings.periods.shootouts.value && scoreboardPeriod >= 4) {
-				if (scoreboardPeriod >= 4 && scoreboardPeriod <= 5)
-					period.value = "Final OT";
-				if (scoreboardPeriod === 6)
-					period.value = "Final SO";
 			}
 		}
 	}

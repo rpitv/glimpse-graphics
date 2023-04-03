@@ -142,8 +142,8 @@ const tga_enabled = ref<boolean>(false);
  * @param team either team 0 or team 1
  */
 function triggerGoalAnimation(team: 0 | 1) {
-	tga_color_primary.value = replicants.teams[team].primaryColor.value;
-	tga_color_secondary.value = replicants.teams[team].secondaryColor.value;
+	tga_color_primary.value = replicants.teams[team].scoreboardPrimaryColor.value;
+	tga_color_secondary.value = replicants.teams[team].scoreboardSecondaryColor.value;
 	tga_school_name.value = replicants.teams[team].name.value.toUpperCase();
 	tga_enabled.value = true;
 
@@ -170,10 +170,10 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 
 $announcement-font-size: 1.6vh;
 $padding-var: 0.1vh;
-$scoreboard-width: 18vw;
+$scoreboard-width: 19vw;
 $main-pos-left: 4vw;
 $main-pos-top: 4vh;
-$clock-font-size: 2.8vh;
+$clock-font-size: 2.6vh;
 $announcement-global-color: rgb(91, 79, 14);
 $announcement-global-bg: rgb(240, 224, 88);
 $clock-row-bg: rgb(27, 25, 25);

@@ -54,8 +54,9 @@ const creditsText = replicants.lowerThird.endGraphics.message;
 	white-space: pre-line;
 
 	.background {
-		background-color: #b7b7b7;
+		background-color: #B5B5B5;
 		padding: 1vh;
+		border-radius: 3vh;
 
 		.header {
 			width: 100%;

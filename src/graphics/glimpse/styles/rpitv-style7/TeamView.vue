@@ -80,7 +80,7 @@ const backgroundGradient = computed(() => {
 $announcement-font-size: 1.6vh;
 $announcement-font-size-inverted: -1.7vh;
 $padding-var: 0.1vh;
-$team-font-size: 2.5vh;
+$team-font-size: 2.3vh;
 
 .mainTeamView {
 	z-index: calc(v-bind(BASE_Z_INDEX) + 1);
@@ -117,7 +117,7 @@ $team-font-size: 2.5vh;
 
 	.teamViewScore {
 		text-align: right;
-		transform: translateX(-0.3vw);
+		transform: translateX(-0.5vw);
 		width: 100%;
 		padding: $padding-var;
 	}
