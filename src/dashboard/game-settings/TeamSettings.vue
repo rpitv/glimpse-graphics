@@ -42,29 +42,39 @@
 				</n-input-group>
 			</div>
 
+			<div class="mt-10" v-if="replicants.gameSettings.style.value === 'rpitv-style7'">
+				<label :for="teamScoreboardColorsId">Scoreboard Colors</label>
+				<n-input-group :id="teamScoreboardColorsId">
+					<n-color-picker :show-alpha="false" :show-preview="true" :modes="['hex']" v-model:value="teamScoreboardPrimaryColor"/>
+					<n-color-picker :show-alpha="false" :show-preview="true" :modes="['hex']" v-model:value="teamScoreboardSecondaryColor"/>
+				</n-input-group>
+				<br>
+				<n-button id="button-sync-scoreboard-color" @click="syncScoreboardColors">Sync Scoreboard Colors from Team Colors</n-button>
+			</div>
+		</div>
+
 			<div class="mt-10">
 				<label :for="teamLogoId">Team Logo <small>(Only input trusted URLs.)</small></label>
 				<n-input :id="teamLogoId" v-model:value="teamLogo"/>
 			</div>
 
 			<div class="team-logo-container">
-				<img class="team-logo mt-10" v-if="teamLogo?.length > 0" :src="teamLogo" alt="Team Logo" />
+				<img class="team-logo mt-10" v-if="teamLogo?.length > 0" :src="teamLogo" alt="Team Logo"/>
 			</div>
-		</div>
-
 	</div>
 </template>
 
 <script setup lang="ts">
 import {defineProps} from "vue";
 import {v4} from "uuid";
-import {NCheckbox, NInput, NInputGroup, NColorPicker, NGrid, NGridItem} from "naive-ui";
+import {NCheckbox, NInput, NInputGroup, NColorPicker, NGrid, NGridItem, NButton} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
 
 
 const teamNameId = v4();
 const teamAbbrId = v4();
 const teamColorsId = v4();
+const teamScoreboardColorsId = v4();
 const schoolNameId = v4();
 const teamLogoId = v4();
 
@@ -84,6 +94,8 @@ const teamAbbr = team.abbreviation;
 const teamSchoolName = team.schoolName;
 const teamPrimaryColor = team.primaryColor;
 const teamSecondaryColor = team.secondaryColor;
+const teamScoreboardPrimaryColor = team.scoreboardPrimaryColor;
+const teamScoreboardSecondaryColor = team.scoreboardSecondaryColor;
 const teamLogo = team.logo;
 
 const syncName = replicants.sync.values.teams[props.id].name;
@@ -91,6 +103,11 @@ const syncAbbreviation = replicants.sync.values.teams[props.id].abbreviation;
 const syncScore = replicants.sync.values.teams[props.id].score;
 const syncShots = replicants.sync.values.teams[props.id].shots;
 
+
+function syncScoreboardColors() {
+	teamScoreboardPrimaryColor.value = teamPrimaryColor.value;
+	teamScoreboardSecondaryColor.value = teamSecondaryColor.value;
+}
 </script>
 
 <style scoped lang="scss">
@@ -106,5 +123,10 @@ const syncShots = replicants.sync.values.teams[props.id].shots;
 	}
 	.team-logo {
 		max-width: 50%;
+	}
+	#button-sync-scoreboard-color {
+		left: 50%;
+		transform: translateX(-50%);
+		margin-top: 5px;
 	}
 </style>

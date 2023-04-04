@@ -38,14 +38,14 @@ img {
 	transition: opacity 1s;
 }
 #leftPerson {
-	left: 0;
-	width: 55.6vw;
+	left: 14vw;
+	width: 36vw;
 	text-align: center;
 	font-size: 3.5vh;
 }
 #rightPerson {
-	left: 0;
-	width: 144.3vw;
+	left: 50vw;
+	width: 36.5vw;
 	text-align: center;
 	font-size: 3.5vh;
 }

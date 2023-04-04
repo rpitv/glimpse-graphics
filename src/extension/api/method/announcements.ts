@@ -37,6 +37,11 @@ export const announcement_teamSpecific_param2: { [key: string]: { name: string, 
 	"power_play_5": {name: "Power Play", time: (5 * 60 * 1000)},
 	"pp_2": {name: "PP", time: (2 * 60 * 1000)},
 	"pp_5": {name: "PP", time: (5 * 60 * 1000)},
+	"man_up_0.5": {name: "Man Up", time: (30 * 1000)},
+	"man_up_1": {name: "Man Up", time: (60 * 1000)},
+	"man_up_2": {name: "Man Up", time: (2 * 60 * 1000)},
+	"man_up_3": {name: "Man Up", time: (3 * 60 * 1000)},
+	"man_up_5": {name: "Man Up", time: (5 * 60 * 1000)},
 	"timeout": {name: "Timeout", time: null},
 };
 

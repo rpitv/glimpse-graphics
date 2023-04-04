@@ -50,6 +50,10 @@ const styles = ref([
 	{
 		label: 'RPI TV (Classic)',
 		value: 'rpitv-classic'
+	},
+	{
+		label: 'RPI TV (Style 7)',
+		value: 'rpitv-style7'
 	}
 ]);
 const selectedSportPreset = ref(null);
