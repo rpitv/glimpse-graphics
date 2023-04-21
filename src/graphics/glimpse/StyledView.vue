@@ -19,6 +19,11 @@
 			<TVStyle7Scoreboard />
 			<TVStyle7LowerThird />
 		</div>
+		<div v-else-if="replicants.gameSettings.style.value === 'rpitv-football'">
+			<TVFootballImageView />
+			<TVFootballLowerThird />
+			<h1>FOOTBALL SEASON!!!!!!!!</h1>
+		</div>
 	</div>
 </template>
 
@@ -38,6 +43,9 @@ import TGVModernLowerThird from "./styles/rpitv-modern/LowerThird.vue";
 import TVStyle7Scoreboard from "./styles/rpitv-style7/ScoreboardView.vue";
 import TVStyle7ImageView from "./styles/rpitv-style7/ImageView.vue";
 import TVStyle7LowerThird from "./styles/rpitv-style7/LowerThird.vue";
+
+import TVFootballImageView from "./styles/rpitv-style7/ImageView.vue";
+import TVFootballLowerThird from "./styles/rpitv-football/LowerThird.vue"
 
 import {watch} from "vue";
 

@@ -50,7 +50,7 @@ export const replicants = {
 			key: nodecg().Replicant<string>("key", `glimpse-graphics.game-settings.api`, {defaultValue: 'CHANGE_ME_API_KEY'}),
 			forceReload: nodecg().Replicant<boolean>("forceReload", "glimpse-graphics.game-settings.api", {defaultValue: false}),
 		},
-		style: nodecg().Replicant<'espn'|'rpitv-modern'|'rpitv-classic'>('style', "glimpse-graphics.game-settings.style", {defaultValue: 'rpitv-modern'}),
+		style: nodecg().Replicant<'espn'|'rpitv-modern'|'rpitv-classic'|'rpitv-style7'|'rpitv-football'>('style', "glimpse-graphics.game-settings.style", {defaultValue: 'rpitv-modern'}),
 		clock: {
 			enabled: nodecg().Replicant<boolean>("enabled", "glimpse-graphics.game-settings.clock", {defaultValue: true}),
 		},
