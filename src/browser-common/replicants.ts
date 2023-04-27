@@ -158,6 +158,9 @@ export async function loadReplicants() {
 			},
 			bug: await replicant<boolean>("bug", `glimpse-graphics.images.lowerThird`, {defaultValue: true}),
 			showCopyright: await replicant<boolean>("showCopyright", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
+		},
+		slideshow: {
+			images: await replicant<typeof Image[]>("images", `glimpse-graphics.images.slideshow`, { defaultValue: []})
 		}
 	}
 }
