@@ -1,7 +1,7 @@
 <template>
 	<n-config-provider :theme="darkTheme">
 		<Suspense>
-			<LowerThird />
+			<Slideshow />
 			<template #fallback>
 				Loading...
 			</template>
@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import {NConfigProvider, darkTheme} from "naive-ui";
-import LowerThird from "./LowerThird.vue";
+import Slideshow from "../slideshow/Slideshow.vue";
 
 </script>
 

@@ -158,6 +158,10 @@ export async function loadReplicants() {
 			},
 			bug: await replicant<boolean>("bug", `glimpse-graphics.images.lowerThird`, {defaultValue: true}),
 			showCopyright: await replicant<boolean>("showCopyright", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
+		},
+		slideshow: {
+			enabled: await replicant<boolean>("enabled", `glimpse-graphics.images.slideshow`, {defaultValue: false}),
+			interval: await replicant<number>("interval", `glimpse-graphics.images.slideshow`, {defaultValue: 5})
 		}
 	}
 }
