@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<SlideshowView />
 		<div v-if="replicants.gameSettings.style.value === 'espn'">
 			<ESPNCopyright />
 			<ESPNImageView />
@@ -24,6 +25,8 @@
 
 <script setup lang="ts">
 import {loadReplicants} from "../../browser-common/replicants";
+import SlideshowView from "./SlideshowView.vue";
+
 import ESPNCopyright from "./styles/espn/lower-third/Copyright.vue"
 import ESPNScoreboardView from "./styles/espn/ScoreboardView.vue";
 import ESPNImageView from "./styles/espn/ImageView.vue";
@@ -52,4 +55,12 @@ watch(replicants.gameSettings.api.forceReload, (newV, oldV) => {
 </script>
 
 <style scoped lang="scss">
+.hide {
+	opacity: 0;
+	transition: 1s;
+}
+.show {
+	opacity: 1;
+	transition: 1s;
+}
 </style>

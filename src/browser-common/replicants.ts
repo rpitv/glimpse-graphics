@@ -160,7 +160,8 @@ export async function loadReplicants() {
 			showCopyright: await replicant<boolean>("showCopyright", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
 		},
 		slideshow: {
-			images: await replicant<typeof Image[]>("images", `glimpse-graphics.images.slideshow`, { defaultValue: []})
+			enabled: await replicant<boolean>("enabled", `glimpse-graphics.images.slideshow`, {defaultValue: false}),
+			interval: await replicant<number>("interval", `glimpse-graphics.images.slideshow`, {defaultValue: 5})
 		}
 	}
 }

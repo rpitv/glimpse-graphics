@@ -1,46 +1,42 @@
 <template>
-<!--	<draggable v-model="images" item-key="id">-->
-<!--		<template #item="{element: image}">-->
-<!--			<v-img :src="image." width="300px" aspect-ratio="1/1"/>-->
-<!--		</template>-->
-<!--	</draggable>-->
-	<v-table>
-		<thead>
-			<tr>
-				<th class="text-left">
-					Name
-				</th>
-				<th class="text-left">
-					Image
-				</th>
-				<th>
-					In slideshow
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr v-for="image in images">
-				<td> {{image.base}} </td>
-				<td><img :src="image.url"></td>
-			</tr>
-		</tbody>
-	</v-table>
+	<draggableComponent v-model="images" item-key="id" :disabled="replicants.slideshow.enabled.value">
+		<template #item="{element}">
+			<img :alt="element.base" :src="element.url">
+		</template>
+	</draggableComponent>
+	<br>
+	<br>
+	<br>
+	<v-row>
+		<v-col cols="6">
+			<v-text-field type="number" label="Interval(Seconds) between transitions"
+						  v-model="replicants.slideshow.interval.value"
+						  :disabled="replicants.slideshow.enabled.value"
+			/>
+		</v-col>
+	</v-row>
+	<v-btn @click="replicants.slideshow.enabled.value = !replicants.slideshow.enabled.value"
+		   :color="replicants.slideshow.enabled.value ? 'red' : 'green'"
+		   class="text-none"
+		   :disabled="images.length === 0"
+	>
+		{{ replicants.slideshow.enabled.value ? "End Slideshow" : "Start Slideshow" }}
+	</v-btn>
 </template>
 
 <script lang="ts" setup>
 import {replicant} from "../../browser-common/replicant";
 import {loadReplicants} from "../../browser-common/replicants";
-import draggable from "vuedraggable";
+import draggableComponent from "vuedraggable";
 
 
 const replicants = await loadReplicants();
-const images = await replicant('assets:slideshow');
-
+const images = await replicant('assets:slideshow-images');
 
 </script>
 <style scoped lang="scss">
 img {
-	width: 100%;
+	height: 150px;
 	aspect-ratio: 16/9;
 }
 </style>
