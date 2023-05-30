@@ -21,7 +21,7 @@
 		<div v-if="isTeamEnabled">
 			<v-combobox label="Schools"
 						class="mt-10" density="comfortable"
-						:items="schools as unknown[]"
+						:items="schoolNames"
 						item-title="name"
 						v-model="availableSchools" />
 			<v-row>
@@ -128,7 +128,7 @@ if (!schoolsJSON) {
 		abbr: "RPI",
 		abbr14: "Rensselaer",
 		logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/RPI_Engineers.svg/1200px-RPI_Engineers.svg.png",
-		name: "Rensselaer",
+		name: "Rensselaer Polytechnic Institute",
 		primaryColor: "#d6001c",
 		secondaryColor: "#ab2328",
 		teamName: "Engineers"
@@ -137,6 +137,11 @@ if (!schoolsJSON) {
 }
 
 const schools = ref(JSON.parse(schoolsJSON));
+const schoolNames = ref<string[]>([]);
+
+for (const school of schools.value)
+	schoolNames.value.push(school.name);
+
 const availableSchools = ref();
 
 function saveSchool() {
@@ -153,7 +158,7 @@ function saveSchool() {
 	// Check if the school is in the JSON
 	while (left <= right) {
 		let middle = Math.floor((left + right) / 2);
-		if (availableSchools.value.name === schools.value[middle].name) {
+		if (availableSchools.value === schools.value[middle].name) {
 			schools.value[middle].abbr = teamAbbr.value;
 			schools.value[middle].abbr14 = teamSchoolName.value;
 			schools.value[middle].logo = teamLogo.value;
@@ -163,7 +168,7 @@ function saveSchool() {
 			localStorage.setItem("schools", JSON.stringify(schools.value));
 			return;
 		}
-		if (schools.value[middle].name < availableSchools.value.name)
+		if (schools.value[middle].name < availableSchools.value)
 			left = middle + 1;
 		else
 			right = middle - 1;
@@ -174,7 +179,9 @@ function saveSchool() {
 
 	while (left <= right) {
 		let middle = Math.floor((left + right) / 2);
-		if (schools.value[middle].name === availableSchools.value.name)
+		if (schools.value[middle].name === availableSchools.value)
+			break;
+		if (schools.value[middle].name < availableSchools.value)
 			left = middle + 1;
 		else
 			right = middle - 1;
@@ -183,25 +190,26 @@ function saveSchool() {
 		abbr: teamAbbr.value,
 		abbr14: teamSchoolName.value,
 		logo: teamLogo.value,
-		name: availableSchools.value.name,
+		name: availableSchools.value,
 		primaryColor: teamPrimaryColor.value,
 		secondaryColor: teamSecondaryColor.value,
 		teamName: teamName.value
 	})
+	schoolNames.value.splice(left, 0, availableSchools.value);
 	localStorage.setItem("schools", JSON.stringify(schools.value));
 }
 
 
 
 function loadSchool() {
-	if (!availableSchools.value?.name)
+	if (!availableSchools.value)
 		return;
 
 	let left = 0;
 	let right = schools.value.length - 1;
 	while (left <= right) {
 		let middle = Math.floor((left + right) / 2);
-		if (availableSchools.value.name === schools.value[middle].name) {
+		if (availableSchools.value === schools.value[middle].name) {
 			teamAbbr.value = schools.value[middle].abbr
 			teamSchoolName.value = schools.value[middle].abbr14
 			teamLogo.value = schools.value[middle].logo
@@ -210,7 +218,7 @@ function loadSchool() {
 			teamName.value = schools.value[middle].teamName
 			return;
 		}
-		if (schools.value[middle].name < availableSchools.value.name)
+		if (schools.value[middle].name < availableSchools.value)
 			left = middle + 1;
 		else
 			right = middle - 1;
