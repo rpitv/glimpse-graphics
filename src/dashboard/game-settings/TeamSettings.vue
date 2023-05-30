@@ -19,6 +19,19 @@
 		</n-grid>
 
 		<div v-if="isTeamEnabled">
+			<v-combobox label="Schools"
+						class="mt-10" density="comfortable"
+						:items="schools as unknown[]"
+						item-title="name"
+						v-model="availableSchools" />
+			<v-row>
+				<v-col cols="6">
+					<v-btn class="text-none" @click="saveSchool">Save School</v-btn>
+				</v-col>
+				<v-col cols="6">
+					<v-btn class="text-none" @click="loadSchool">Load School</v-btn>
+				</v-col>
+			</v-row>
 			<div class="mt-10">
 				<label :for="teamNameId">Team Name</label>
 				<n-input :id="teamNameId" :disabled="syncName" v-model:value="teamName"/>
@@ -65,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps} from "vue";
+import {defineProps, ref} from "vue";
 import {v4} from "uuid";
 import {NCheckbox, NInput, NInputGroup, NColorPicker, NGrid, NGridItem, NButton} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
@@ -108,6 +121,102 @@ function syncScoreboardColors() {
 	teamScoreboardPrimaryColor.value = teamPrimaryColor.value;
 	teamScoreboardSecondaryColor.value = teamSecondaryColor.value;
 }
+
+let schoolsJSON = localStorage.getItem("schools") as string;
+if (!schoolsJSON) {
+	localStorage.setItem("schools", JSON.stringify([{
+		abbr: "RPI",
+		abbr14: "Rensselaer",
+		logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/RPI_Engineers.svg/1200px-RPI_Engineers.svg.png",
+		name: "Rensselaer",
+		primaryColor: "#d6001c",
+		secondaryColor: "#ab2328",
+		teamName: "Engineers"
+	}]));
+	schoolsJSON = localStorage.getItem("schools") as string;
+}
+
+const schools = ref(JSON.parse(schoolsJSON));
+const availableSchools = ref();
+
+function saveSchool() {
+	// TO-DO: availableschools can sometimes be a string because the school doesn't exist
+	if (!availableSchools.value || !teamAbbr.value || !teamSchoolName.value ||
+		!teamLogo.value || !teamPrimaryColor.value || !teamSecondaryColor.value || !teamName.value) {
+		console.log(availableSchools);
+
+		return;
+	}
+
+	let left = 0;
+	let right = schools.value.length - 1;
+	// Check if the school is in the JSON
+	while (left <= right) {
+		let middle = Math.floor((left + right) / 2);
+		if (availableSchools.value.name === schools.value[middle].name) {
+			schools.value[middle].abbr = teamAbbr.value;
+			schools.value[middle].abbr14 = teamSchoolName.value;
+			schools.value[middle].logo = teamLogo.value;
+			schools.value[middle].primaryColor = teamPrimaryColor.value;
+			schools.value[middle].secondaryColor = teamSecondaryColor.value;
+			schools.value[middle].teamName = teamName.value;
+			localStorage.setItem("schools", JSON.stringify(schools.value));
+			return;
+		}
+		if (schools.value[middle].name < availableSchools.value.name)
+			left = middle + 1;
+		else
+			right = middle - 1;
+	}
+	// If it isn't in the JSON, add it
+	left = 0;
+	right = schools.value.length - 1;
+
+	while (left <= right) {
+		let middle = Math.floor((left + right) / 2);
+		if (schools.value[middle].name === availableSchools.value.name)
+			left = middle + 1;
+		else
+			right = middle - 1;
+	}
+	schools.value.splice(left, 0, {
+		abbr: teamAbbr.value,
+		abbr14: teamSchoolName.value,
+		logo: teamLogo.value,
+		name: availableSchools.value.name,
+		primaryColor: teamPrimaryColor.value,
+		secondaryColor: teamSecondaryColor.value,
+		teamName: teamName.value
+	})
+	localStorage.setItem("schools", JSON.stringify(schools.value));
+}
+
+
+
+function loadSchool() {
+	if (!availableSchools.value?.name)
+		return;
+
+	let left = 0;
+	let right = schools.value.length - 1;
+	while (left <= right) {
+		let middle = Math.floor((left + right) / 2);
+		if (availableSchools.value.name === schools.value[middle].name) {
+			teamAbbr.value = schools.value[middle].abbr
+			teamSchoolName.value = schools.value[middle].abbr14
+			teamLogo.value = schools.value[middle].logo
+			teamPrimaryColor.value = schools.value[middle].primaryColor
+			teamSecondaryColor.value = schools.value[middle].secondaryColor
+			teamName.value = schools.value[middle].teamName
+			return;
+		}
+		if (schools.value[middle].name < availableSchools.value.name)
+			left = middle + 1;
+		else
+			right = middle - 1;
+	}
+}
+
 </script>
 
 <style scoped lang="scss">
