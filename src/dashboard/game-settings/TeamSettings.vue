@@ -13,9 +13,25 @@
 			<n-grid-item>
 				<n-checkbox class="ml-10" v-model:checked="syncAbbreviation">Sync Abbr.</n-checkbox>
 			</n-grid-item>
+			<n-grid-item>
+				<n-checkbox class="ml-10" v-model:checked="syncShots">Sync Shots</n-checkbox>
+			</n-grid-item>
 		</n-grid>
 
 		<div v-if="isTeamEnabled">
+			<v-combobox label="Schools"
+						class="mt-10" density="comfortable"
+						:items="schoolNames"
+						item-title="name"
+						v-model="availableSchools" />
+			<v-row>
+				<v-col cols="6">
+					<v-btn class="text-none" @click="saveSchool">Save School</v-btn>
+				</v-col>
+				<v-col cols="6">
+					<v-btn class="text-none" @click="loadSchool">Load School</v-btn>
+				</v-col>
+			</v-row>
 			<div class="mt-10">
 				<label :for="teamNameId">Team Name</label>
 				<n-input :id="teamNameId" :disabled="syncName" v-model:value="teamName"/>
@@ -39,29 +55,39 @@
 				</n-input-group>
 			</div>
 
+			<div class="mt-10" v-if="replicants.gameSettings.style.value === 'rpitv-style7'">
+				<label :for="teamScoreboardColorsId">Scoreboard Colors</label>
+				<n-input-group :id="teamScoreboardColorsId">
+					<n-color-picker :show-alpha="false" :show-preview="true" :modes="['hex']" v-model:value="teamScoreboardPrimaryColor"/>
+					<n-color-picker :show-alpha="false" :show-preview="true" :modes="['hex']" v-model:value="teamScoreboardSecondaryColor"/>
+				</n-input-group>
+				<br>
+				<n-button id="button-sync-scoreboard-color" @click="syncScoreboardColors">Sync Scoreboard Colors from Team Colors</n-button>
+			</div>
+		</div>
+
 			<div class="mt-10">
 				<label :for="teamLogoId">Team Logo <small>(Only input trusted URLs.)</small></label>
 				<n-input :id="teamLogoId" v-model:value="teamLogo"/>
 			</div>
 
 			<div class="team-logo-container">
-				<img class="team-logo mt-10" v-if="teamLogo?.length > 0" :src="teamLogo" alt="Team Logo" />
+				<img class="team-logo mt-10" v-if="teamLogo?.length > 0" :src="teamLogo" alt="Team Logo"/>
 			</div>
-		</div>
-
 	</div>
 </template>
 
 <script setup lang="ts">
-import {defineProps} from "vue";
+import {defineProps, ref} from "vue";
 import {v4} from "uuid";
-import {NCheckbox, NInput, NInputGroup, NColorPicker, NGrid, NGridItem} from "naive-ui";
+import {NCheckbox, NInput, NInputGroup, NColorPicker, NGrid, NGridItem, NButton} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
 
 
 const teamNameId = v4();
 const teamAbbrId = v4();
 const teamColorsId = v4();
+const teamScoreboardColorsId = v4();
 const schoolNameId = v4();
 const teamLogoId = v4();
 
@@ -81,11 +107,123 @@ const teamAbbr = team.abbreviation;
 const teamSchoolName = team.schoolName;
 const teamPrimaryColor = team.primaryColor;
 const teamSecondaryColor = team.secondaryColor;
+const teamScoreboardPrimaryColor = team.scoreboardPrimaryColor;
+const teamScoreboardSecondaryColor = team.scoreboardSecondaryColor;
 const teamLogo = team.logo;
 
 const syncName = replicants.sync.values.teams[props.id].name;
 const syncAbbreviation = replicants.sync.values.teams[props.id].abbreviation;
 const syncScore = replicants.sync.values.teams[props.id].score;
+const syncShots = replicants.sync.values.teams[props.id].shots;
+
+
+function syncScoreboardColors() {
+	teamScoreboardPrimaryColor.value = teamPrimaryColor.value;
+	teamScoreboardSecondaryColor.value = teamSecondaryColor.value;
+}
+
+let schoolsJSON = localStorage.getItem("schools") as string;
+if (!schoolsJSON) {
+	localStorage.setItem("schools", JSON.stringify([{
+		abbr: "RPI",
+		abbr14: "Rensselaer",
+		logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/RPI_Engineers.svg/1200px-RPI_Engineers.svg.png",
+		name: "Rensselaer Polytechnic Institute",
+		primaryColor: "#d6001c",
+		secondaryColor: "#ab2328",
+		teamName: "Engineers"
+	}]));
+	schoolsJSON = localStorage.getItem("schools") as string;
+}
+
+const schools = ref(JSON.parse(schoolsJSON));
+const schoolNames = ref<string[]>([]);
+
+for (const school of schools.value)
+	schoolNames.value.push(school.name);
+
+const availableSchools = ref();
+
+function saveSchool() {
+	// TO-DO: availableschools can sometimes be a string because the school doesn't exist
+	if (!availableSchools.value || !teamAbbr.value || !teamSchoolName.value ||
+		!teamLogo.value || !teamPrimaryColor.value || !teamSecondaryColor.value || !teamName.value) {
+		console.log(availableSchools);
+
+		return;
+	}
+
+	let left = 0;
+	let right = schools.value.length - 1;
+	// Check if the school is in the JSON
+	while (left <= right) {
+		let middle = Math.floor((left + right) / 2);
+		if (availableSchools.value === schools.value[middle].name) {
+			schools.value[middle].abbr = teamAbbr.value;
+			schools.value[middle].abbr14 = teamSchoolName.value;
+			schools.value[middle].logo = teamLogo.value;
+			schools.value[middle].primaryColor = teamPrimaryColor.value;
+			schools.value[middle].secondaryColor = teamSecondaryColor.value;
+			schools.value[middle].teamName = teamName.value;
+			localStorage.setItem("schools", JSON.stringify(schools.value));
+			return;
+		}
+		if (schools.value[middle].name < availableSchools.value)
+			left = middle + 1;
+		else
+			right = middle - 1;
+	}
+	// If it isn't in the JSON, add it
+	left = 0;
+	right = schools.value.length - 1;
+
+	while (left <= right) {
+		let middle = Math.floor((left + right) / 2);
+		if (schools.value[middle].name === availableSchools.value)
+			break;
+		if (schools.value[middle].name < availableSchools.value)
+			left = middle + 1;
+		else
+			right = middle - 1;
+	}
+	schools.value.splice(left, 0, {
+		abbr: teamAbbr.value,
+		abbr14: teamSchoolName.value,
+		logo: teamLogo.value,
+		name: availableSchools.value,
+		primaryColor: teamPrimaryColor.value,
+		secondaryColor: teamSecondaryColor.value,
+		teamName: teamName.value
+	})
+	schoolNames.value.splice(left, 0, availableSchools.value);
+	localStorage.setItem("schools", JSON.stringify(schools.value));
+}
+
+
+
+function loadSchool() {
+	if (!availableSchools.value)
+		return;
+
+	let left = 0;
+	let right = schools.value.length - 1;
+	while (left <= right) {
+		let middle = Math.floor((left + right) / 2);
+		if (availableSchools.value === schools.value[middle].name) {
+			teamAbbr.value = schools.value[middle].abbr
+			teamSchoolName.value = schools.value[middle].abbr14
+			teamLogo.value = schools.value[middle].logo
+			teamPrimaryColor.value = schools.value[middle].primaryColor
+			teamSecondaryColor.value = schools.value[middle].secondaryColor
+			teamName.value = schools.value[middle].teamName
+			return;
+		}
+		if (schools.value[middle].name < availableSchools.value)
+			left = middle + 1;
+		else
+			right = middle - 1;
+	}
+}
 
 </script>
 
@@ -102,5 +240,10 @@ const syncScore = replicants.sync.values.teams[props.id].score;
 	}
 	.team-logo {
 		max-width: 50%;
+	}
+	#button-sync-scoreboard-color {
+		left: 50%;
+		transform: translateX(-50%);
+		margin-top: 5px;
 	}
 </style>

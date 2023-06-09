@@ -10,6 +10,23 @@
 			:summary="createFooter"
 			@update:checked-row-keys="(newSelectedRows) => selectedRows = newSelectedRows"/>
 	</div>
+	<h4>Quickplay Buttons</h4>
+	<div v-if="!globalAnnouncements" class="quickplay">
+		<NButton @click="addAnnouncement('Power Play', '2:00')">2:00 Power Play</NButton>
+		<NButton @click="addAnnouncement('Power Play', '5:00')">5:00 Power Play</NButton>
+		<NButton @click="addAnnouncement('Man Up', '0:30')">0:30 Man Up</NButton>
+		<NButton @click="addAnnouncement('Man Up', '1:00')">1:00 Man Up</NButton>
+		<NButton @click="addAnnouncement('Man Up', '2:00')">2:00 Man Up</NButton>
+		<NButton @click="addAnnouncement('Man Up', '3:00')">3:00 Man Up</NButton>
+		<NButton @click="addAnnouncement('Man Up', '5:00')">5:00 Man Up</NButton>
+		<NButton @click="addAnnouncement('Timeout', '')">Timeout</NButton>
+	</div>
+	<div v-else>
+		<NButton @click="addAnnouncement('Official Review', '')">Official Review</NButton>
+		<NButton @click="addAnnouncement('Delayed Penalty', '')">Delayed Penalty</NButton>
+		<NButton @click="addAnnouncement('Empty Net', '')">Empty Net</NButton>
+		<NButton @click="addAnnouncement('Timeout', '')">Timeout</NButton>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -30,6 +47,7 @@ const props = defineProps({
 		type: Array as PropType<Announcement[]>,
 		required: true,
 	},
+	globalAnnouncements: Boolean
 });
 
 const emit = defineEmits(["update:announcements"])
@@ -180,7 +198,7 @@ const tableData = computed<AnnouncementRow[]>(() => {
  *   are not guaranteed to successfully be parsed and may result in undesired output or errors being displayed to
  *   the user.
  */
-function addAnnouncement(messageInput: string, timerInput: string) {
+function addAnnouncement(messageInput: string, timerInput: string | null) {
 	try {
 		const newAnnouncement: Announcement = {
 			id: v4(),

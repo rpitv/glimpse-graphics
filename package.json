@@ -23,6 +23,7 @@
     "watch:extension": "tsc -b tsconfig.extension.json -w"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.3.0",
     "@vueuse/core": "^9.5.0",
     "animejs": "^3.2.1",
     "fs-extra": "^11.1.0",
@@ -30,9 +31,12 @@
     "pinia": "^2.0.23",
     "pino": "^8.7.0",
     "serialport": "^10.4.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "vuedraggable": "^4.1.0",
+    "vuetify": "^3.1.11"
   },
   "devDependencies": {
+    "@types/animejs": "^3.1.7",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^16.11.47",
     "@types/uuid": "^8.3.4",
@@ -49,6 +53,7 @@
     "vite": "^2.9.14",
     "vite-plugin-checker": "^0.4.9",
     "vite-plugin-nodecg": "^1.0.2",
+    "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.2.37",
     "vue-tsc": "^0.39.5"
   },
@@ -117,6 +122,13 @@
         "file": "lower-third.html",
         "workspace": "Images",
         "width": "8"
+      },
+      {
+        "name": "slideshow",
+        "title": "Slideshow",
+        "file": "slideshow.html",
+        "workspace": "Images",
+        "width": "8"
       }
     ],
     "graphics": [
@@ -130,6 +142,16 @@
       {
         "name": "images",
         "title": "Images",
+        "allowedTypes": [
+          "jpg",
+          "jpeg",
+          "gif",
+          "png"
+        ]
+      },
+      {
+        "name": "slideshow-images",
+        "title": "Slideshow",
         "allowedTypes": [
           "jpg",
           "jpeg",

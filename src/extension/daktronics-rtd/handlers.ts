@@ -102,3 +102,40 @@ export function awayShotHandler(value: string): void {
 
 	replicants.teams[1].shots.value = parseInt(value, 10) || 0;
 }
+
+export function homePenalty1Handler(value: string): void {
+	if (!replicants.sync.values.penalty.value) {
+		logger.trace('Penalty sync is disabled, ignoring penalty updates');
+		return;
+	}
+	const data = value.split(" ");
+	replicants.teams[0].player1PenaltyNumber.value = data[0] || "";
+	replicants.teams[0].player1PenaltyClock.value = data[1] || "";
+}
+export function homePenalty2Handler(value: string): void {
+	if (!replicants.sync.values.penalty.value) {
+		logger.trace('Penalty sync is disabled, ignoring penalty updates');
+		return;
+	}
+	const data = value.split(" ");
+	replicants.teams[0].player2PenaltyNumber.value = data[0] || "";
+	replicants.teams[0].player2PenaltyClock.value = data[1] || "";
+}
+export function awayPenalty1Handler(value: string): void {
+	if (!replicants.sync.values.penalty.value) {
+		logger.trace('Penalty sync is disabled, ignoring penalty updates');
+		return;
+	}
+	const data = value.split(" ");
+	replicants.teams[1].player1PenaltyNumber.value = data[0] || "";
+	replicants.teams[1].player1PenaltyClock.value = data[1] || "";
+}
+export function awayPenalty2Handler(value: string): void {
+	if (!replicants.sync.values.penalty.value) {
+		logger.trace('Penalty sync is disabled, ignoring penalty updates');
+		return;
+	}
+	const data = value.split(" ");
+	replicants.teams[1].player2PenaltyNumber.value = data[0] || "";
+	replicants.teams[1].player2PenaltyClock.value = data[1] || "";
+}

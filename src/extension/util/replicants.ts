@@ -1,4 +1,4 @@
-import { get as nodecg } from './nodecg';
+import {get as nodecg} from './nodecg';
 import {Announcement} from "./Announcement";
 
 export const replicants = {
@@ -22,14 +22,15 @@ export const replicants = {
 					score: nodecg().Replicant<boolean>("score", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
 					name: nodecg().Replicant<boolean>("name", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
 					abbreviation: nodecg().Replicant<boolean>("abbreviation", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
-					shots: nodecg().Replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false})
+					shots: nodecg().Replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team1", {defaultValue: false}),
 				},{
 					score: nodecg().Replicant<boolean>("score", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 					name: nodecg().Replicant<boolean>("name", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 					abbreviation: nodecg().Replicant<boolean>("abbreviation", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
-					shots: nodecg().Replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false})
+					shots: nodecg().Replicant<boolean>("shots", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 				}
 			],
+			penalty: nodecg().Replicant<boolean>("penalty", "glimpse-graphics.sync-settings.values", {defaultValue: true}),
 			baseball: {
 				bottomTop: nodecg().Replicant<boolean>("bottomTop", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),
 				outsStrikesBalls: nodecg().Replicant<boolean>("outsStrikesBall", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),
@@ -39,10 +40,16 @@ export const replicants = {
 				possession: nodecg().Replicant<boolean>("possession", "glimpse-graphics.sync-settings.values.football", {defaultValue: false}),
 				yardsToGo: nodecg().Replicant<boolean>("yardsToGo", "glimpse-graphics.sync-settings.values.football", {defaultValue: false}),
 				playClock: nodecg().Replicant<boolean>("playClock", "glimpse-graphics.sync-settings.values.football", {defaultValue: false}),
-			}
+			},
+			sogs: nodecg().Replicant<boolean>("sogs", "glimpse-graphics.sync-settings.values", {defaultValue: false})
 		}
 	},
 	gameSettings: {
+		api: {
+			enabled: nodecg().Replicant<boolean>("enabled", "glimpse-graphics.game-settings.api", {defaultValue: false}),
+			key: nodecg().Replicant<string>("key", `glimpse-graphics.game-settings.api`, {defaultValue: 'CHANGE_ME_API_KEY'}),
+			forceReload: nodecg().Replicant<boolean>("forceReload", "glimpse-graphics.game-settings.api", {defaultValue: false}),
+		},
 		style: nodecg().Replicant<'espn'|'rpitv-modern'|'rpitv-classic'>('style', "glimpse-graphics.game-settings.style", {defaultValue: 'rpitv-modern'}),
 		clock: {
 			enabled: nodecg().Replicant<boolean>("enabled", "glimpse-graphics.game-settings.clock", {defaultValue: true}),
@@ -85,9 +92,15 @@ export const replicants = {
 			abbreviation: nodecg().Replicant<string>("abbreviation", `glimpse-graphics.game-settings.team0`, {defaultValue: "ONE"}),
 			primaryColor: nodecg().Replicant<string>("primaryColor", `glimpse-graphics.game-settings.team0`, {defaultValue: '#ffffff'}),
 			secondaryColor: nodecg().Replicant<string>("secondaryColor", `glimpse-graphics.game-settings.team0`, {defaultValue: '#aaaaaa'}),
+			scoreboardPrimaryColor: nodecg().Replicant<string>("scoreboardPrimaryColor", `glimpse-graphics.game-settings.team0`, {defaultValue: '#ffffff'}),
+			scoreboardSecondaryColor: nodecg().Replicant<string>("scoreboardSecondaryColor", `glimpse-graphics.game-settings.team0`, {defaultValue: '#aaaaaa'}),
 			logo: nodecg().Replicant<string>("logo", `glimpse-graphics.game-settings.team0`, {defaultValue: ''}),
 			schoolName: nodecg().Replicant<string>("schoolName", `glimpse-graphics.game-settings.team0`, {defaultValue: 'School One'}),
-			shots: nodecg().Replicant<number>("shots", `glimpse-graphics.game-settings.team0`, {defaultValue: 0})
+			shots: nodecg().Replicant<number>("shots", `glimpse-graphics.game-settings.team0`, {defaultValue: 0}),
+			player1PenaltyNumber: nodecg().Replicant<string>("player1PenaltyNumber", `glimpse-graphics.game-settings.team0`, {defaultValue: ""}),
+			player1PenaltyClock: nodecg().Replicant<string>("player1PenaltyClock", `glimpse-graphics.game-settings.team0`, {defaultValue: ""}),
+			player2PenaltyNumber: nodecg().Replicant<string>("player2PenaltyNumber", `glimpse-graphics.game-settings.team0`, {defaultValue: ""}),
+			player2PenaltyClock: nodecg().Replicant<string>("player2PenaltyClock", `glimpse-graphics.game-settings.team0`, {defaultValue: ""})
 		},
 		{
 			enabled: nodecg().Replicant<boolean>("enabled", `glimpse-graphics.game-settings.team1`, {defaultValue: true}),
@@ -96,9 +109,15 @@ export const replicants = {
 			abbreviation: nodecg().Replicant<string>("abbreviation", `glimpse-graphics.game-settings.team1`, {defaultValue: "TWO"}),
 			primaryColor: nodecg().Replicant<string>("primaryColor", `glimpse-graphics.game-settings.team1`, {defaultValue: '#ffffff'}),
 			secondaryColor: nodecg().Replicant<string>("secondaryColor", `glimpse-graphics.game-settings.team1`, {defaultValue: '#aaaaaa'}),
+			scoreboardPrimaryColor: nodecg().Replicant<string>("scoreboardPrimaryColor", `glimpse-graphics.game-settings.team1`, {defaultValue: '#ffffff'}),
+			scoreboardSecondaryColor: nodecg().Replicant<string>("scoreboardSecondaryColor", `glimpse-graphics.game-settings.team1`, {defaultValue: '#aaaaaa'}),
 			logo: nodecg().Replicant<string>("logo", `glimpse-graphics.game-settings.team1`, {defaultValue: ''}),
 			schoolName: nodecg().Replicant<string>("schoolName", `glimpse-graphics.game-settings.team1`, {defaultValue: 'School Two'}),
-			shots: nodecg().Replicant<number>("shots", `glimpse-graphics.game-settings.team1`, {defaultValue: 0})
+			shots: nodecg().Replicant<number>("shots", `glimpse-graphics.game-settings.team1`, {defaultValue: 0}),
+			player1PenaltyNumber: nodecg().Replicant<string>("player1PenaltyNumber", `glimpse-graphics.game-settings.team1`, {defaultValue: ""}),
+			player1PenaltyClock: nodecg().Replicant<string>("player1PenaltyClock", `glimpse-graphics.game-settings.team1`, {defaultValue: ""}),
+			player2PenaltyNumber: nodecg().Replicant<string>("player2PenaltyNumber", `glimpse-graphics.game-settings.team1`, {defaultValue: ""}),
+			player2PenaltyClock: nodecg().Replicant<string>("player2PenaltyClock", `glimpse-graphics.game-settings.team1`, {defaultValue: ""})
 		}
 	],
 	announcements: {
@@ -113,20 +132,22 @@ export const replicants = {
 		locator: nodecg().Replicant<boolean>("locator", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
 		commentators: {
 			show: nodecg().Replicant<boolean>("show", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
-			leftPerson: nodecg().Replicant<string>("leftPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Bahl"}),
-			rightPerson: nodecg().Replicant<string>("rightPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Fridgen"}),
+			leftPerson: nodecg().Replicant<string>("leftPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Fridgen"}),
+			rightPerson: nodecg().Replicant<string>("rightPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Bahl"}),
 			offset: {
 				enabled: nodecg().Replicant<boolean>("enabled", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
-				number: nodecg().Replicant<number>("number", `glimpse-graphics.images.lowerThird`, {defaultValue: 0})
+				number: nodecg().Replicant<number>("number", `glimpse-graphics.images.lowerThird`, {defaultValue: 36})
 			}
 		},
 		endGraphics: {
 			disabled: nodecg().Replicant<boolean>("disabled", `glimpse-graphics.images.endGraphics`, {defaultValue: false}),
-			show: nodecg().Replicant<boolean>("endGraphics", `glimpse-graphics.images.endGraphics`, {defaultValue: false}),
+			show: nodecg().Replicant<boolean>("show", `glimpse-graphics.images.endGraphics`, {defaultValue: false}),
 			title: nodecg().Replicant<string>("title", `glimpse-graphics.images.endGraphics`, {defaultValue: "RPI TV Crew"}),
 			message: nodecg().Replicant<string>("message", `glimpse-graphics.images.endGraphics`, {defaultValue: "Director\nProducer\nReplay Operator\nCamera Operator"}),
-			length: nodecg().Replicant<number>('length', 'glimpse-graphics.endGraphics', {defaultValue: 30})
+			length: nodecg().Replicant<number>('length', 'glimpse-graphics.endGraphics', {defaultValue: 30}),
+			type: nodecg().Replicant<'scroll' | 'box'>("type", `glimpse-graphics.images.endGraphics`, {defaultValue: 'box'})
 		},
 		bug: nodecg().Replicant<boolean>("bug", `glimpse-graphics.images.lowerThird`, {defaultValue: true}),
+		showCopyright: nodecg().Replicant<boolean>("showCopyright", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
 	}
 }

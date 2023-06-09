@@ -10,7 +10,7 @@
 		</div>
 		<div class="score-section">
 			<p>
-				{{ team.score.value }}
+<!--				{{ team.score.value }}-->
 			</p>
 		</div>
 	</div>
