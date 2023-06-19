@@ -25,13 +25,17 @@
 						item-title="name"
 						v-model="availableSchools" />
 			<v-row>
-				<v-col cols="6">
-					<v-btn class="text-none" @click="saveSchool">Save School</v-btn>
+				<v-col cols="4">
+					<v-btn class="text-none school-btns" @click="saveSchool">Save School</v-btn>
 				</v-col>
-				<v-col cols="6">
-					<v-btn class="text-none" @click="loadSchool">Load School</v-btn>
+				<v-col cols="4">
+					<v-btn class="text-none school-btns" @click="loadSchool">Load School</v-btn>
+				</v-col>
+				<v-col cols="4">
+					<v-btn class="text-none school-btns" @click="deleteSchool">Delete School</v-btn>
 				</v-col>
 			</v-row>
+			<v-card v-show="subtitle" class="mt-10" :subtitle="subtitle" :text="msg" variant="tonal" :color="color"></v-card>
 			<div class="mt-10">
 				<label :for="teamNameId">Team Name</label>
 				<n-input :id="teamNameId" :disabled="syncName" v-model:value="teamName"/>
@@ -82,7 +86,48 @@ import {defineProps, ref} from "vue";
 import {v4} from "uuid";
 import {NCheckbox, NInput, NInputGroup, NColorPicker, NGrid, NGridItem, NButton} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
+import { collection, query, getDocs, doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
+const subtitle = ref<string>();
+const color = ref<string>();
+const msg = ref<string>();
+const schoolNames = ref<string[]>([]);
+const schools = ref<any[]>([]);
+
+// Get the schools from the database
+try {
+	const schoolsRef = collection(db, "schools");
+	const q = query(schoolsRef);
+	const querySnapshot = await getDocs(q);
+	querySnapshot.docs.forEach(async (document) => {
+		schoolNames.value.push(document.id);
+		const schoolRef = doc(db, "schools", document.id);
+		const schoolSnap = await getDoc(schoolRef);
+		schools.value.push(schoolSnap.data());
+	});
+	localStorage.setItem("schools", JSON.stringify(schools.value));
+// If the fetch fails, fallback to the local storage
+} catch(e) {
+	let schoolsJSON = localStorage.getItem("schools") as string;
+	if (!schoolsJSON) {
+		localStorage.setItem("schools", JSON.stringify([{
+			abbr: "RPI",
+			abbr14: "Rensselaer",
+			logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/RPI_Engineers.svg/1200px-RPI_Engineers.svg.png",
+			name: "Rensselaer Polytechnic Institute",
+			primaryColor: "#d6001c",
+			secondaryColor: "#ab2328",
+			teamName: "Engineers"
+		}]));
+		schoolsJSON = localStorage.getItem("schools") as string;
+	}
+
+	schools.value = JSON.parse(schoolsJSON);
+
+	for (const school of schools.value)
+		schoolNames.value.push(school.name);
+}
 
 const teamNameId = v4();
 const teamAbbrId = v4();
@@ -122,89 +167,105 @@ function syncScoreboardColors() {
 	teamScoreboardSecondaryColor.value = teamSecondaryColor.value;
 }
 
-let schoolsJSON = localStorage.getItem("schools") as string;
-if (!schoolsJSON) {
-	localStorage.setItem("schools", JSON.stringify([{
-		abbr: "RPI",
-		abbr14: "Rensselaer",
-		logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/RPI_Engineers.svg/1200px-RPI_Engineers.svg.png",
-		name: "Rensselaer Polytechnic Institute",
-		primaryColor: "#d6001c",
-		secondaryColor: "#ab2328",
-		teamName: "Engineers"
-	}]));
-	schoolsJSON = localStorage.getItem("schools") as string;
-}
-
-const schools = ref(JSON.parse(schoolsJSON));
-const schoolNames = ref<string[]>([]);
-
-for (const school of schools.value)
-	schoolNames.value.push(school.name);
 
 const availableSchools = ref();
 
-function saveSchool() {
-	// TO-DO: availableschools can sometimes be a string because the school doesn't exist
+async function saveSchool() {
 	if (!availableSchools.value || !teamAbbr.value || !teamSchoolName.value ||
 		!teamLogo.value || !teamPrimaryColor.value || !teamSecondaryColor.value || !teamName.value) {
-		console.log(availableSchools);
-
+		subtitle.value = "Error";
+		color.value = "red";
+		msg.value = "One of the fields is empty. Make sure all the fields are filled in order to save."
 		return;
 	}
+	// If we can reach the database...
+	try {
+		// Add it to database
+		const schoolRef = doc(db, "schools", availableSchools.value);
+		await setDoc(schoolRef, {
+			abbr: teamAbbr.value,
+			abbr14: teamSchoolName.value,
+			logo: teamLogo.value,
+			name: availableSchools.value,
+			primaryColor: teamPrimaryColor.value,
+			secondaryColor: teamSecondaryColor.value,
+			teamName: teamName.value
+		});
 
-	let left = 0;
-	let right = schools.value.length - 1;
-	// Check if the school is in the JSON
-	while (left <= right) {
-		let middle = Math.floor((left + right) / 2);
-		if (availableSchools.value === schools.value[middle].name) {
-			schools.value[middle].abbr = teamAbbr.value;
-			schools.value[middle].abbr14 = teamSchoolName.value;
-			schools.value[middle].logo = teamLogo.value;
-			schools.value[middle].primaryColor = teamPrimaryColor.value;
-			schools.value[middle].secondaryColor = teamSecondaryColor.value;
-			schools.value[middle].teamName = teamName.value;
-			localStorage.setItem("schools", JSON.stringify(schools.value));
-			return;
+	} finally {
+		// Add it to local storage
+		let left = 0;
+		let right = schools.value.length - 1;
+		// Check if the school is in the JSON
+		while (left <= right) {
+			let middle = Math.floor((left + right) / 2);
+			if (availableSchools.value === schools.value[middle].name) {
+				schools.value[middle].abbr = teamAbbr.value;
+				schools.value[middle].abbr14 = teamSchoolName.value;
+				schools.value[middle].logo = teamLogo.value;
+				schools.value[middle].primaryColor = teamPrimaryColor.value;
+				schools.value[middle].secondaryColor = teamSecondaryColor.value;
+				schools.value[middle].teamName = teamName.value;
+				localStorage.setItem("schools", JSON.stringify(schools.value));
+				subtitle.value = "Success";
+				color.value = "green";
+				msg.value = "School exists, successfully replaced its values.";
+				return;
+			}
+			if (schools.value[middle].name < availableSchools.value)
+				left = middle + 1;
+			else
+				right = middle - 1;
 		}
-		if (schools.value[middle].name < availableSchools.value)
-			left = middle + 1;
-		else
-			right = middle - 1;
-	}
-	// If it isn't in the JSON, add it
-	left = 0;
-	right = schools.value.length - 1;
+		// If it isn't in the JSON, add it
+		left = 0;
+		right = schools.value.length - 1;
 
-	while (left <= right) {
-		let middle = Math.floor((left + right) / 2);
-		if (schools.value[middle].name === availableSchools.value)
-			break;
-		if (schools.value[middle].name < availableSchools.value)
-			left = middle + 1;
-		else
-			right = middle - 1;
+		while (left <= right) {
+			let middle = Math.floor((left + right) / 2);
+			if (schools.value[middle].name === availableSchools.value)
+				break;
+			if (schools.value[middle].name < availableSchools.value)
+				left = middle + 1;
+			else
+				right = middle - 1;
+		}
+		schools.value.splice(left, 0, {
+			abbr: teamAbbr.value,
+			abbr14: teamSchoolName.value,
+			logo: teamLogo.value,
+			name: availableSchools.value,
+			primaryColor: teamPrimaryColor.value,
+			secondaryColor: teamSecondaryColor.value,
+			teamName: teamName.value
+		})
+		localStorage.setItem("schools", JSON.stringify(schools.value));
+		subtitle.value = "Success";
+		color.value = "green";
+		msg.value = "Successfully added school.";
+		if (db) {
+			const schoolsRef = collection(db, "schools");
+			const q = query(schoolsRef);
+			const querySnapshot = await getDocs(q);
+			querySnapshot.docs.forEach((document) => {
+				if (schoolNames.value.indexOf(document.id) === -1)
+					schoolNames.value.push(document.id);
+			});
+		} else {
+			schoolNames.value.splice(left, 0, availableSchools.value);
+		}
 	}
-	schools.value.splice(left, 0, {
-		abbr: teamAbbr.value,
-		abbr14: teamSchoolName.value,
-		logo: teamLogo.value,
-		name: availableSchools.value,
-		primaryColor: teamPrimaryColor.value,
-		secondaryColor: teamSecondaryColor.value,
-		teamName: teamName.value
-	})
-	schoolNames.value.splice(left, 0, availableSchools.value);
-	localStorage.setItem("schools", JSON.stringify(schools.value));
 }
 
 
 
 function loadSchool() {
-	if (!availableSchools.value)
+	if (!availableSchools.value) {
+		subtitle.value = "Error";
+		color.value = "red";
+		msg.value = "School field is empty, select one of schools available to load it.";
 		return;
-
+	}
 	let left = 0;
 	let right = schools.value.length - 1;
 	while (left <= right) {
@@ -216,6 +277,9 @@ function loadSchool() {
 			teamPrimaryColor.value = schools.value[middle].primaryColor
 			teamSecondaryColor.value = schools.value[middle].secondaryColor
 			teamName.value = schools.value[middle].teamName
+			subtitle.value = "Success";
+			color.value = "green";
+			msg.value = "School exists, successfully loaded its values.";
 			return;
 		}
 		if (schools.value[middle].name < availableSchools.value)
@@ -223,27 +287,75 @@ function loadSchool() {
 		else
 			right = middle - 1;
 	}
+	if (!availableSchools.value) {
+		subtitle.value = "Error";
+		color.value = "red";
+		msg.value = "School does not exist, select one of schools available to load it.";
+		return;
+	}
+}
+
+async function deleteSchool() {
+	if (!availableSchools.value) {
+		if (!availableSchools.value) {
+			subtitle.value = "Error";
+			color.value = "red";
+			msg.value = "School field is empty, select one of the schools available to load it.";
+			return;
+		}
+	}
+	try {
+		const schoolRef = doc(db, "schools", availableSchools.value);
+		const schoolDoc = await getDoc(schoolRef);
+		if (!schoolDoc.exists()) {
+			if (!availableSchools.value) {
+				subtitle.value = "Error";
+				color.value = "red";
+				msg.value = "School does not exist, select one of the schools available to delete it.";
+				return;
+			}
+			return;
+		}
+		const index = schoolNames.value.indexOf(availableSchools.value);
+		await deleteDoc(schoolRef);
+		subtitle.value = "Success";
+		color.value = "green";
+		msg.value = "School exists, successfully deleted it.";
+
+		schoolNames.value.splice(index, 1);
+		// The line below is trivial since you cannot select it as a value
+		schools.value.splice(index, 1);
+		localStorage.setItem("schools", JSON.stringify(schools.value));
+	} catch (e) {
+		subtitle.value = "Error";
+		color.value = "red";
+		msg.value = "Due to how the database works, there is no reason to delete the school " +
+						"while there is no internet connection.";
+	}
 }
 
 </script>
 
 <style scoped lang="scss">
-	.mt-10 {
-		margin-top: 10px;
-	}
-	.ml-10 {
-		margin-left: 10px;
-	}
-	.team-logo-container {
-		display: flex;
-		justify-content: center;
-	}
-	.team-logo {
-		max-width: 50%;
-	}
-	#button-sync-scoreboard-color {
-		left: 50%;
-		transform: translateX(-50%);
-		margin-top: 5px;
-	}
+.mt-10 {
+	margin-top: 10px;
+}
+.ml-10 {
+	margin-left: 10px;
+}
+.team-logo-container {
+	display: flex;
+	justify-content: center;
+}
+.team-logo {
+	max-width: 50%;
+}
+#button-sync-scoreboard-color {
+	left: 50%;
+	transform: translateX(-50%);
+	margin-top: 5px;
+}
+.school-btns {
+	font-size: 10px;
+}
 </style>
