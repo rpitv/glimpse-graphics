@@ -26,13 +26,13 @@
 						v-model="availableSchools" />
 			<v-row>
 				<v-col cols="4">
-					<v-btn class="text-none school-btns" @click="saveSchool">Save School</v-btn>
+					<v-btn class="text-none school-btns" @click="saveSchool" color="#121212">Save School</v-btn>
 				</v-col>
 				<v-col cols="4">
-					<v-btn class="text-none school-btns" @click="loadSchool">Load School</v-btn>
+					<v-btn class="text-none school-btns" @click="loadSchool" color="#121212">Load School</v-btn>
 				</v-col>
 				<v-col cols="4">
-					<v-btn class="text-none school-btns" @click="deleteSchool">Delete School</v-btn>
+					<v-btn class="text-none school-btns" @click="deleteSchool" color="#121212">Delete School</v-btn>
 				</v-col>
 			</v-row>
 			<v-card v-show="subtitle" class="mt-10" :subtitle="subtitle" :text="msg" variant="tonal" :color="color"></v-card>
