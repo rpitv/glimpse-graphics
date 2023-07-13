@@ -1,15 +1,15 @@
 <template>
 	<div class="team">
 		<div class="team-info">
-			<div>
-				I
+			<div class="team-logo">
+				<img :src="team.logo.value" class="logo">
 			</div>
 			<div class="team-name">
 				UVM
 			</div>
 		</div>
 		<div class="team-score">
-			@2
+			{{ team.score }}
 		</div>
 	</div>
 </template>
@@ -18,6 +18,7 @@
 
 import {computed, defineProps} from "vue";
 import {loadReplicants} from "../../../../browser-common/replicants";
+import isDarkColor from "is-dark-color";
 
 const props = defineProps({
 	teamId: {
@@ -66,7 +67,6 @@ function isLighter(color1: string, color2: string): boolean {
 
 const color1 = computed(() => {
 	const linearGradient = calcLinearGrad(team.primaryColor.value);
-	console.log(linearGradient);
 	if (!isLighter(team.primaryColor.value, linearGradient))
 		return linearGradient;
 	return team.primaryColor.value;
@@ -78,6 +78,23 @@ const color2 = computed(() => {
 		return team.primaryColor.value;
 	return linearGradient;
 })
+
+const color3 = computed(() => {
+	const linearGradient = calcLinearGrad(team.secondaryColor.value);
+	if (!isLighter(team.secondaryColor.value, linearGradient))
+		return linearGradient;
+	return team.secondaryColor.value;
+})
+
+const color4 = computed(() => {
+	const linearGradient = calcLinearGrad(team.secondaryColor.value);
+	if (!isLighter(team.secondaryColor.value, linearGradient))
+		return team.secondaryColor.value;
+	return linearGradient;
+})
+
+const nameColor = computed(() => isDarkColor(team.primaryColor.value) ? "white" : "black");
+const scoreColor = computed(() => isDarkColor(team.secondaryColor.value) ? "white" : "black");
 
 </script>
 
@@ -92,7 +109,7 @@ const color2 = computed(() => {
 	grid-template-columns: 2fr 1fr;
 	align-items: center;
 	align-content: center;
-	position: fixed;
+	//position: fixed;
 	background: linear-gradient(v-bind(color1), v-bind(color2));
 	width: 15.62vw;
 	height: 6.2vh;
@@ -107,15 +124,33 @@ const color2 = computed(() => {
 
 .team-name {
 	// TO-DO: Replace
-	color: white;
+	color: v-bind(nameColor);
 	text-align: center;
 	font-family: "Malgun Gothic";
 	font-weight: bold;
-	text-shadow: 3px 3px 6px #000000;
+	text-shadow: 2px 2px 4px #292929;
 	font-size: 4.63vh;
 }
 
 .team-score {
-	background-color: yellow;
+	text-align: center;
+	height: 6.2vh;
+	background: linear-gradient(v-bind(color3), v-bind(color4));
+	font-size: 4.63vh;
+	color: v-bind(scoreColor);
+	text-shadow: 2px 2px 4px #292929;
+}
+
+.team-logo {
+	display: flex;
+	justify-content: center;
+}
+
+.logo {
+	width: 100%;
+	height: 100%;
+	max-width: 3vw;
+	max-height: 5vh;
+	filter: drop-shadow(3px 3px 2px #292929);
 }
 </style>
