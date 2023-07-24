@@ -7,26 +7,66 @@
 		<TeamView class="team" :team-id="1" />
 		<div class="clock-period">
 			<div class="period">
-				{{ formattedPeriod }}
+				{{ formattedPeriod.toUpperCase() }}
 			</div>
 			<div class="clock">
 				{{ formattedClockTime }}
 			</div>
 		</div>
 		<div class="play-clock">40</div>
-		<div class="down-counter">TBD</div>
+		<div class="down-counter-announcements">{{announcement}}</div>
 	</div>
+<!--	<div :class="'animation'"></div>-->
 </template>
 
 <script setup lang="ts">
 import TeamView from "./TeamView.vue";
 import { loadReplicants } from "../../../../browser-common/replicants";
 import rpitvBug from "../../../../assets/football/rpitv_logo.png";
-import {computed} from "vue";
+import {computed, ref} from "vue";
+import {calcLinearGrad, isLighter} from "../../../../dashboard/util";
 const replicants = await loadReplicants();
 
 const clock = replicants.scoreboard.clock;
 const period = replicants.scoreboard.period;
+
+const backgroundColor1 = ref<string>("#FFF700");
+const backgroundColor2 = ref<string>("#807C00");
+
+const announcement = computed(() => {
+	let currentState = "2ND & 10";
+	let linearGrad: string;
+	if (replicants.announcements.team1.value[0]?.message) {
+		currentState = replicants.announcements.team1.value[0].message;
+		linearGrad = calcLinearGrad(replicants.teams[0].primaryColor.value);
+		if (isLighter(replicants.teams[0].primaryColor.value, linearGrad)) {
+			backgroundColor1.value = replicants.teams[0].primaryColor.value;
+			backgroundColor2.value = linearGrad;
+		} else {
+			backgroundColor1.value = linearGrad;
+			backgroundColor2.value = replicants.teams[0].primaryColor.value;
+		}
+	} else if (replicants.announcements.team2.value[0]?.message) {
+		currentState = replicants.announcements.team2.value[0].message;
+		linearGrad = calcLinearGrad(replicants.teams[1].primaryColor.value);
+		if (isLighter(replicants.teams[1].primaryColor.value, linearGrad)) {
+			backgroundColor1.value = replicants.teams[1].primaryColor.value;
+			backgroundColor2.value = linearGrad;
+		} else {
+			backgroundColor1.value = linearGrad;
+			backgroundColor2.value = replicants.teams[1].primaryColor.value;
+		}
+	} else {
+		backgroundColor1.value = "#FFF700";
+		backgroundColor2.value = "#807C00";
+	}
+	if (replicants.announcements.global.value[0]?.message) {
+		currentState = replicants.announcements.global.value[0].message;
+		backgroundColor1.value = "#FFF700";
+		backgroundColor2.value = "#807C00";
+	}
+	return currentState;
+})
 
 const formattedClockTime = computed<string>(() => {
 	const minutes = Math.floor(clock.time.value / 60000).toString();
@@ -76,13 +116,18 @@ const formattedPeriod = computed<string>(() => {
 </script>
 
 <style scoped lang="scss">
+@font-face {
+	font-family: "Malgun Gothic";
+	src: url("../../../../assets/football/malgun.ttf") format('truetype');
+}
+
 .scoreboard {
 	//background-color: white;
 	filter: drop-shadow(5px 5px 6px #7D7D7D);
 	position: fixed;
-	left: 14.55vw;
+	left: 12.8vw;
 	top: 84.07vh;
-	width: 70.9vw;
+	width: 73.35vw;
 	height: 6.2vh;
 	display: flex;
 }
@@ -113,14 +158,16 @@ const formattedPeriod = computed<string>(() => {
 
 .clock-period {
 	display: flex;
-	width: 10.34vw;
+	width: 12vw;
 	height: 6.2vh;
 	background: linear-gradient(#9D9595, #2E2D2D);
-	font-size: 2.4vw;
+	font-size: 4.56vh;
 	color: white;
 	justify-content: space-around;
 	text-shadow: 2px 2px 4px #292929;
 	text-align: center;
+	font-family: "Malgun Gothic";
+	font-weight: bold;
 }
 
 
@@ -130,13 +177,32 @@ const formattedPeriod = computed<string>(() => {
 	background: linear-gradient(#C5C5C5, #636363);
 	font-size: 4.56vh;
 	text-align: center;
+	font-family: "Malgun Gothic";
+	font-weight: bold;
+	text-shadow: 2px 2px 4px #292929;
 }
 
-.down-counter {
+.down-counter-announcements {
 	width: 16.7vw;
 	height: 6.2vh;
-	background-color: black;
-	color: white;
+	transition: 1s;
+	background: linear-gradient(v-bind(backgroundColor1), v-bind(backgroundColor2));
+	color: black;
+	font-family: "Malgun Gothic";
+	font-weight: bold;
+	font-size: 4.56vh;
+	text-align: center;
+	text-shadow: 2px 2px 4px #292929;
+}
+
+
+.animation {
+	left: 12.8vw;
+	top: 84.07vh;
+	width: 73.35vw;
+	height: 6.2vh;
+	background-color: white;
+	position: fixed;
 }
 
 </style>

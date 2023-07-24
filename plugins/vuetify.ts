@@ -16,4 +16,7 @@ export default createVuetify({
 		aliases,
 		sets: { fa }
 	},
+	theme: {
+		defaultTheme: 'dark'
+	}
 })
