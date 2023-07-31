@@ -1,30 +1,43 @@
 <template>
-	<div :class="'scoreboard ' + (replicants.scoreboard.visible.value ? 'show' : 'hidden')">
-		<div class="rpitv">
-			<img :src="rpitvBug" class="logo">
-		</div>
-		<TeamView class="team" :team-id="0"/>
-		<TeamView class="team" :team-id="1" />
-		<div class="clock-period">
-			<div class="period">
-				{{ formattedPeriod.toUpperCase() }}
+	<div class="scoreboard-container">
+		<div :class="'scoreboard ' + (replicants.scoreboard.visible.value ? 'show' : 'hidden')">
+			<div class="rpitv">
+				<img :src="rpitvBug" class="logo">
 			</div>
-			<div class="clock">
-				{{ formattedClockTime }}
+			<TeamView class="team" :team-id="0"/>
+			<TeamView class="team" :team-id="1" />
+			<div class="clock-period">
+				<div class="period">
+					{{ formattedPeriod.toUpperCase() }}
+				</div>
+				<div class="clock">
+					{{ formattedClockTime }}
+				</div>
 			</div>
+			<div class="play-clock">40</div>
+			<div class="down-counter-announcements">{{announcement}}</div>
 		</div>
-		<div class="play-clock">40</div>
-		<div class="down-counter-announcements">{{announcement}}</div>
 	</div>
-<!--	<div :class="'animation'"></div>-->
+	<div class="animation-container">
+		<div :class="'animation'">
+			<div class="animation-text">
+				{{ scoreType }}
+			</div>
+			<img class="animation-image image1" :src="scoreImage">
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
 import TeamView from "./TeamView.vue";
 import { loadReplicants } from "../../../../browser-common/replicants";
 import rpitvBug from "../../../../assets/football/rpitv_logo.png";
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {calcLinearGrad, isLighter} from "../../../../dashboard/util";
+import gsap from "gsap";
+import { CustomEase } from "gsap/CustomEase";
+
+gsap.registerPlugin(CustomEase);
 const replicants = await loadReplicants();
 
 const clock = replicants.scoreboard.clock;
@@ -113,6 +126,46 @@ const formattedPeriod = computed<string>(() => {
 	}
 });
 
+function grabScoreType (n: number, teamNumber: number) {
+	if (n == 6)
+		return replicants.teams[teamNumber].name + "TOUCHDOWN";
+	if (n == 3)
+		return replicants.teams[teamNumber].name + "FIELD GOAL";
+	return "";
+}
+
+function runAnimation() {
+	const t1 = gsap.timeline();
+	const t2 = gsap.timeline();
+	const t3 = gsap.timeline();
+	t1.fromTo(".animation", {letterSpacing: "normal", backgroundColor: "black"},
+		{duration: 4, letterSpacing: "4vw", ease: CustomEase.create("custom", "M0,0 C0.04,0.122 0.043,0.235 0.07,0.338 0.125,0.554 0.194,0.721 0.302,0.822 0.494,1.002 0.818,1.001 1,1 ")});
+	t2.to(".animation", {duration: 1, opacity: 1});
+	t3.to(".animation-image", {})
+	t1.to(".animation", {duration: 1, backgroundColor: "black", opacity: 0}, "-=.5");
+}
+const scoreType = ref<string>("");
+const scoreImage = ref<string>("");
+
+watch(replicants.teams[0].score, (n, o) => {
+	scoreType.value = grabScoreType(n - o, 0);
+	scoreImage.value = replicants.teams[0].logo.value;
+	// if (!scoreType)
+	// 	return;
+	scoreType.value = "TOUCHDOWN";
+	runAnimation();
+})
+
+watch(replicants.teams[1].score, (n, o) => {
+	scoreType.value = grabScoreType(n - o, 1);
+	scoreImage.value = replicants.teams[1].logo.value;
+	// if (!scoreType)
+	// 	return;
+	// REMOVE
+	scoreType.value = "TOUCHDOWN";
+	runAnimation();
+})
+
 </script>
 
 <style scoped lang="scss">
@@ -121,13 +174,16 @@ const formattedPeriod = computed<string>(() => {
 	src: url("../../../../assets/football/malgun.ttf") format('truetype');
 }
 
+.scoreboard-container {
+	display: flex;
+	justify-content: center;
+}
+
 .scoreboard {
-	//background-color: white;
 	filter: drop-shadow(5px 5px 6px #7D7D7D);
 	position: fixed;
-	left: 12.8vw;
 	top: 84.07vh;
-	width: 73.35vw;
+	width: 77.35vw;
 	height: 6.2vh;
 	display: flex;
 }
@@ -149,6 +205,7 @@ const formattedPeriod = computed<string>(() => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border-radius: 2vh 0 0 2vh;
 }
 
 .logo {
@@ -183,26 +240,43 @@ const formattedPeriod = computed<string>(() => {
 }
 
 .down-counter-announcements {
-	width: 16.7vw;
+	width: 20.7vw;
 	height: 6.2vh;
-	transition: 1s;
 	background: linear-gradient(v-bind(backgroundColor1), v-bind(backgroundColor2));
 	color: black;
 	font-family: "Malgun Gothic";
 	font-weight: bold;
-	font-size: 4.56vh;
+	font-size: 4.3vh;
 	text-align: center;
-	text-shadow: 2px 2px 4px #292929;
+	border-radius: 0 2vh 2vh 0;
 }
 
+.animation-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
 .animation {
-	left: 12.8vw;
+	display: flex;
+	opacity: 0;
+	font-family: "Malgun Gothic";
 	top: 84.07vh;
-	width: 73.35vw;
+	width: 77.35vw;
 	height: 6.2vh;
-	background-color: white;
 	position: fixed;
+	color: blue;
+	text-align: center;
+	font-weight: bolder;
+	text-shadow: 2px 2px 4px #292929;
+	border-radius: 2vh 2vh 2vh 2vh;
+}
+
+.animation-text {
+	width: 77.35vw;
+	position: fixed;
+	bottom: 9vh;
+	font-size: 6.2vh;
 }
 
 </style>

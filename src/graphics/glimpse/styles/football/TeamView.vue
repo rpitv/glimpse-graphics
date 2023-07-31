@@ -1,25 +1,24 @@
 <template>
 	<div class="team">
 		<div class="team-info">
-			<div class="team-logo">
-				<img :src="team.logo.value" class="logo">
-			</div>
+			<img :src="team.logo.value" class="logo">
 			<div class="team-name">
 				{{ team.abbreviation.value }}
 			</div>
 		</div>
 		<div class="team-score">
-			{{ team.score }}
+			{{ score.toFixed(0) }}
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 
-import {computed, defineProps} from "vue";
+import {computed, defineProps, ref, watch} from "vue";
 import {loadReplicants} from "../../../../browser-common/replicants";
 import isDarkColor from "is-dark-color";
 import { calcLinearGrad, isLighter } from "../../../../dashboard/util";
+import gsap from "gsap";
 
 const props = defineProps({
 	teamId: {
@@ -62,6 +61,11 @@ const color4 = computed(() => {
 const nameColor = computed(() => isDarkColor(team.primaryColor.value) ? "white" : "black");
 const scoreColor = computed(() => isDarkColor(team.secondaryColor.value) ? "white" : "black");
 
+const score = ref(team.score.value);
+watch(team.score, (n, o) => {
+	gsap.to(score, { duration: 0.75, value: Number(n) || 0})
+})
+
 </script>
 
 <style scoped lang="scss">
@@ -81,7 +85,7 @@ const scoreColor = computed(() => isDarkColor(team.secondaryColor.value) ? "whit
 
 .team-info {
 	display: grid;
-	grid-template-columns: 3fr 5fr;
+	grid-template-columns: 4fr 9fr;
 	align-items: center;
 }
 
@@ -106,16 +110,12 @@ const scoreColor = computed(() => isDarkColor(team.secondaryColor.value) ? "whit
 
 }
 
-.team-logo {
-	display: flex;
-	justify-content: center;
-}
-
 .logo {
 	width: 100%;
 	height: 100%;
 	max-width: 3vw;
 	max-height: 5vh;
 	filter: drop-shadow(3px 3px 2px #292929);
+	padding-left: 0.3vw;
 }
 </style>

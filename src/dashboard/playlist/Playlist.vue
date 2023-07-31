@@ -19,7 +19,7 @@
 					{{ ad.name }}
 				</td>
 				<td>
-					<video ref="videos" controls height="150" @loadedmetadata="getDuration(i)">
+					<video ref="videos" controls height="150" @loadedmetadata="getDuration(i as number)">
 						<source :src="ad.url">
 					</video>
 				</td>
@@ -36,8 +36,7 @@
 <script setup lang="ts">
 import { loadReplicants } from "../../browser-common/replicants";
 import {replicant} from "../../browser-common/replicant";
-import {computed, onMounted, ref} from "vue";
-import {parseTimeString} from "../util";
+import {ref} from "vue";
 
 const replicants = await loadReplicants()
 const ads = await replicant('assets:advertisements');
