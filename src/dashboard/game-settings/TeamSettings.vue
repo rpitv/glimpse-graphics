@@ -16,6 +16,9 @@
 			<n-grid-item>
 				<n-checkbox class="ml-10" v-model:checked="syncShots">Sync Shots</n-checkbox>
 			</n-grid-item>
+			<n-grid-item v-if="replicants.gameSettings.style.value === 'football'">
+				<n-checkbox class="ml-10" v-model:checked="syncTimeouts">Sync T/Os</n-checkbox>
+			</n-grid-item>
 		</n-grid>
 
 		<div v-if="isTeamEnabled">
@@ -160,6 +163,7 @@ const syncName = replicants.sync.values.teams[props.id].name;
 const syncAbbreviation = replicants.sync.values.teams[props.id].abbreviation;
 const syncScore = replicants.sync.values.teams[props.id].score;
 const syncShots = replicants.sync.values.teams[props.id].shots;
+const syncTimeouts = replicants.sync.values.teams[props.id].timeouts;
 
 
 function syncScoreboardColors() {

@@ -7,7 +7,6 @@
 	<div class="display-text">
 		{{ formattedPeriod }}
 	</div>
-
 </div>
 </template>
 

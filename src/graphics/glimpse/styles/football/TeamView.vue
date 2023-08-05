@@ -63,13 +63,12 @@ const scoreColor = computed(() => isDarkColor(team.secondaryColor.value) ? "whit
 
 const score = ref(team.score.value);
 watch(team.score, (n, o) => {
-	gsap.to(score, { duration: 0.75, value: Number(n) || 0})
+	gsap.to(score, { duration: 1, value: Number(n) || 0, ease: "power1.out"}, "+=0.5")
 })
 
 </script>
 
 <style scoped lang="scss">
-
 
 .team {
 	display: grid;
@@ -94,7 +93,7 @@ watch(team.score, (n, o) => {
 	text-align: center;
 	font-family: "Malgun Gothic";
 	font-weight: bolder;
-	text-shadow: 2px 2px 4px #292929;
+	text-shadow: 0.1vw 0.1vw 0.6vh #292929;
 	font-size: 4.63vh;
 }
 
@@ -104,7 +103,7 @@ watch(team.score, (n, o) => {
 	background: linear-gradient(v-bind(color3), v-bind(color4));
 	font-size: 4.63vh;
 	color: v-bind(scoreColor);
-	text-shadow: 2px 2px 4px #292929;
+	text-shadow: 0.1vw 0.1vw 0.6vh #292929;
 	font-family: "Malgun Gothic";
 	font-weight: bold;
 
@@ -115,7 +114,7 @@ watch(team.score, (n, o) => {
 	height: 100%;
 	max-width: 3vw;
 	max-height: 5vh;
-	filter: drop-shadow(3px 3px 2px #292929);
+	filter: drop-shadow(0.5vh 0.3vh 0.3vh #292929);
 	padding-left: 0.3vw;
 }
 </style>

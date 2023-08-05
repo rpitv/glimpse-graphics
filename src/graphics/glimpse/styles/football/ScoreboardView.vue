@@ -14,16 +14,19 @@
 					{{ formattedClockTime }}
 				</div>
 			</div>
-			<div class="play-clock">40</div>
-			<div class="down-counter-announcements">{{announcement}}</div>
+			<div class="play-clock">{{replicants.scoreboard.playClock.value}}</div>
+			<div :class="'down-counter-announcements ' + (announcement.length ? 'announcement' : 'down')">
+				{{announcement ? announcement : `${getSuffix(replicants.scoreboard.down.value).toUpperCase()} & ${replicants.scoreboard.yardsToGo.value}`}}
+			</div>
 		</div>
 	</div>
 	<div class="animation-container">
 		<div :class="'animation'">
 			<div class="animation-text">
-				{{ scoreType }}
 			</div>
-			<img class="animation-image image1" :src="scoreImage">
+			<div class="image-container">
+			<img v-for="(i) in 10" :class="'animation-image ' + `image${i}`" :src="scoreImage">
+			</div>
 		</div>
 	</div>
 </template>
@@ -36,6 +39,7 @@ import {computed, ref, watch} from "vue";
 import {calcLinearGrad, isLighter} from "../../../../dashboard/util";
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
+import isDarkColor from "is-dark-color";
 
 gsap.registerPlugin(CustomEase);
 const replicants = await loadReplicants();
@@ -47,7 +51,7 @@ const backgroundColor1 = ref<string>("#FFF700");
 const backgroundColor2 = ref<string>("#807C00");
 
 const announcement = computed(() => {
-	let currentState = "2ND & 10";
+	let currentState = "";
 	let linearGrad: string;
 	if (replicants.announcements.team1.value[0]?.message) {
 		currentState = replicants.announcements.team1.value[0].message;
@@ -94,6 +98,18 @@ const formattedClockTime = computed<string>(() => {
 	}
 })
 
+function getSuffix(n: number) {
+	if(n === 1) {
+		return `${n}st`;
+	} else if(n === 2) {
+		return `${n}nd`;
+	} else if(n === 3) {
+		return `${n}rd`;
+	} else {
+		return `${n}th`;
+	}
+}
+
 const formattedPeriod = computed<string>(() => {
 	if(period.value > replicants.gameSettings.periods.count.value) {
 		const overtimePeriod = period.value - replicants.gameSettings.periods.count.value;
@@ -115,56 +131,123 @@ const formattedPeriod = computed<string>(() => {
 
 	// For all other numbers, we need to figure out the suffix.
 	const lastNumberOfPeriod = period.value % 10;
-	if(lastNumberOfPeriod === 1) {
-		return `${period.value}st`;
-	} else if(lastNumberOfPeriod === 2) {
-		return `${period.value}nd`;
-	} else if(lastNumberOfPeriod === 3) {
-		return `${period.value}rd`;
-	} else {
-		return `${period.value}th`;
-	}
+	return getSuffix(lastNumberOfPeriod);
 });
 
 function grabScoreType (n: number, teamNumber: number) {
+	const animationText = ["", ""];
 	if (n == 6)
-		return replicants.teams[teamNumber].name + "TOUCHDOWN";
+		animationText[0] = "TOUCHDOWN";
 	if (n == 3)
-		return replicants.teams[teamNumber].name + "FIELD GOAL";
-	return "";
+		animationText[0] = "FIELD GOAL"
+	animationText[1] = replicants.teams[teamNumber].name.value;
+	return animationText;
 }
 
+const stagger = 0.3;
 function runAnimation() {
 	const t1 = gsap.timeline();
 	const t2 = gsap.timeline();
 	const t3 = gsap.timeline();
-	t1.fromTo(".animation", {letterSpacing: "normal", backgroundColor: "black"},
-		{duration: 4, letterSpacing: "4vw", ease: CustomEase.create("custom", "M0,0 C0.04,0.122 0.043,0.235 0.07,0.338 0.125,0.554 0.194,0.721 0.302,0.822 0.494,1.002 0.818,1.001 1,1 ")});
-	t2.to(".animation", {duration: 1, opacity: 1});
-	t3.to(".animation-image", {})
-	t1.to(".animation", {duration: 1, backgroundColor: "black", opacity: 0}, "-=.5");
+	t1.fromTo(".animation", {opacity: 0}, {duration: 1, opacity: 1});
+	t1.fromTo(".animation-text", {letterSpacing: "normal", opacity: 0}, {
+		duration: 3,
+		innerText: String(scoreType.value[0]).toUpperCase(),
+		letterSpacing: "4vw",
+		ease: CustomEase.create("custom", "M0,0 C0.04,0.122 0.043,0.235 0.07,0.338 0.125,0.554 0.194,0.721 0.302,0.822 0.494,1.002 0.818,1.001 1,1 "),
+		opacity: 1
+	}, "-=0.25");
+	t1.to(".animation-text", { duration: 1, opacity: 0}, "-=0.25");
+	t1.fromTo(".animation-text", {letterSpacing: "2vw"}, {
+		duration: 2,
+		innerText: String(scoreType.value[1]).toUpperCase(),
+		opacity: 1,
+		letterSpacing: "4vw",
+		ease: CustomEase.create("custom", "M0,0 C0.04,0.122 0.043,0.235 0.07,0.338 0.125,0.554 0.194,0.721 0.302,0.822 0.494,1.002 0.818,1.001 1,1 ")
+	}, "-=0.15");
+	/*
+	 The clip transition doesn't perform a smooth transition, so we use
+	 variables where over the duration, the variable change gradually
+	 */
+	t2.fromTo(".animation-image", {top: "6.1vh"}, {duration: 3, top: "0.5vh", stagger: stagger, ease: CustomEase.create("custom", "M0,0 C0.104,0.204 0.456,2.144 1,0 ")}, "+=1");
+	t3.fromTo(".animation-image", {"--clip": "3.1vh"}, {"--clip": "0vh", duration: 0.65, stagger: stagger}, "+=1.1");
+	t3.to(".animation-image", {"--clip": "3.1vh", duration: 0.6, stagger: stagger}, "-=0.9");
+	t1.to(".animation", {duration: 1, opacity: 0}, "+=0.75");
 }
-const scoreType = ref<string>("");
+
+const scoreType = ref<string[]>([]);
 const scoreImage = ref<string>("");
+
+const teamColor1 = ref<string>("");
+const teamColor2 = ref<string>("");
+
+const nameColor = ref<string>("");
 
 watch(replicants.teams[0].score, (n, o) => {
 	scoreType.value = grabScoreType(n - o, 0);
 	scoreImage.value = replicants.teams[0].logo.value;
-	// if (!scoreType)
-	// 	return;
-	scoreType.value = "TOUCHDOWN";
+	const linearGradient = calcLinearGrad(replicants.teams[0].primaryColor.value);
+	if (!isLighter(replicants.teams[0].primaryColor.value, linearGradient)) {
+		teamColor2.value = replicants.teams[0].primaryColor.value;
+		teamColor1.value = linearGradient;
+		nameColor.value =  isDarkColor(teamColor2.value) ? "white" : "black";
+	} else {
+		teamColor1.value = replicants.teams[0].primaryColor.value;
+		teamColor2.value = linearGradient;
+		nameColor.value =  isDarkColor(teamColor1.value) ? "white" : "black";
+	}
+	if (!scoreType.value[0])
+		return;
 	runAnimation();
 })
 
 watch(replicants.teams[1].score, (n, o) => {
 	scoreType.value = grabScoreType(n - o, 1);
 	scoreImage.value = replicants.teams[1].logo.value;
-	// if (!scoreType)
-	// 	return;
-	// REMOVE
-	scoreType.value = "TOUCHDOWN";
+	const linearGradient = calcLinearGrad(replicants.teams[1].primaryColor.value);
+	if (!isLighter(replicants.teams[1].primaryColor.value, linearGradient)) {
+		teamColor2.value = replicants.teams[1].primaryColor.value;
+		teamColor1.value = linearGradient;
+		nameColor.value =  isDarkColor(teamColor2.value) ? "white" : "black";
+	} else {
+		teamColor1.value = replicants.teams[1].primaryColor.value;
+		teamColor2.value = linearGradient;
+		nameColor.value =  isDarkColor(teamColor1.value) ? "white" : "black";
+	}
+	if (!scoreType.value[0])
+		return;
 	runAnimation();
+});
+
+const possessionColors = computed(() => {
+	const colors = [];
+	if (replicants.scoreboard.possession.value === '<') {
+		const linearGradient = calcLinearGrad(replicants.teams[0].primaryColor.value);
+		if (!isLighter(replicants.teams[0].primaryColor.value, linearGradient)) {
+			colors[0] = replicants.teams[0].primaryColor.value;
+			colors[1] = linearGradient;
+			colors[2] = isDarkColor(colors[0]) ? "white" : "black";
+		} else {
+			colors[1] = replicants.teams[0].primaryColor.value;
+			colors[0] = linearGradient;
+			colors[2] =  isDarkColor(colors[1]) ? "white" : "black";
+		}
+	} else if (replicants.scoreboard.possession.value === '>') {
+		const linearGradient = calcLinearGrad(replicants.teams[1].primaryColor.value);
+		if (!isLighter(replicants.teams[1].primaryColor.value, linearGradient)) {
+			colors[0] = replicants.teams[1].primaryColor.value;
+			colors[1] = linearGradient;
+			colors[2] = isDarkColor(colors[0]) ? "white" : "black";
+		} else {
+			colors[1] = replicants.teams[1].primaryColor.value;
+			colors[0] = linearGradient;
+			colors[2] =  isDarkColor(colors[1]) ? "white" : "black";
+		}
+	}
+	return colors;
 })
+
+replicants.scoreboard.possession.value = '';
 
 </script>
 
@@ -173,6 +256,10 @@ watch(replicants.teams[1].score, (n, o) => {
 	font-family: "Malgun Gothic";
 	src: url("../../../../assets/football/malgun.ttf") format('truetype');
 }
+@font-face {
+	font-family: "Roboto Condensed";
+	src: url("../../../../assets/football/RobotoCondensed-Bold.ttf") format('truetype');
+}
 
 .scoreboard-container {
 	display: flex;
@@ -180,7 +267,7 @@ watch(replicants.teams[1].score, (n, o) => {
 }
 
 .scoreboard {
-	filter: drop-shadow(5px 5px 6px #7D7D7D);
+	filter: drop-shadow(1vh 1vh 1vh #7D7D7D);
 	position: fixed;
 	top: 84.07vh;
 	width: 77.35vw;
@@ -221,7 +308,7 @@ watch(replicants.teams[1].score, (n, o) => {
 	font-size: 4.56vh;
 	color: white;
 	justify-content: space-around;
-	text-shadow: 2px 2px 4px #292929;
+	text-shadow: 0.1vw 0.1vw 0.6vh #292929;
 	text-align: center;
 	font-family: "Malgun Gothic";
 	font-weight: bold;
@@ -236,19 +323,32 @@ watch(replicants.teams[1].score, (n, o) => {
 	text-align: center;
 	font-family: "Malgun Gothic";
 	font-weight: bold;
-	text-shadow: 2px 2px 4px #292929;
+	text-shadow: 0.1vw 0.1vw 0.6vh #292929;
 }
+
+
 
 .down-counter-announcements {
 	width: 20.7vw;
 	height: 6.2vh;
-	background: linear-gradient(v-bind(backgroundColor1), v-bind(backgroundColor2));
-	color: black;
 	font-family: "Malgun Gothic";
 	font-weight: bold;
 	font-size: 4.3vh;
 	text-align: center;
 	border-radius: 0 2vh 2vh 0;
+	text-shadow: 0.1vw 0.1vw 0.6vh #292929;
+}
+
+.announcement {
+	background: linear-gradient(v-bind(backgroundColor1), v-bind(backgroundColor2));
+}
+
+.down {
+	--color1: v-bind(possessionColors[0]);
+	--color2: v-bind(possessionColors[1]);
+	--color3: v-bind(possessionColors[2]);
+	background: linear-gradient(var(--color2), var(--color1));
+	color: var(--color3);
 }
 
 .animation-container {
@@ -259,17 +359,17 @@ watch(replicants.teams[1].score, (n, o) => {
 
 .animation {
 	display: flex;
-	opacity: 0;
-	font-family: "Malgun Gothic";
+	opacity: 1;
 	top: 84.07vh;
 	width: 77.35vw;
 	height: 6.2vh;
 	position: fixed;
-	color: blue;
+	color: v-bind(nameColor);
 	text-align: center;
 	font-weight: bolder;
 	text-shadow: 2px 2px 4px #292929;
 	border-radius: 2vh 2vh 2vh 2vh;
+	background: linear-gradient(v-bind(teamColor1), v-bind(teamColor2));
 }
 
 .animation-text {
@@ -277,6 +377,22 @@ watch(replicants.teams[1].score, (n, o) => {
 	position: fixed;
 	bottom: 9vh;
 	font-size: 6.2vh;
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+.image-container {
+	display: flex;
+	justify-content: space-around;
+	width: 77.35vw;
+}
+
+.animation-image {
+	--clip: 3.1vh;
+	position: relative;
+	height: 3.1vh;
+	top: 6vh;
+	clip-path: inset(0 0 var(--clip) 0);
+	z-index: -5;
 }
 
 </style>
