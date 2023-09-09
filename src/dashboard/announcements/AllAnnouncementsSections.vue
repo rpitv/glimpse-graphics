@@ -1,6 +1,10 @@
 <template>
 <div>
-	<n-checkbox class="ml-10" v-model:checked="syncPenalties">Sync penalties</n-checkbox>
+
+	<n-checkbox class="ml-10" v-model:checked="syncPenalties"
+				v-if="replicants.gameSettings.style.value === 'espn' || replicants.gameSettings.style.value === 'rpitv-style7'">
+		Sync penalties
+	</n-checkbox>
 	<n-grid :cols="2" :x-gap="10" :y-gap="10">
 		<n-grid-item>
 			<h2>Away Team</h2>
@@ -14,7 +18,7 @@
 			<h2>Global</h2>
 			<AnnouncementsSection v-model:announcements="globalMessages" :global-announcements="true"/>
 		</n-grid-item>
-		<n-grid-item>
+		<n-grid-item v-if="replicants.gameSettings.style.value === 'espn' || replicants.gameSettings.style.value === 'rpitv-style7'">
 			<h2>Banner</h2>
 			<n-checkbox size="large"
 						v-model:checked="replicants.sync.values.sogs.value">

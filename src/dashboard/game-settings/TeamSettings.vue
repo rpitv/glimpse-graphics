@@ -16,6 +16,11 @@
 			<n-grid-item>
 				<n-checkbox class="ml-10" v-model:checked="syncShots">Sync Shots</n-checkbox>
 			</n-grid-item>
+			<div v-if="replicants.gameSettings.style.value === 'football'">
+				<n-grid-item>
+					<n-checkbox class="ml-10" v-model:checked="syncTimeouts">Sync T/Os</n-checkbox>
+				</n-grid-item>
+			</div>
 		</n-grid>
 
 		<div v-if="isTeamEnabled">
@@ -23,32 +28,33 @@
 						class="mt-10" density="comfortable"
 						:items="schoolNames"
 						item-title="name"
-						v-model="availableSchools" />
+						v-model="availableSchools" variant="outlined"
+			/>
 			<v-row>
 				<v-col cols="4">
-					<v-btn class="text-none school-btns" @click="saveSchool">Save School</v-btn>
+					<v-btn class="text-none school-btns" @click="saveSchool" color="#121212">Save School</v-btn>
 				</v-col>
 				<v-col cols="4">
-					<v-btn class="text-none school-btns" @click="loadSchool">Load School</v-btn>
+					<v-btn class="text-none school-btns" @click="loadSchool" color="#121212">Load School</v-btn>
 				</v-col>
 				<v-col cols="4">
-					<v-btn class="text-none school-btns" @click="deleteSchool">Delete School</v-btn>
+					<v-btn class="text-none school-btns" @click="deleteSchool" color="#121212">Delete School</v-btn>
 				</v-col>
 			</v-row>
 			<v-card v-show="subtitle" class="mt-10" :subtitle="subtitle" :text="msg" variant="tonal" :color="color"></v-card>
 			<div class="mt-10">
 				<label :for="teamNameId">Team Name</label>
-				<n-input :id="teamNameId" :disabled="syncName" v-model:value="teamName"/>
+				<v-text-field clearable variant="outlined" :id="teamNameId" :disabled="syncName" v-model="teamName"/>
 			</div>
 
 			<div class="mt-10">
 				<label :for="teamAbbrId">Team Abbreviation</label>
-				<n-input :id="teamAbbrId" :disabled="syncAbbreviation" v-model:value="teamAbbr"/>
+				<v-text-field clearable variant="outlined" :id="teamAbbrId" :disabled="syncAbbreviation" v-model="teamAbbr"/>
 			</div>
 
 			<div class="mt-10">
 				<label :for="schoolNameId">School Name</label>
-				<n-input :id="schoolNameId" v-model:value="teamSchoolName"/>
+				<v-text-field clearable variant="outlined" :id="schoolNameId" v-model="teamSchoolName"/>
 			</div>
 
 			<div class="mt-10">
@@ -72,7 +78,7 @@
 
 			<div class="mt-10">
 				<label :for="teamLogoId">Team Logo <small>(Only input trusted URLs.)</small></label>
-				<n-input :id="teamLogoId" v-model:value="teamLogo"/>
+				<v-text-field clearable variant="outlined" :id="teamLogoId" v-model="teamLogo"/>
 			</div>
 
 			<div class="team-logo-container">
@@ -94,6 +100,7 @@ const color = ref<string>();
 const msg = ref<string>();
 const schoolNames = ref<string[]>([]);
 const schools = ref<any[]>([]);
+
 
 // Get the schools from the database
 try {
@@ -156,10 +163,13 @@ const teamScoreboardPrimaryColor = team.scoreboardPrimaryColor;
 const teamScoreboardSecondaryColor = team.scoreboardSecondaryColor;
 const teamLogo = team.logo;
 
+console.log(teamName);
+
 const syncName = replicants.sync.values.teams[props.id].name;
 const syncAbbreviation = replicants.sync.values.teams[props.id].abbreviation;
 const syncScore = replicants.sync.values.teams[props.id].score;
 const syncShots = replicants.sync.values.teams[props.id].shots;
+const syncTimeouts = replicants.sync.values.teams[props.id].timeouts;
 
 
 function syncScoreboardColors() {

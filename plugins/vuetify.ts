@@ -17,14 +17,6 @@ export default createVuetify({
 		sets: { fa }
 	},
 	theme: {
-		defaultTheme: "glimpseTheme",
-		themes: {
-			glimpseTheme: {
-				dark: true,
-				colors: {
-					background: "#2f3a4f"
-				}
-			}
-		}
+		defaultTheme: 'dark'
 	}
 })

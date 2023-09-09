@@ -12,7 +12,7 @@
 	<div id="rightTeam">{{ replicants.teams[1].schoolName.value }}</div>
 	<div id="containerLocation">
 		<div id="center">
-			<span class="locationECAV">ECAV Stadium</span>
+			ECAV Stadium
 		</div>
 	</div>
 </template>
@@ -112,23 +112,20 @@ img {
 
 #containerLocation {
 	position: relative;
-
+	display: flex;
+	justify-content: center;
 	#center {
 		font-family: "Rubik", sans-serif;
-		//position: absolute;
-		width: 100%;
-		//top: 85vh;
+		position: absolute;
+		width: 19vw;
+		top: 100vh;
 		text-align: center;
 		font-size: 2.6vh;
 		font-weight: bold;
 		transform: translateY(-13.7vh);
-	}
-
-	.locationECAV {
 		background-color: black;
 		color: #ee3124;
-		padding-left: 3vw;
-		padding-right: 3vw;
 	}
+
 }
 </style>

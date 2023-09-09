@@ -137,6 +137,16 @@
 			<div>Home Penalty 2: #{{ replicants.teams[0].player2PenaltyNumber.value }} for {{ replicants.teams[0].player2PenaltyClock.value }}</div>
 			<div>Away Penalty 1: #{{ replicants.teams[1].player1PenaltyNumber.value }} for {{ replicants.teams[1].player1PenaltyClock.value }}</div>
 			<div>Away Penalty 2: #{{ replicants.teams[1].player2PenaltyNumber.value }} for {{ replicants.teams[1].player2PenaltyClock.value }}</div>
+			<br>
+		<div>FOOTBALL
+		<ul>Downs: {{ replicants.scoreboard.down }}</ul>
+		<ul>Possession: {{replicants.scoreboard}}</ul>
+			<ul>Yards To Go: {{replicants.scoreboard.yardsToGo}}</ul>
+			<ul>Play Clock: {{ replicants.scoreboard.playClock}}</ul>
+			<ul>Football {{replicants.sync.values.football}}</ul>
+			<ul>Timeouts Home Team {{replicants.teams[0].timeouts}}</ul>
+			<ul>Timeouts Away Team {{replicants.teams[1].timeouts}}</ul>
+		</div>
 	</div>
 </template>
 

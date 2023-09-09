@@ -116,3 +116,44 @@ export function formatPeriodShorthand(period: number, periodCount: number, overt
 		return formatNumber(period);
 	}
 }
+
+/**
+ * Takes the color given and returns an accompanying color that will look pleasing
+ * @param hex String to parse. Expected to be in the form #000000
+ */
+export function calcLinearGrad(hex: string): string {
+	const hexNoPound = hex.replace("#", '');
+	const colors = hexNoPound.match(/.{1,2}/g) as string[];
+	let r = parseInt(colors[0], 16);
+	let g = parseInt(colors[1], 16);
+	let b = parseInt(colors[2], 16);
+
+	if (r >= 100 || g >= 100 || b >= 100) {
+		r = Math.floor(r / 2);
+		g = Math.floor(g / 2);
+		b = Math.floor(b / 2);
+	}
+	else if (r <= 63 && g <= 63 && b <= 63) {
+		r = Math.floor(2 * r / 3 + 84);
+		g = Math.floor(2 * g / 3 + 84);
+		b = Math.floor(2 * b / 3 + 84);
+	} else {
+		r = Math.ceil(r / 5);
+		g = Math.ceil(g / 5);
+		b = Math.ceil(b / 5);
+	}
+
+	return "#" + (r.toString(16).length == 1 ? ("0" + r.toString(16)) : r.toString(16)) + (g.toString(16).length == 1 ? ("0" + g.toString(16)) :  g.toString(16))
+		+ (b.toString(16).length == 1 ? ("0" + b.toString(16)) :  b.toString(16));
+}
+/**
+ * Determines if the first color is lighter than the second color
+ * @param hex1 String to parse. Expected to be in the form #000000
+ * @param hex2 String to parse. Expected to be in the form #000000
+ */
+export function isLighter(color1: string, color2: string): boolean {
+	let dec1 = parseInt(color1.replace("#", ''), 16);
+	let dec2 = parseInt(color2.replace("#", ''), 16);
+
+	return dec1 > dec2;
+}
