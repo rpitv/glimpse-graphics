@@ -19,7 +19,9 @@
 			<TVStyle7LowerThird />
 		</div>
 		<div v-else-if="replicants.gameSettings.style.value === 'football'">
+			<TVModernCopyright />
 			<FootballScoreboard />
+			<FootballLowerThird />
 		</div>
 	</div>
 </template>
@@ -42,6 +44,7 @@ import TVStyle7Scoreboard from "./styles/rpitv-style7/ScoreboardView.vue";
 import TVStyle7LowerThird from "./styles/rpitv-style7/LowerThird.vue";
 
 import FootballScoreboard from "./styles/football/ScoreboardView.vue";
+import FootballLowerThird from "./styles/football/LowerThird.vue";
 
 import {watch} from "vue";
 
