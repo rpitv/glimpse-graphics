@@ -12,19 +12,33 @@
 	</div>
 	<h4>Quickplay Buttons</h4>
 	<div v-if="!globalAnnouncements" class="quickplay">
-		<NButton @click="addAnnouncement('Power Play', '2:00')">2:00 Power Play</NButton>
-		<NButton @click="addAnnouncement('Power Play', '5:00')">5:00 Power Play</NButton>
-		<NButton @click="addAnnouncement('Man Up', '0:30')">0:30 Man Up</NButton>
-		<NButton @click="addAnnouncement('Man Up', '1:00')">1:00 Man Up</NButton>
-		<NButton @click="addAnnouncement('Man Up', '2:00')">2:00 Man Up</NButton>
-		<NButton @click="addAnnouncement('Man Up', '3:00')">3:00 Man Up</NButton>
-		<NButton @click="addAnnouncement('Man Up', '5:00')">5:00 Man Up</NButton>
+		<!--Hockey-->
+		<span v-if="replicants.gameSettings.style.value === 'espn' || replicants.gameSettings.style.value === 'rpitv-style7'">
+			<NButton @click="addAnnouncement('Power Play', '2:00')">2:00 Power Play</NButton>
+			<NButton @click="addAnnouncement('Power Play', '5:00')">5:00 Power Play</NButton>
+			<NButton @click="addAnnouncement('Man Up', '0:30')">0:30 Man Up</NButton>
+			<NButton @click="addAnnouncement('Man Up', '1:00')">1:00 Man Up</NButton>
+			<NButton @click="addAnnouncement('Man Up', '2:00')">2:00 Man Up</NButton>
+			<NButton @click="addAnnouncement('Man Up', '3:00')">3:00 Man Up</NButton>
+			<NButton @click="addAnnouncement('Man Up', '5:00')">5:00 Man Up</NButton>
+		</span>
+		<!--Football-->
+		<span v-if="replicants.gameSettings.style.value === 'football'">
+			<NButton @click="addAnnouncement('Flag', '')">Flag</NButton>
+		</span>
 		<NButton @click="addAnnouncement('Timeout', '')">Timeout</NButton>
 	</div>
 	<div v-else>
-		<NButton @click="addAnnouncement('Official Review', '')">Official Review</NButton>
-		<NButton @click="addAnnouncement('Delayed Penalty', '')">Delayed Penalty</NButton>
-		<NButton @click="addAnnouncement('Empty Net', '')">Empty Net</NButton>
+		<span v-if="replicants.gameSettings.style.value === 'espn' || replicants.gameSettings.style.value === 'rpitv-style7'">
+			<NButton @click="addAnnouncement('Official Review', '')">Official Review</NButton>
+			<NButton @click="addAnnouncement('Delayed Penalty', '')">Delayed Penalty</NButton>
+			<NButton @click="addAnnouncement('Empty Net', '')">Empty Net</NButton>
+		</span>
+		<!--Football-->
+		<span v-if="replicants.gameSettings.style.value === 'football'">
+			<NButton @click="addAnnouncement('Play Under Review', '')">PUR</NButton>
+			<NButton @click="addAnnouncement('Flag', '')">Flag</NButton>
+		</span>
 		<NButton @click="addAnnouncement('Timeout', '')">Timeout</NButton>
 	</div>
 </template>

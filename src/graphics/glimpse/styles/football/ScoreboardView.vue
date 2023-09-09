@@ -16,7 +16,9 @@
 			</div>
 			<div class="play-clock">{{replicants.scoreboard.playClock.value}}</div>
 			<div :class="'down-counter-announcements ' + (announcement.length ? 'announcement' : 'down')">
-				{{announcement ? announcement : `${getSuffix(replicants.scoreboard.down.value).toUpperCase()} & ${replicants.scoreboard.yardsToGo.value}`}}
+				{{announcement ? announcement :
+					(replicants.scoreboard.possession.value === '' ? '' :
+						`${getSuffix(replicants.scoreboard.down.value).toUpperCase()} & ${replicants.scoreboard.yardsToGo.value}`)}}
 			</div>
 		</div>
 	</div>
@@ -99,11 +101,11 @@ const formattedClockTime = computed<string>(() => {
 })
 
 function getSuffix(n: number) {
-	if(n === 1) {
+	if(n == 1) {
 		return `${n}st`;
-	} else if(n === 2) {
+	} else if(n == 2) {
 		return `${n}nd`;
-	} else if(n === 3) {
+	} else if(n == 3) {
 		return `${n}rd`;
 	} else {
 		return `${n}th`;
@@ -220,7 +222,7 @@ watch(replicants.teams[1].score, (n, o) => {
 });
 
 const possessionColors = computed(() => {
-	const colors = [];
+	const colors = ["#2b2b2b", "#dfdfdf", "black"];
 	if (replicants.scoreboard.possession.value === '<') {
 		const linearGradient = calcLinearGrad(replicants.teams[0].primaryColor.value);
 		if (!isLighter(replicants.teams[0].primaryColor.value, linearGradient)) {
@@ -246,8 +248,6 @@ const possessionColors = computed(() => {
 	}
 	return colors;
 })
-
-replicants.scoreboard.possession.value = '';
 
 </script>
 
