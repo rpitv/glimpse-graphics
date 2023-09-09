@@ -187,6 +187,8 @@ const nameColor = ref<string>("");
 
 watch(replicants.teams[0].score, (n, o) => {
 	scoreType.value = grabScoreType(n - o, 0);
+	if (!scoreType.value[0])
+		return;
 	scoreImage.value = replicants.teams[0].logo.value;
 	const linearGradient = calcLinearGrad(replicants.teams[0].primaryColor.value);
 	if (!isLighter(replicants.teams[0].primaryColor.value, linearGradient)) {
@@ -198,13 +200,13 @@ watch(replicants.teams[0].score, (n, o) => {
 		teamColor2.value = linearGradient;
 		nameColor.value =  isDarkColor(teamColor1.value) ? "white" : "black";
 	}
-	if (!scoreType.value[0])
-		return;
 	runAnimation();
 })
 
 watch(replicants.teams[1].score, (n, o) => {
 	scoreType.value = grabScoreType(n - o, 1);
+	if (!scoreType.value[0])
+		return;
 	scoreImage.value = replicants.teams[1].logo.value;
 	const linearGradient = calcLinearGrad(replicants.teams[1].primaryColor.value);
 	if (!isLighter(replicants.teams[1].primaryColor.value, linearGradient)) {
@@ -216,8 +218,6 @@ watch(replicants.teams[1].score, (n, o) => {
 		teamColor2.value = linearGradient;
 		nameColor.value =  isDarkColor(teamColor1.value) ? "white" : "black";
 	}
-	if (!scoreType.value[0])
-		return;
 	runAnimation();
 });
 
