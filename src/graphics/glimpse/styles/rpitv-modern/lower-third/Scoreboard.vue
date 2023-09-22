@@ -84,8 +84,8 @@ watch(replicants.lowerThird.scoreboard, (newValue, oldValue) => {
 	if (newValue) {
 		team0Score.value = replicants.teams[0].score.value;
 		team1Score.value = replicants.teams[1].score.value;
-
-		if (replicants.sync.selectedSport.value === "Hockey/Lacrosse") {
+		// potentially useless 'if' block
+		if (replicants.sync.selectedSport.value === "Hockey/Lacrosse" || replicants.sync.selectedSport.value === "Football" ) {
 			if (replicants.gameSettings.periods.count.value === 3) {
 				periodTextHockey();
 			} else { // assuming 4 period max for all other cases (lacrosse)

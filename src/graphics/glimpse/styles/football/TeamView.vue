@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-
 import {computed, defineProps, ref, watch} from "vue";
 import {loadReplicants} from "../../../../browser-common/replicants";
 import isDarkColor from "is-dark-color";

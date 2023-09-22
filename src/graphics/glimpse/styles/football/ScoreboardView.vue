@@ -171,7 +171,8 @@ function runAnimation() {
 	 The clip transition doesn't perform a smooth transition, so we use
 	 variables where over the duration, the variable change gradually
 	 */
-	t2.fromTo(".animation-image", {top: "6.1vh"}, {duration: 3, top: "0.5vh", stagger: stagger, ease: CustomEase.create("custom", "M0,0 C0.104,0.204 0.456,2.144 1,0 ")}, "+=1");
+	t2.fromTo(".animation-image", {top: "6.1vh"},
+		{duration: 3, top: "0.5vh", stagger: stagger, ease: CustomEase.create("custom", "M0,0 C0.104,0.204 0.456,2.144 1,0 ")}, "+=1");
 	t3.fromTo(".animation-image", {"--clip": "3.1vh"}, {"--clip": "0vh", duration: 0.65, stagger: stagger}, "+=1.1");
 	t3.to(".animation-image", {"--clip": "3.1vh", duration: 0.6, stagger: stagger}, "-=0.9");
 	t1.to(".animation", {duration: 1, opacity: 0}, "+=0.75");
@@ -267,7 +268,7 @@ const possessionColors = computed(() => {
 }
 
 .scoreboard {
-	filter: drop-shadow(1vh 1vh 1vh #7D7D7D);
+	filter: drop-shadow(1vh 1vh 1vh #111111);
 	position: fixed;
 	top: 84.07vh;
 	width: 77.35vw;

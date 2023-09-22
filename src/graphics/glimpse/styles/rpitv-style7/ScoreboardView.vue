@@ -264,16 +264,17 @@ $clock-zero-red: #862f28;
 	font-size: $clock-font-size;
 	color: $clock-row-color;
 	background: linear-gradient(180deg, #625858, #0d0505, #625858);
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
 	align-items: center;
 	text-align: center;
-	align-content: center;
 	position: relative;
 
+	#clockRowLogo {
+		display: flex;
+		justify-content: center;
+	}
+
 	#clockLogo {
-		height: (1.1 * $clock-font-size);
+		height: (1.5 * $clock-font-size);
 		width: auto;
 		position: absolute;
 		transform: translateY(-50%);

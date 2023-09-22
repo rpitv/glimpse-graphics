@@ -184,5 +184,5 @@ export function yardsToGoHandler(value: string): void {
 		return;
 	}
 
-	replicants.scoreboard.yardsToGo.value = parseInt(value);
+	replicants.scoreboard.yardsToGo.value = value;
 }

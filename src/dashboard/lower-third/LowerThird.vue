@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h2>
-			<v-btn @click="replicants.lowerThird.bug.value = !replicants.lowerThird.bug.value"
+			<v-btn @click="showBug"
 				   :color="replicants.lowerThird.bug.value ? 'red' : 'green'"
 				   class="text-none"
 			>
@@ -162,6 +162,12 @@ const availableCreditsOptions = computed<{ title: string, value: string }[]>(() 
 		{title: "Scroll", value: "scroll"}
 	]
 });
+
+function showBug() {
+	if (replicants.gameSettings.style.value === "football" && replicants.scoreboard.visible.value)
+		replicants.scoreboard.visible.value = false;
+	replicants.lowerThird.bug.value = !replicants.lowerThird.bug.value
+}
 </script>
 
 <style scoped>

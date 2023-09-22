@@ -1,6 +1,6 @@
 <template>
 	<div class="mainTeamView">
-		<n-grid class="containerTeamView" :style="backgroundGradient" cols="3">
+		<n-grid class="containerTeamView" cols="3">
 			<n-grid-item>
 				<img class="logo" ref="teamLogoImg" :src="team.logo.value" :alt="team.schoolName.value">
 			</n-grid-item>
@@ -25,6 +25,7 @@ import {loadReplicants} from "../../../../browser-common/replicants";
 import {Announcement} from "../../../../common/Announcement";
 import {computed, onMounted, ref} from "vue";
 import {NGrid, NGridItem} from "naive-ui";
+import {calcLinearGrad, isLighter} from "../../../../dashboard/util";
 
 const props = defineProps({
 	teamId: {
@@ -70,9 +71,19 @@ function computedMessage(message: Announcement) {
 	})
 }
 
-const backgroundGradient = computed(() => {
-	return "background-image: linear-gradient(135deg," + team.scoreboardPrimaryColor.value + "," + team.scoreboardSecondaryColor.value + ");";
-});
+const color1 = computed(() => {
+	const linearGradient = calcLinearGrad(team.primaryColor.value);
+	if (!isLighter(team.primaryColor.value, linearGradient))
+		return linearGradient;
+	return team.primaryColor.value;
+})
+
+const color2 = computed(() => {
+	const linearGradient = calcLinearGrad(team.primaryColor.value);
+	if (!isLighter(team.primaryColor.value, linearGradient))
+		return team.primaryColor.value;
+	return linearGradient;
+})
 
 </script>
 
@@ -91,7 +102,7 @@ $team-font-size: 2.3vh;
 .containerTeamView {
 	height: calc(v-bind(teamViewHeight) + $padding-var);
 	padding-bottom: $padding-var;
-	background-color: v-bind(teamPrimaryColor);
+	background: linear-gradient(v-bind(color1), v-bind(color2));
 	z-index: calc(v-bind(BASE_Z_INDEX) + 3);
 	position: relative;
 	display: flex;
@@ -102,12 +113,10 @@ $team-font-size: 2.3vh;
 	align-content: center;
 
 	.logo {
-		height: 4.3vh;
-		padding: $padding-var;
-		opacity: 1;
+		margin-top: 0.5vh;
+		height: 3.5vh;
 		z-index: calc(v-bind(BASE_Z_INDEX) + 1);
-		filter: drop-shadow(0.3vh 0.3vw 1vh black);
-		transform: translateY(3 * $padding-var);
+		filter: drop-shadow(0.2vh 0.2vw 0.2vw black);
 	}
 
 	.teamViewAbbreviation {

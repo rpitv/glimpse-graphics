@@ -87,8 +87,8 @@ export const replicants = {
 		},
 		period: nodecg().Replicant<number>('period', 'glimpse-graphics.scoreboard', {defaultValue: 1}),
 		playClock: nodecg().Replicant<number>('playClock', 'glimpse-graphics.playClock', {defaultValue: 0}),
-		down: nodecg().Replicant<number>('down', 'glimpse-graphics.down', {defaultValue: 1}),
-		yardsToGo: nodecg().Replicant<number>('yardsToGo', 'glimpse-graphics.yardsToGo', {defaultValue: 0}),
+		down: nodecg().Replicant<number>('down', 'glimpse-graphics.down', {defaultValue: 0}),
+		yardsToGo: nodecg().Replicant<string>('yardsToGo', 'glimpse-graphics.yardsToGo', {defaultValue: ""}),
 		possession: nodecg().Replicant<string>('possession', 'glimpse-graphics.possession', {defaultValue: ''})
 	},
 	teams: [
