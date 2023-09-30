@@ -28,6 +28,16 @@
 				{{ replicants.lowerThird.locator.value ? "Hide" : "Show" }}
 			</v-btn>
 			Display Locator
+			<br>
+			<br>
+			<v-select
+				v-if="replicants.gameSettings.style.value === 'rpitv-style7'"
+				label="Location for the locator"
+				:items="['ECAV Stadium', 'Houston Field House']"
+				v-model="replicants.lowerThird.location"
+				variant="outlined"
+			></v-select>
+
 		</h2>
 		<br>
 		<v-row>

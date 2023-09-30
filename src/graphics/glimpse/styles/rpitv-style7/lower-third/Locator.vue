@@ -12,7 +12,7 @@
 	<div id="rightTeam">{{ replicants.teams[1].schoolName.value }}</div>
 	<div id="containerLocation">
 		<div id="center">
-			ECAV Stadium
+			{{ replicants.lowerThird.location.value }}
 		</div>
 	</div>
 </template>
