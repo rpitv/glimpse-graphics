@@ -1,8 +1,13 @@
 <template>
 	<div id="containerScoreboardView" :class="'scoreboard ' + (replicants.scoreboard.visible.value ? '' : 'hidden')">
 		<Transition name="animation-global">
-			<div v-if="replicants.announcements.global.value.length !== 0" id="announcementGlobalRow">
-				{{ announcementGlobalMsg }}
+			<div>
+				<div v-if="announcementType === 'global'" class="announcementGlobalRow">
+					{{ powerPlayStatus }} {{ powerPlayClock }}
+				</div>
+				<div v-if="replicants.announcements.global.value.length !== 0" class="announcementGlobalRow">
+					{{ announcementGlobalMsg }}
+				</div>
 			</div>
 		</Transition>
 		<div id="bannerScore">
@@ -23,8 +28,14 @@
 				</n-grid-item>
 			</n-grid>
 			<div id="teamRow">
-				<TeamView :team-id="1" :text-color="teamLeftTextColor" id="teamLeft"/>
-				<TeamView :team-id="0" :text-color="teamRightTextColor" id="teamRight"/>
+				<TeamView :team-id="1" :text-color="teamLeftTextColor" id="teamLeft"
+						  :powerplayStatus="announcementType === 'away' ? powerPlayStatus : ''"
+						  :powerplayClock="announcementType === 'away' ? powerPlayClock : ''
+			"/>
+				<TeamView :team-id="0" :text-color="teamRightTextColor" id="teamRight"
+						  :powerplayStatus="announcementType === 'home' ? powerPlayStatus : ''"
+						  :powerplayClock="announcementType === 'home' ? powerPlayClock : ''
+			"/>
 			</div>
 		</div>
 	</div>
@@ -163,6 +174,183 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 		triggerGoalAnimation(1);
 	}
 });
+
+// POWER PLAY SYNC TO:DO CLEAN UP THE CODE
+const announcementType = computed(() => {
+	if (!replicants.sync.values.penalty.value)
+		return "";
+	// If we are in overtime
+	if (replicants.gameSettings.periods.overtime.count.value + 3 < period.value)
+		return "";
+	if (replicants.gameSettings.periods.count.value === 4 || (replicants.gameSettings.periods.count.value === 5 &&
+		replicants.gameSettings.periods.shootouts.value !== true)) {
+		// If two away players are on penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value) {
+			// If two home players are on penalty
+			if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value)
+				return "";
+			if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+				return "home";
+			return "home";
+		}
+		// If two home players are on penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value) {
+			// If two home players are on penalty
+			if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value)
+				return "";
+			if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+				return "away";
+			return "away";
+		}
+		// If either away player is on a penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value) {
+			// If either home player is on a penalty...
+			if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+				return "";
+			return "home";
+		}
+		// If either home player is on a penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value) {
+			// If either home player is on a penalty...
+			if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+				return "";
+			return "away";
+		}
+	}
+	if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value) {
+		// If two home players are on penalty
+		if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value)
+			return "global"
+		return "home";
+	}
+	// If two home players are on penalty...
+	if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value) {
+		// If two away players are on penalty
+		if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value)
+			return "global";
+		return "away";
+	}
+	// If either away player is on a penalty...
+	if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value) {
+		// If either home player is on a penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+			return "global";
+		return "home";
+	}
+	// If either home player is on a penalty...
+	if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value) {
+		// If either home player is on a penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+			return "global";
+		return "away";
+	}
+	return "";
+})
+
+const powerPlayStatus = computed(() => {
+	console.log(announcementType.value);
+	if (replicants.gameSettings.periods.count.value >= 5 && replicants.gameSettings.periods.shootouts.value)
+		return "";
+	// If we are in overtime
+	if (replicants.gameSettings.periods.count.value === 4 || (replicants.gameSettings.periods.count.value === 5 &&
+		replicants.gameSettings.periods.shootouts.value !== true)) {
+		// If two away players are on penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value) {
+			// If two home players are on penalty
+			if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value)
+				return "";
+			if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+				return "4 on 3";
+			return "5 on 3";
+		}
+		// If two home players are on penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value) {
+			// If two home players are on penalty
+			if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value)
+				return "";
+			if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+				return "4 on 3";
+			return "5 on 3";
+		}
+		// If either away player is on a penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value) {
+			// If either home player is on a penalty...
+			if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+				return "";
+			return "Power Play";
+		}
+		// If either home player is on a penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value) {
+			// If either home player is on a penalty...
+			if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+				return "";
+			return "Power Play";
+		}
+	}
+	// If two away players are on penalty...
+	if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value) {
+		// If two home players are on penalty
+		if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value)
+			return "3 on 3";
+		if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+			return "4 on 3";
+		return "5 on 3"
+	}
+	// If two home players are on penalty...
+	if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value) {
+		// If two home players are on penalty
+		if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value)
+			return "3 on 3";
+		if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+			return "4 on 3";
+		return "5 on 3";
+	}
+	// If either away player is on a penalty...
+	if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value) {
+		// If either home player is on a penalty...
+		if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value)
+			return "4 on 4";
+		return "Power Play";
+	}
+	// If either home player is on a penalty...
+	if (replicants.teams[0].player1PenaltyNumber.value || replicants.teams[0].player2PenaltyNumber.value) {
+		// If either home player is on a penalty...
+		if (replicants.teams[1].player1PenaltyNumber.value || replicants.teams[1].player2PenaltyNumber.value)
+			return "4 on 4";
+		return "Power Play";
+	}
+})
+
+const powerPlayClock = computed(() => {
+	let smallestTime = "";
+	const times = [replicants.teams[0].player1PenaltyClock.value, replicants.teams[0].player2PenaltyClock.value,
+		replicants.teams[1].player1PenaltyClock.value, replicants.teams[1].player2PenaltyClock.value];
+
+	for (const time of times) {
+		if (!time)
+			continue;
+		if (!smallestTime) {
+			smallestTime = time;
+			continue;
+		}
+		// If the minutes of the "smallest time" is less than the minute of the time, ignore it
+		if (smallestTime.split(":")[0] < time.split(":")[0])
+			continue;
+
+		// If the minutes of the "smallest time" is equal to the minute of the time...
+		if (smallestTime.split(":")[0] == time.split(":")[0]) {
+			// If the seconds of the "smallest time" is less than the seconds of the time, ignore it
+			if (smallestTime.split(":")[1] < time.split(":")[1] && smallestTime.split(":")[1] != "0")
+				continue;
+			smallestTime = time;
+			continue;
+		}
+		smallestTime = time;
+	}
+	console.log(smallestTime);
+	return smallestTime;
+});
+
 </script>
 
 <style scoped lang="scss">
@@ -245,7 +433,7 @@ $clock-zero-red: #862f28;
 	}
 }
 
-#announcementGlobalRow {
+.announcementGlobalRow {
 	text-align: center;
 	color: $announcement-global-color;
 	background-color: $announcement-global-bg;
