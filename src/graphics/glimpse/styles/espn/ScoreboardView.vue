@@ -8,6 +8,9 @@
 			<p v-if="replicants.announcements.team2.value.length > 0" class="announcement-section team2">
 				{{ computedMessage(replicants.announcements.team2.value[0]).value }}
 			</p>
+			<p v-if="replicants.gameSettings.showShootouts.value" class="announcement-section team2">
+				{{replicants.teams[1].shootouts.value}}
+			</p>
 		</div>
 
 		<div class="team1-section">
@@ -17,6 +20,9 @@
 			</p>
 			<p v-if="replicants.announcements.team1.value.length > 0" class="announcement-section team1">
 				{{ computedMessage(replicants.announcements.team1.value[0]).value }}
+			</p>
+			<p v-if="replicants.gameSettings.showShootouts.value" class="announcement-section team1">
+				{{replicants.teams[0].shootouts.value}}
 			</p>
 		</div>
 
@@ -194,7 +200,7 @@ const announcementType = computed(() => {
 	}
 	// If two home players are on penalty...
 	if (replicants.teams[0].player1PenaltyNumber.value && replicants.teams[0].player2PenaltyNumber.value) {
-		// If two home players are on penalty
+		// If two away players are on penalty
 		if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value)
 			return "global";
 		return "away";

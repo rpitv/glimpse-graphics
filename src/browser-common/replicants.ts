@@ -72,7 +72,7 @@ export async function loadReplicants() {
 				},
 				shootouts: await replicant<boolean>('shootouts', 'glimpse-graphics.game-settings.periods', {defaultValue: false}),
 			},
-
+			showShootouts: await replicant<boolean>("showShootouts", 'glimpse-graphics.game-settings',{defaultValue: false}),
 			baseball: {
 				bases: await replicant<boolean>("bases", "glimpse-graphics.game-settings.baseball", {defaultValue: false}),
 				bottomTop: await replicant<boolean>("bottomTop", "glimpse-graphics.game-settings.baseball", {defaultValue: false}),
@@ -97,7 +97,7 @@ export async function loadReplicants() {
 			period: await replicant<number>('period', 'glimpse-graphics.scoreboard', {defaultValue: 1}),
 			playClock: await replicant<number>('playClock', 'glimpse-graphics.playClock', {defaultValue: 0}),
 			down: await replicant<number>('down', 'glimpse-graphics.down', {defaultValue: 1}),
-			yardsToGo: await replicant<number>('yardsToGo', 'glimpse-graphics.yardsToGo', {defaultValue: 0}),
+			yardsToGo: await replicant<string>('yardsToGo', 'glimpse-graphics.yardsToGo', {defaultValue: ""}),
 			possession: await replicant<string>('possession', 'glimpse-graphics.possession', {defaultValue: ''})
 		},
 		teams: [
@@ -118,6 +118,7 @@ export async function loadReplicants() {
 				player2PenaltyNumber: await replicant<string>("player2PenaltyNumber", `glimpse-graphics.game-settings.team0`, {defaultValue: ""}),
 				player2PenaltyClock: await replicant<string>("player2PenaltyClock", `glimpse-graphics.game-settings.team0`, {defaultValue: ""}),
 				timeouts: await replicant<number>("timeouts", `glimpse-graphics.game-settings.team0`, {defaultValue: 0}),
+				shootouts: await replicant<string>("shootouts", `glimpse-graphics.game-settings.team0`, {defaultValue: ""})
 			},
 			{
 				enabled: await replicant<boolean>("enabled", `glimpse-graphics.game-settings.team1`, {defaultValue: true}),
@@ -136,6 +137,7 @@ export async function loadReplicants() {
 				player2PenaltyNumber: await replicant<string>("player2PenaltyNumber", `glimpse-graphics.game-settings.team1`, {defaultValue: ""}),
 				player2PenaltyClock: await replicant<string>("player2PenaltyClock", `glimpse-graphics.game-settings.team1`, {defaultValue: ""}),
 				timeouts: await replicant<number>("timeouts", `glimpse-graphics.game-settings.team1`, {defaultValue: 0}),
+				shootouts: await replicant<string>("shootouts", `glimpse-graphics.game-settings.team1`, {defaultValue: ""})
 			}
 		],
 		announcements: {

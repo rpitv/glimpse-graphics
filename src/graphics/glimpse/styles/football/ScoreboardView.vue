@@ -18,7 +18,7 @@
 			<div :class="'down-counter-announcements ' + (announcement.length ? 'announcement' : 'down')">
 				{{announcement ? announcement :
 					(replicants.scoreboard.possession.value === '' ? '' :
-						`${getSuffix(replicants.scoreboard.down.value).toUpperCase()} & ${replicants.scoreboard.yardsToGo.value}`)}}
+						`${getSuffix(replicants.scoreboard.down.value)} & ${replicants.scoreboard.yardsToGo.value}`)}}
 			</div>
 		</div>
 	</div>
@@ -27,7 +27,7 @@
 			<div class="animation-text">
 			</div>
 			<div class="image-container">
-			<img v-for="(i) in 10" :class="'animation-image ' + `image${i}`" :src="scoreImage">
+				<img v-for="(i) in 10" :class="'animation-image ' + `image${i}`" :src="scoreImage">
 			</div>
 		</div>
 	</div>
@@ -48,6 +48,10 @@ const replicants = await loadReplicants();
 
 const clock = replicants.scoreboard.clock;
 const period = replicants.scoreboard.period;
+
+// Resets the period and down when it loads
+period.value = 1;
+replicants.scoreboard.down.value = 1;
 
 const backgroundColor1 = ref<string>("#FFF700");
 const backgroundColor2 = ref<string>("#807C00");
@@ -102,13 +106,13 @@ const formattedClockTime = computed<string>(() => {
 
 function getSuffix(n: number) {
 	if(n == 1) {
-		return `${n}st`;
+		return `${n}ST`;
 	} else if(n == 2) {
-		return `${n}nd`;
+		return `${n}ND`;
 	} else if(n == 3) {
-		return `${n}rd`;
+		return `${n}RD`;
 	} else {
-		return `${n}th`;
+		return `${n}TH`;
 	}
 }
 
@@ -151,7 +155,9 @@ function runAnimation() {
 	const t1 = gsap.timeline();
 	const t2 = gsap.timeline();
 	const t3 = gsap.timeline();
+	// Element goes from hidden to shown for 1 second
 	t1.fromTo(".animation", {opacity: 0}, {duration: 1, opacity: 1});
+	// Gets goal type (touchdown or field goal) and slowly spaces it out
 	t1.fromTo(".animation-text", {letterSpacing: "normal", opacity: 0}, {
 		duration: 3,
 		innerText: String(scoreType.value[0]).toUpperCase(),
@@ -159,7 +165,9 @@ function runAnimation() {
 		ease: CustomEase.create("custom", "M0,0 C0.04,0.122 0.043,0.235 0.07,0.338 0.125,0.554 0.194,0.721 0.302,0.822 0.494,1.002 0.818,1.001 1,1 "),
 		opacity: 1
 	}, "-=0.25");
+	// Text disappears before the animation fully ends
 	t1.to(".animation-text", { duration: 1, opacity: 0}, "-=0.25");
+	// Gets the team name and slowly spaces it out
 	t1.fromTo(".animation-text", {letterSpacing: "2vw"}, {
 		duration: 2,
 		innerText: String(scoreType.value[1]).toUpperCase(),
@@ -167,15 +175,11 @@ function runAnimation() {
 		letterSpacing: "4vw",
 		ease: CustomEase.create("custom", "M0,0 C0.04,0.122 0.043,0.235 0.07,0.338 0.125,0.554 0.194,0.721 0.302,0.822 0.494,1.002 0.818,1.001 1,1 ")
 	}, "-=0.15");
-	/*
-	 The clip transition doesn't perform a smooth transition, so we use
-	 variables where over the duration, the variable change gradually
-	 */
-	t2.fromTo(".animation-image", {top: "6.1vh"},
+	// Whilst t1 is happening, we can have another element change, which will have the images go up and down
+	t2.fromTo(".animation-image", {top: "6.6vh"},
 		{duration: 3, top: "0.5vh", stagger: stagger, ease: CustomEase.create("custom", "M0,0 C0.104,0.204 0.456,2.144 1,0 ")}, "+=1");
-	t3.fromTo(".animation-image", {"--clip": "3.1vh"}, {"--clip": "0vh", duration: 0.65, stagger: stagger}, "+=1.1");
-	t3.to(".animation-image", {"--clip": "3.1vh", duration: 0.6, stagger: stagger}, "-=0.9");
 	t1.to(".animation", {duration: 1, opacity: 0}, "+=0.75");
+	t3.fromTo(".animation-image", {"--rotate": "0deg"}, {duration: 6, "--rotate": "720deg", stagger: stagger}, "+=1");
 }
 
 const scoreType = ref<string[]>([]);
@@ -385,15 +389,18 @@ const possessionColors = computed(() => {
 	display: flex;
 	justify-content: space-around;
 	width: 77.35vw;
+	height: 6.2vh;
+	overflow: hidden;
 }
 
 .animation-image {
-	--clip: 3.1vh;
+	--rotate: 0deg;
 	position: relative;
 	height: 3.1vh;
 	top: 6vh;
-	clip-path: inset(0 0 var(--clip) 0);
 	z-index: -5;
+	filter: drop-shadow(0.2vh 0.2vw 0.2vw black);
+	rotate: var(--rotate);
 }
 
 </style>
