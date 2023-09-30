@@ -14,6 +14,7 @@
 		<TransitionGroup tag="div" name="animation-team-msg">
 			<div v-for="(msg, i) in messages" :key="msg.id" :style="{'z-index': BASE_Z_INDEX - i}"
 				 :class="['teamAnnouncement', (i === 0 ? '' : 'fade-in'), (i === messages.length - 1 ? 'fade-out' : '')]">
+				{{ computedMessage(msg).value }}
 			</div>
 			<div v-if="props.powerplayStatus.length" class="teamAnnouncement">
 				{{ props.powerplayStatus }} {{ props.powerplayClock }}
