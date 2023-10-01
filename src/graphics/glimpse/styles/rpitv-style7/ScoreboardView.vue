@@ -68,7 +68,7 @@ onMounted(() => {
 	if (elmLeftTeamViewContainer.value && elmRightTeamViewContainer.value) {
 		// todo fix ts typing here
 		// @ts-ignore
-		elmTeamViewContainerHeight.value = Math.max(elmLeftTeamViewContainer.value.offsetHeight, elmRightTeamViewContainer.value.offsetHeight) + "px";
+		elmTeamViewContainerHeight.value = Math.max(elmLeftTeamViewContainer.value.getBoundingClientRect().height, elmRightTeamViewContainer.value.getBoundingClientRect().height) + "px";
 	}
 });
 
@@ -153,9 +153,9 @@ const tga_enabled = ref<boolean>(false);
  * @param team either team 0 or team 1
  */
 function triggerGoalAnimation(team: 0 | 1) {
-	tga_color_primary.value = replicants.teams[team].scoreboardPrimaryColor.value;
-	tga_color_secondary.value = replicants.teams[team].scoreboardSecondaryColor.value;
-	tga_school_name.value = replicants.teams[team].name.value.toUpperCase();
+	tga_color_primary.value = replicants.teams[team].primaryColor.value;
+	tga_color_secondary.value = replicants.teams[team].secondaryColor.value;
+	tga_school_name.value = replicants.teams[team].name.value.toUpperCase().trim();
 	tga_enabled.value = true;
 
 	// note this timeout should be twice css animation duration in "#bannerScore .tga-visible"
@@ -382,7 +382,7 @@ $clock-zero-red: #862f28;
 	position: absolute;
 	z-index: 3;
 	left: $main-pos-left;
-	top: calc($main-pos-top + v-bind(elmClockHeight) + 6 * $padding-var);
+	top: calc($main-pos-top + v-bind(elmClockHeight) + 4 * $padding-var);
 	width: $scoreboard-width;
 	display: flex;
 	align-items: center;
@@ -397,7 +397,7 @@ $clock-zero-red: #862f28;
 		width: $scoreboard-width;
 		text-align: center;
 		font-size: $clock-font-size;
-		height: calc(v-bind(elmTeamViewContainerHeight) - 4 * $padding-var);
+		height: calc(v-bind(elmTeamViewContainerHeight) - 14 * $padding-var);
 		background: linear-gradient(to right, v-bind(tga_color_secondary), v-bind(tga_color_primary), v-bind(tga_color_secondary));
 		color: white;
 		animation: expand_center 4s ease-out 2 alternate;
