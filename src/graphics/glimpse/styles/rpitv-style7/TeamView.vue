@@ -127,7 +127,7 @@ $team-font-size: 2.3vh;
 
 	.logo {
 		margin-top: 0.5vh;
-		height: 3.5vh;
+		height: 2.6vh;
 		z-index: calc(v-bind(BASE_Z_INDEX) + 1);
 		filter: drop-shadow(0.2vh 0.2vw 0.2vw black);
 	}
