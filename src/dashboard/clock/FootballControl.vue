@@ -7,7 +7,7 @@
 			<v-text-field label="Current Down" class="inputs" clearable variant="outlined" type="number" v-model="replicants.scoreboard.down.value"/>
 		</div>
 		<div>
-			<v-text-field label="Current Yards To Go" class="inputs" clearable variant="outlined" type="number" v-model="replicants.scoreboard.yardsToGo.value"/>
+			<v-text-field label="Current Yards To Go" class="inputs" clearable variant="outlined"  v-model.lazy="replicants.scoreboard.yardsToGo.value"/>
 		</div>
 		<div>
 			<v-combobox label="Possession"

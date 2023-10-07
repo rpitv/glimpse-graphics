@@ -1,15 +1,17 @@
 <template>
 	<div class="team-name">
-		<h3>
-			Insert Team Name
-		</h3>
+		<h2>
+			<span v-if="!disable"> Current School: </span> {{replicants.teams[props.teamIndex].schoolName.value}}
+		</h2>
 	</div>
 	<div>
-		Current Results: {{props.team.value}}
+		<h4>
+			Current Results: {{replicants.teams[props.teamIndex].shootouts.value}}
+		</h4>
 	</div>
 	<div>
-		<v-btn @click="addScore">✅</v-btn>
-		<v-btn @click="addMiss">❌</v-btn>
+		<v-btn class="ma-3" @click="addValue('✅')" variant="outlined" :disabled="disable">Add ✅</v-btn>
+		<v-btn class="ma-3" @click="addValue('❌')" variant="outlined" :disabled="disable">Add ❌</v-btn>
 	</div>
 </template>
 
@@ -20,35 +22,28 @@ import {PropType} from "vue";
 const replicants = await loadReplicants();
 
 const props = defineProps({
-	team: {
-		type: Object,
+	teamIndex: {
+		type: Number,
 		required: true,
-		default() {
-			return {value: ""}
-		}
 	},
-	index: {
-		type: Object,
+	disable: {
+		type: Boolean,
 		required: true,
-		default() {
-			return {value: 0}
-		}
 	}
 });
 
-function addScore() {
-	let teamShootout = props.team.value.split('');
-	teamShootout[props.index.value] = "✅";
-	props.team.value = teamShootout.join('');
-	props.index.value++;
+const emit = defineEmits({
+	addVal(value: string, team: number) {
+		return true;
+	}
+})
+
+function addValue(value: string) {
+	// First we'll check
+
+	emit('addVal', value, props.teamIndex);
 }
 
-function addMiss() {
-	let teamShootout = props.team.value.split('');
-	teamShootout[props.index.value] = "❌";
-	props.team.value = teamShootout.join('');
-	props.index.value++;
-}
 
 </script>
 

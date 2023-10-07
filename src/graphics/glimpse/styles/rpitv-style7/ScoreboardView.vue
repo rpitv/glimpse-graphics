@@ -31,11 +31,11 @@
 				<TeamView :team-id="1" :text-color="teamLeftTextColor" id="teamLeft"
 						  :powerplayStatus="announcementType === 'away' ? powerPlayStatus : ''"
 						  :powerplayClock="announcementType === 'away' ? powerPlayClock : ''
-			"/>
+				"/>
 				<TeamView :team-id="0" :text-color="teamRightTextColor" id="teamRight"
 						  :powerplayStatus="announcementType === 'home' ? powerPlayStatus : ''"
 						  :powerplayClock="announcementType === 'home' ? powerPlayClock : ''
-			"/>
+				"/>
 			</div>
 		</div>
 	</div>
@@ -177,7 +177,7 @@ watch([replicants.teams[0].score, replicants.teams[1].score], (newValue, oldValu
 
 // POWER PLAY SYNC TO:DO CLEAN UP THE CODE
 const announcementType = computed(() => {
-	if (!replicants.sync.values.penalty.value)
+	if (!replicants.scoreboard.penalty.value)
 		return "";
 	// If we are in overtime
 	if (replicants.gameSettings.periods.overtime.count.value + 3 < period.value)

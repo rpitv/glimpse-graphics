@@ -152,7 +152,7 @@ function computedMessage(message: Announcement) {
 
 // POWERPLAY SYNC
 const announcementType = computed(() => {
-	if (!replicants.sync.values.penalty.value)
+	if (!replicants.scoreboard.penalty.value)
 		return "";
 	// If we are in overtime
 	if (replicants.gameSettings.periods.overtime.count.value + 3 < period.value)

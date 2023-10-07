@@ -37,7 +37,6 @@ export async function loadReplicants() {
 						timeouts: await replicant<boolean>("timeouts", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 					}
 				],
-				penalty: await replicant<boolean>("penalty", "glimpse-graphics.sync-settings.values", {defaultValue: true}),
 				baseball: {
 					bottomTop: await replicant<boolean>("bottomTop", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),
 					outsStrikesBalls: await replicant<boolean>("outsStrikesBall", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),
@@ -98,7 +97,8 @@ export async function loadReplicants() {
 			playClock: await replicant<number>('playClock', 'glimpse-graphics.playClock', {defaultValue: 0}),
 			down: await replicant<number>('down', 'glimpse-graphics.down', {defaultValue: 1}),
 			yardsToGo: await replicant<string>('yardsToGo', 'glimpse-graphics.yardsToGo', {defaultValue: ""}),
-			possession: await replicant<string>('possession', 'glimpse-graphics.possession', {defaultValue: ''})
+			possession: await replicant<string>('possession', 'glimpse-graphics.possession', {defaultValue: ''}),
+			penalty: await replicant<boolean>("penalty", "glimpse-graphics.penalty", {defaultValue: true}),
 		},
 		teams: [
 			{

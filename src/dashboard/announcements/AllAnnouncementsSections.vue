@@ -1,8 +1,8 @@
 <template>
 <div>
-	<n-checkbox class="ml-10" v-model:checked="syncPenalties"
+	<n-checkbox class="ml-10" v-model:checked="showPenalties"
 				v-if="replicants.gameSettings.style.value === 'espn' || replicants.gameSettings.style.value === 'rpitv-style7'">
-		Sync penalties
+		Show Penalties
 	</n-checkbox>
 	<n-grid :cols="2" :x-gap="10" :y-gap="10">
 		<n-grid-item>
@@ -40,7 +40,7 @@ import {loadReplicants} from "../../browser-common/replicants";
 import Shootouts from "./Shootouts.vue";
 
 const replicants = await loadReplicants();
-const syncPenalties = replicants.sync.values.penalty;
+const showPenalties = replicants.scoreboard.penalty;
 
 
 const homeMessages = replicants.announcements.team1;

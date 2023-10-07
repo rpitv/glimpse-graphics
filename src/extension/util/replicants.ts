@@ -32,7 +32,6 @@ export const replicants = {
 					timeouts: nodecg().Replicant<boolean>("timeouts", "glimpse-graphics.sync-settings.values.team2", {defaultValue: false}),
 				}
 			],
-			penalty: nodecg().Replicant<boolean>("penalty", "glimpse-graphics.sync-settings.values", {defaultValue: true}),
 			baseball: {
 				bottomTop: nodecg().Replicant<boolean>("bottomTop", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),
 				outsStrikesBalls: nodecg().Replicant<boolean>("outsStrikesBall", "glimpse-graphics.sync-settings.values.baseball", {defaultValue: false}),
@@ -89,7 +88,9 @@ export const replicants = {
 		playClock: nodecg().Replicant<number>('playClock', 'glimpse-graphics.playClock', {defaultValue: 0}),
 		down: nodecg().Replicant<number>('down', 'glimpse-graphics.down', {defaultValue: 1}),
 		yardsToGo: nodecg().Replicant<string>('yardsToGo', 'glimpse-graphics.yardsToGo', {defaultValue: ""}),
-		possession: nodecg().Replicant<string>('possession', 'glimpse-graphics.possession', {defaultValue: ''})
+		possession: nodecg().Replicant<string>('possession', 'glimpse-graphics.possession', {defaultValue: ''}),
+		penalty:  nodecg().Replicant<boolean>("penalty", "glimpse-graphics.penalty", {defaultValue: true}),
+
 	},
 	teams: [
 		{
@@ -109,6 +110,8 @@ export const replicants = {
 			player2PenaltyNumber: nodecg().Replicant<string>("player2PenaltyNumber", `glimpse-graphics.game-settings.team0`, {defaultValue: ""}),
 			player2PenaltyClock: nodecg().Replicant<string>("player2PenaltyClock", `glimpse-graphics.game-settings.team0`, {defaultValue: ""}),
 			timeouts: nodecg().Replicant<number>("timeouts", `glimpse-graphics.game-settings.team0`, {defaultValue: 0}),
+			shootouts: nodecg().Replicant<string>("shootouts", `glimpse-graphics.game-settings.team0`, {defaultValue: ""})
+
 		},
 		{
 			enabled: nodecg().Replicant<boolean>("enabled", `glimpse-graphics.game-settings.team1`, {defaultValue: true}),
@@ -127,6 +130,7 @@ export const replicants = {
 			player2PenaltyNumber: nodecg().Replicant<string>("player2PenaltyNumber", `glimpse-graphics.game-settings.team1`, {defaultValue: ""}),
 			player2PenaltyClock: nodecg().Replicant<string>("player2PenaltyClock", `glimpse-graphics.game-settings.team1`, {defaultValue: ""}),
 			timeouts: nodecg().Replicant<number>("timeouts", `glimpse-graphics.game-settings.team1`, {defaultValue: 0}),
+			shootouts: nodecg().Replicant<string>("shootouts", `glimpse-graphics.game-settings.team1`, {defaultValue: ""})
 		}
 	],
 	announcements: {
