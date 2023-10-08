@@ -1,88 +1,34 @@
 <template>
-	<div class="mainTeamView">
-		<n-grid class="containerTeamView" cols="3">
-			<n-grid-item>
-				<img class="logo" ref="teamLogoImg" :src="team.logo.value" :alt="team.schoolName.value">
-			</n-grid-item>
-			<n-grid-item class="teamViewAbbreviation">
-				{{ team.abbreviation.value }}
-			</n-grid-item>
-			<n-grid-item class="teamViewScore">
-				{{ team.score.value }}
-			</n-grid-item>
-		</n-grid>
-		<TransitionGroup tag="div" name="animation-team-msg">
-			<div v-for="(msg, i) in messages" :key="msg.id" :style="{'z-index': BASE_Z_INDEX - i}"
-				 :class="['teamAnnouncement', (i === 0 ? '' : 'fade-in'), (i === messages.length - 1 ? 'fade-out' : '')]">
-				{{ computedMessage(msg).value }}
-			</div>
-			<div v-if="props.powerplayStatus.length" class="teamAnnouncement">
-				{{ props.powerplayStatus }} {{ props.powerplayClock }}
-			</div>
-		</TransitionGroup>
+	<div class="team">
+		<div class="logo">
+			<img :src="replicants.teams[props.teamId].logo.value" id="logoImg">
+		</div>
+		<div class="team-name">
+			{{ replicants.teams[props.teamId].abbreviation.value }}
+		</div>
+		<div class="team-score">
+			{{ replicants.teams[props.teamId].score.value }}
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import {loadReplicants} from "../../../../browser-common/replicants";
-import {Announcement} from "../../../../common/Announcement";
-import {computed, onMounted, ref} from "vue";
-import {NGrid, NGridItem} from "naive-ui";
-import {calcLinearGrad, isLighter} from "../../../../dashboard/util";
+import { loadReplicants } from "../../../../browser-common/replicants";
+import {computed, ref, watch} from "vue";
+import { calcLinearGrad, isLighter } from "../../../../dashboard/util";
+import isDarkColor from "is-dark-color";
+
+const replicants = await loadReplicants();
 
 const props = defineProps({
 	teamId: {
 		type: Number,
 		required: true
-	},
-	textColor: {
-		type: String,
-		required: true
-	},
-	powerplayStatus: {
-		type: String,
-		required: false,
-		default: ""
-	},
-	powerplayClock: {
-		type: String,
-		required: false,
-		default: ""
 	}
-});
-
-const replicants = await loadReplicants();
-const team = replicants.teams[props.teamId];
-const messages = replicants.announcements[<"team1" | "team2">`team${props.teamId + 1}`];
-const teamPrimaryColor = team.primaryColor;
-const teamTextColor = props.textColor;
-const BASE_Z_INDEX = 69;
-
-const teamLogoImg = ref<HTMLImageElement>();
-const teamViewHeight = ref<string>("5vh");
-onMounted(() => {
-	if (teamLogoImg.value)
-		teamViewHeight.value = teamLogoImg.value.offsetHeight + "px";
 })
+const team = replicants.teams[props.teamId];
+const fontColor = ref("black");
 
-function computedMessage(message: Announcement) {
-	return computed(() => {
-		if (!message.timer || !message.timer.visible) {
-			return message.message;
-		} else {
-			const timeRemaining = message.timer.length - (message.timer.startedAt - replicants.scoreboard.clock.time.value);
-			const minutes = Math.max(0, Math.floor(timeRemaining / 60000)).toString();
-			// noinspection TypeScriptUnresolvedFunction - Not sure why this is happening in my IDE
-			const seconds = Math.max(0, Math.floor((timeRemaining % 60000) / 1000)).toString().padStart(2, "0");
-
-			if (minutes === "0") {
-				return message.message + " 0:" + seconds;
-			} else {
-				return message.message + " " + minutes + ":" + seconds;
-			}
-		}
-	})
-}
 
 const color1 = computed(() => {
 	const linearGradient = calcLinearGrad(team.primaryColor.value);
@@ -98,87 +44,39 @@ const color2 = computed(() => {
 	return linearGradient;
 })
 
+if (isDarkColor(color1.value)) fontColor.value = "white";
+else fontColor.value = "black";
+
+watch(color1, (n, o) => {
+	if (isDarkColor(n)) fontColor.value = "white";
+	else fontColor.value = "black";
+})
+
 </script>
 
-<style scoped lang="scss">
-$announcement-font-size: 1.6vh;
-$announcement-font-size-inverted: -1.7vh;
-$padding-var: 0.1vh;
-$team-font-size: 2.3vh;
-
-.mainTeamView {
-	z-index: calc(v-bind(BASE_Z_INDEX) + 1);
-	color: v-bind(teamTextColor);
-}
-
-
-.containerTeamView {
-	height: calc(v-bind(teamViewHeight) + $padding-var);
-	padding-bottom: $padding-var;
-	background: linear-gradient(v-bind(color1), v-bind(color2));
-	z-index: calc(v-bind(BASE_Z_INDEX) + 3);
-	position: relative;
+<style scoped>
+.team {
 	display: flex;
-	flex-direction: row;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
-	font-size: $team-font-size;
-	align-content: center;
-
-	.logo {
-		margin-top: 0.5vh;
-		height: 2.6vh;
-		z-index: calc(v-bind(BASE_Z_INDEX) + 1);
-		filter: drop-shadow(0.2vh 0.2vw 0.2vw black);
-	}
-
-	.teamViewAbbreviation {
-		padding: $padding-var;
-		text-align: center;
-	}
-
-	.teamViewScore {
-		text-align: right;
-		transform: translateX(-0.5vw);
-		width: 100%;
-		padding: $padding-var;
-	}
+	background: linear-gradient(v-bind(color1), v-bind(color2));
+	font-size: 3.5vh;
+	color: v-bind(fontColor);
+	text-shadow: 0 0 0.2vh black;
 }
 
-.teamAnnouncement {
-	padding-top: $padding-var;
-	padding-bottom: $padding-var;
-	font-size: $announcement-font-size;
-	background-color: v-bind(teamPrimaryColor);
-	position: relative;
-	font-weight: bold;
+.logo {
+	display: flex;
+	align-items: center;
 }
 
-// Vue animation classes for insertion and removing team announcements
-.animation-team-msg-move,
-.animation-team-msg-enter-active,
-.animation-team-msg-leave-active {
-	transition: all 1s ease-out;
+#logoImg {
+	margin-left: 0.3vw;
+	max-height: 3.6vh;
+	max-width: 2.5vw;
+	filter: drop-shadow(0 0 0.1vw black);
 }
-
-.animation-team-msg-leave-active {
-	position: absolute;
-	width: 50%;
-
-	&:not(.fade-out) {
-		padding-bottom: 2 * $padding-var;
-	}
-}
-
-.animation-team-msg-enter-from {
-	transform: translateY(-100%);
-
-	&.fade-in {
-		opacity: 0;
-	}
-}
-
-.animation-team-msg-leave-to {
-	transform: translateY(-100%);
+.team-score {
+	margin-right: 0.3vw;
 }
 </style>

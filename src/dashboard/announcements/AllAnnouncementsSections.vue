@@ -17,9 +17,8 @@
 			<h2>Global</h2>
 			<AnnouncementsSection v-model:announcements="globalMessages" :global-announcements="true"/>
 		</n-grid-item>
-		<n-grid-item v-if="replicants.gameSettings.style.value === 'espn'">
+		<n-grid-item v-if="replicants.gameSettings.style.value === 'espn' || replicants.gameSettings.style.value === 'rpitv-style7'">
 			<h2>Shootouts</h2>
-
 			<Shootouts/>
 		</n-grid-item>
 		<n-grid-item v-if="replicants.gameSettings.style.value === 'espn'">
