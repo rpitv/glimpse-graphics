@@ -1,13 +1,13 @@
 <template>
 	<div class="scoreboard">
 		<div class="game-info">
-			<div class="logo">
+			<div class="logo game-info-child">
 				<img id="logoImg" :src="rpitvLogo">
 			</div>
-			<div class="clock">
+			<div class="clock game-info-child">
 				{{ formattedClockTime }}
 			</div>
-			<div class="period">
+			<div class="period game-info-child">
 				{{ formattedPeriod }}
 			</div>
 		</div>
@@ -590,7 +590,7 @@ onMounted(() => {
 
 </script>
 
-<style scoped>
+<style scoped scss>
 @font-face {
 	font-family: "Malgun Gothic Bold";
 	src: url("../../../../assets/rpitv-modern/MalgunGothicBold.ttf") format('truetype');
@@ -623,12 +623,12 @@ onMounted(() => {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-	> div {
-		width: 7vw;
-		font-size: 3.3vh;
-	}
 	color: white;
 	z-index: 100;
+}
+.game-info-child {
+	font-size: 3.3vh;
+	width: 7vw;
 }
 
 .logo {
@@ -646,14 +646,12 @@ onMounted(() => {
 	display: flex;
 	justify-content: space-evenly;
 	height: 5vh;
-	> div {
-		width: 10.5vw;
-	}
 	top: 4vh;
 	z-index: 1;
 }
 
 .team-view-1 {
+	width: 10.5vw;
 	position: absolute;
 	left: 0vw;
 	height: 5vh;
@@ -662,6 +660,7 @@ onMounted(() => {
 .team-view-2 {
 	position: absolute;
 	left: 10.5vw;
+	width: 10.5vw;
 	height: 5vh;
 }
 
