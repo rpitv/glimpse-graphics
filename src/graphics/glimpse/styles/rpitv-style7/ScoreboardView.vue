@@ -29,6 +29,7 @@
 			<p v-if="replicants.announcements.global.value.length > 0">
 				{{ computedMessage(replicants.announcements.global.value[0]).value }}
 			</p>
+
 			<p v-else-if="announcementType === 'global'">
 				{{ powerPlayStatus }} {{ powerPlayClock }}
 			</p>
@@ -37,7 +38,7 @@
 			<p v-if="replicants.announcements.team2.value.length > 0">
 				{{ computedMessage(replicants.announcements.team2.value[0]).value}}
 			</p>
-			<p v-else-if="announcementType === 'home'">
+			<p v-else-if="announcementType === 'away'">
 				{{ powerPlayStatus }} {{ powerPlayClock }}
 			</p>
 			<p v-else-if="replicants.gameSettings.showShootouts.value">
@@ -48,9 +49,9 @@
 			<p v-if="replicants.announcements.team1.value.length > 0">
 				{{ computedMessage(replicants.announcements.team1.value[0]).value}}
 			</p>
-			<p v-else-if="announcementType === 'away'">
-				{{ powerPlayStatus }} {{ powerPlayClock }}
-			</p>
+			<p v-else-if="announcementType === 'home'">
+			{{ powerPlayStatus }} {{ powerPlayClock }}
+		</p>
 			<p v-else-if="replicants.gameSettings.showShootouts.value">
 				{{replicants.teams[0].shootouts.value}}
 			</p>
@@ -238,17 +239,16 @@ watch(replicants.gameSettings.showShootouts, (n, o) => {
 		showTeam(team1Pos, ".team1");
 		showTeam(team2Pos, ".team2");
 	}
-
 })
 
 function forHome() {
-	if (!team2Open) {
-		showTeam(team2Pos, ".team2");
-		team2Open = !team2Open;
-	}
-	if (team1Open && !replicants.announcements.team1.value.length) {
-		hideTeam(team1Pos, ".team1");
+	if (!team1Open) {
+		showTeam(team1Pos, ".team1");
 		team1Open = !team1Open;
+	}
+	if (team2Open && !replicants.announcements.team1.value.length) {
+		hideTeam(team2Pos, ".team2");
+		team2Open = !team2Open;
 	}
 	if (globalOpen && !replicants.announcements.global.value.length) {
 		hideGlobal();
@@ -257,13 +257,13 @@ function forHome() {
 }
 
 function forAway() {
-	if (team2Open && !replicants.announcements.team2.value.length) {
-		hideTeam(team2Pos, ".team2");
-		team2Open = !team2Open;
-	}
-	if (!team1Open) {
-		showTeam(team1Pos, ".team1");
+	if (team1Open && !replicants.announcements.team2.value.length) {
+		hideTeam(team1Pos, ".team1");
 		team1Open = !team1Open;
+	}
+	if (!team2Open) {
+		showTeam(team2Pos, ".team2");
+		team2Open = !team2Open;
 	}
 	if (globalOpen && !replicants.announcements.global.value.length) {
 		hideGlobal();
@@ -272,13 +272,13 @@ function forAway() {
 }
 
 function forGlobal() {
-	if (team2Open && !replicants.announcements.team2.value.length) {
-		hideTeam(team2Pos, ".team2");
-		team2Open = !team2Open;
-	}
 	if (team1Open && !replicants.announcements.team1.value.length) {
 		hideTeam(team1Pos, ".team1");
 		team1Open = !team1Open;
+	}
+	if (team2Open && !replicants.announcements.team2.value.length) {
+		hideTeam(team2Pos, ".team2");
+		team2Open = !team2Open;
 	}
 	if (!globalOpen) {
 		showGlobal();
@@ -287,13 +287,14 @@ function forGlobal() {
 }
 
 function forNone() {
-	if (team2Open && !replicants.announcements.team2.value.length) {
-		hideTeam(team2Pos, ".team2");
-		team2Open = !team2Open;
-	}
+	console.log(team1Open);
 	if (team1Open && !replicants.announcements.team1.value.length) {
 		hideTeam(team1Pos, ".team1");
 		team1Open = !team1Open;
+	}
+	if (team2Open && !replicants.announcements.team2.value.length) {
+		hideTeam(team2Pos, ".team2");
+		team2Open = !team2Open;
 	}
 	if (globalOpen && !replicants.announcements.global.value.length) {
 		hideGlobal();
@@ -582,11 +583,11 @@ onMounted(() => {
 	}
 	if (announcementType.value === "home" || replicants.announcements.team1.value.length > 0) {
 		team2Open = true;
-		showTeam(team2Pos, ".team2");
+		showTeam(team1Pos, ".team1");
 	}
 	if (announcementType.value === "away" || replicants.announcements.team2.value.length > 0) {
 		team1Open = true;
-		showTeam(team1Pos, ".team1");
+		showTeam(team2Pos, ".team2");
 	}
 })
 
