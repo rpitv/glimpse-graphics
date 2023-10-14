@@ -142,7 +142,7 @@ function runAnimation(team: number) {
 	t4.fromTo(".text2", {left: "75vw", letterSpacing: 0}, {left: "0vw", duration: 1, ease: "power3.out"}, "-=1.25");
 	t1.to(".game-info", {top: "0vh", duration: disappearance}, "+=4");
 	t2.to(".team-view-1", {top: "0vh", left: "0vw", duration: disappearance}, "+=4");
-	t3.to(".team-view-2", {top: "0vh", left: "10.5vw", duration: disappearance}, "+=4");
+	t3.to(".team-view-2", {top: "0vh", left: "12.5vw", duration: disappearance}, "+=4");
 }
 
 watch(replicants.teams[0].score, (n, o) => {
@@ -722,7 +722,7 @@ onMounted(() => {
 	justify-content: center;
 	align-items: center;
 	height: 9vh;
-	width: 21vw;
+	width: 25vw;
 }
 
 .animation-text {
@@ -742,7 +742,7 @@ onMounted(() => {
 	white-space: nowrap;
 	text-align: center;
 	overflow: visible;
-	width: 21vw;
+	width: 25vw;
 }
 
 .show {
