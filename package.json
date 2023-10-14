@@ -14,7 +14,7 @@
   "scripts": {
     "start": "node ../..",
     "start-dev": "npx nodemon ../.. | npx pino-pretty -c",
-    "clean": "rm -rf node_modules/.cache && rm -rf shared/dist && rm -rf dashboard && rm -rf graphics && rm -rf extension",
+    "clean": "npx ts-node clean.ts",
     "build": "run-s clean build:*",
     "build:browser": "vite build",
     "build:extension": "tsc -b tsconfig.extension.json",
@@ -29,7 +29,6 @@
     "firebase": "^9.22.1",
     "fs-extra": "^11.1.0",
     "gsap": "^3.12.2",
-    "is-dark-color": "^1.2.0",
     "module-alias": "^2.2.2",
     "pinia": "^2.0.23",
     "pino": "^8.7.0",

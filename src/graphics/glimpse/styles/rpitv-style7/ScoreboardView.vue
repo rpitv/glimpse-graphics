@@ -69,7 +69,7 @@ import {Announcement} from "../../../../common/Announcement";
 import gsap from "gsap";
 import {calcLinearGrad, isLighter} from "../../../../dashboard/util";
 import { CustomEase } from "gsap/CustomEase";
-import isDarkColor from "is-dark-color";
+import { isLightColor } from "../../../../dashboard/util";
 
 gsap.registerPlugin(CustomEase);
 
@@ -119,7 +119,7 @@ function hideTeam(teamPos: Ref<string>, element: string) {
 
 function runAnimation(team: number) {
 	scoreboardColor.value = replicants.teams[team].primaryColor.value;
-	animationText.value = isDarkColor(scoreboardColor.value) ? "white" : "black";
+	animationText.value = isLightColor(scoreboardColor.value) ? "white" : "black";
 	const t1 = gsap.timeline();
 	const t2 = gsap.timeline();
 	const t3 = gsap.timeline();
@@ -187,19 +187,19 @@ const team2Color2 = computed(() => {
 	return linearGradient;
 });
 
-if (isDarkColor(team1Color1.value)) team1FontColor.value = "white";
+if (isLightColor(team1Color1.value)) team1FontColor.value = "white";
 else team1FontColor.value = "black";
 
-if (isDarkColor(team2Color1.value)) team2FontColor.value = "white";
+if (isLightColor(team2Color1.value)) team2FontColor.value = "white";
 else team2FontColor.value = "black";
 
 watch(team1Color1, (n, o) => {
-	if (isDarkColor(n)) team1FontColor.value = "white";
+	if (isLightColor(n)) team1FontColor.value = "white";
 	else team1FontColor.value = "black";
 });
 
 watch(team2Color1, (n, o) => {
-	if (isDarkColor(n)) team2FontColor.value = "white";
+	if (isLightColor(n)) team2FontColor.value = "white";
 	else team2FontColor.value = "black";
 });
 /*
@@ -609,7 +609,7 @@ onMounted(() => {
 	top: 6vh;
 	left: 4vw;
 	height: 9vh;
-	width: 21vw;
+	width: 25vw;
 	background: v-bind(scoreboardColor);
 	font-family: "Malgun Gothic Bold";
 	font-weight: bold;
@@ -620,7 +620,7 @@ onMounted(() => {
 .game-info {
 	position: absolute;
 	text-align: center;
-	width: 21vw;
+	width: 25vw;
 	height: 4vh;
 	background: linear-gradient(#767676 1%, #000000);
 	display: flex;
@@ -654,7 +654,7 @@ onMounted(() => {
 }
 
 .team-view-1 {
-	width: 10.5vw;
+	width: 12.5vw;
 	position: absolute;
 	left: 0vw;
 	height: 5vh;
@@ -662,8 +662,8 @@ onMounted(() => {
 
 .team-view-2 {
 	position: absolute;
-	left: 10.5vw;
-	width: 10.5vw;
+	left: 12.5vw;
+	width: 12.5vw;
 	height: 5vh;
 }
 
@@ -687,7 +687,7 @@ onMounted(() => {
 .team-announcements {
 	text-shadow: 0 0 0.2vh black;
 	position: absolute;
-	width: 10.5vw;
+	width: 12.5vw;
 	height: 3.5vh;
 	background-color: darkgray;
 	z-index: 0;

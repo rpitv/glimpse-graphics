@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import {computed, defineProps, ref, watch} from "vue";
 import {loadReplicants} from "../../../../browser-common/replicants";
-import isDarkColor from "is-dark-color";
+import { isLightColor } from "../../../../dashboard/util";
 import { calcLinearGrad, isLighter } from "../../../../dashboard/util";
 import gsap from "gsap";
 
@@ -57,12 +57,13 @@ const color4 = computed(() => {
 	return linearGradient;
 })
 
-const nameColor = computed(() => isDarkColor(team.primaryColor.value) ? "white" : "black");
-const scoreColor = computed(() => isDarkColor(team.secondaryColor.value) ? "white" : "black");
+const nameColor = computed(() => isLightColor(team.primaryColor.value) ? "white" : "black");
+const scoreColor = computed(() => isLightColor(team.secondaryColor.value) ? "white" : "black");
 
 const score = ref(team.score.value);
 watch(team.score, (n, o) => {
-	gsap.to(score, { duration: 1, value: Number(n) || 0, ease: "power1.out"}, "+=0.5")
+	const t1 = gsap.timeline();
+	t1.to(score, { duration: 1, value: Number(n), ease: "power1.out"}, "+=8")
 })
 
 </script>
@@ -109,8 +110,6 @@ watch(team.score, (n, o) => {
 }
 
 .logo {
-	width: 100%;
-	height: 100%;
 	max-width: 3vw;
 	max-height: 5vh;
 	filter: drop-shadow(0.5vh 0.3vh 0.3vh #292929);

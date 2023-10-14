@@ -16,7 +16,7 @@
 import { loadReplicants } from "../../../../browser-common/replicants";
 import {computed, ref, watch} from "vue";
 import { calcLinearGrad, isLighter } from "../../../../dashboard/util";
-import isDarkColor from "is-dark-color";
+import { isLightColor } from "../../../../dashboard/util";
 
 const replicants = await loadReplicants();
 
@@ -44,11 +44,11 @@ const color2 = computed(() => {
 	return linearGradient;
 })
 
-if (isDarkColor(color1.value)) fontColor.value = "white";
+if (isLightColor(color1.value)) fontColor.value = "white";
 else fontColor.value = "black";
 
 watch(color1, (n, o) => {
-	if (isDarkColor(n)) fontColor.value = "white";
+	if (isLightColor(n)) fontColor.value = "white";
 	else fontColor.value = "black";
 })
 
@@ -77,6 +77,11 @@ watch(color1, (n, o) => {
 	filter: drop-shadow(0 0 0.1vw black);
 }
 .team-score {
-	margin-right: 0.3vw;
+	margin-right: 0.5vw;
+}
+
+.team-name {
+	position: absolute;
+	left: 3vw;
 }
 </style>

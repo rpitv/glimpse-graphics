@@ -41,7 +41,7 @@ import {computed, ref, watch} from "vue";
 import {calcLinearGrad, isLighter} from "../../../../dashboard/util";
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
-import isDarkColor from "is-dark-color";
+import { isLightColor } from "../../../../dashboard/util";
 
 gsap.registerPlugin(CustomEase);
 const replicants = await loadReplicants();
@@ -55,6 +55,7 @@ replicants.scoreboard.down.value = 1;
 
 const backgroundColor1 = ref<string>("#FFF700");
 const backgroundColor2 = ref<string>("#807C00");
+const announcementTextColor = ref<string>("white");
 
 const announcement = computed(() => {
 	let currentState = "";
@@ -88,6 +89,8 @@ const announcement = computed(() => {
 		backgroundColor1.value = "#FFF700";
 		backgroundColor2.value = "#807C00";
 	}
+	console.log("THE FK")
+	announcementTextColor.value = isLightColor(backgroundColor1.value) ? "white" : "black";
 	return currentState;
 })
 
@@ -168,11 +171,11 @@ function runAnimation() {
 	// Text disappears before the animation fully ends
 	t1.to(".animation-text", { duration: 1, opacity: 0}, "-=0.25");
 	// Gets the team name and slowly spaces it out
-	t1.fromTo(".animation-text", {letterSpacing: "2vw"}, {
+	t1.fromTo(".animation-text", {letterSpacing: "1vw"}, {
 		duration: 2,
 		innerText: String(scoreType.value[1]).toUpperCase(),
 		opacity: 1,
-		letterSpacing: "4vw",
+		letterSpacing: "2vw",
 		ease: CustomEase.create("custom", "M0,0 C0.04,0.122 0.043,0.235 0.07,0.338 0.125,0.554 0.194,0.721 0.302,0.822 0.494,1.002 0.818,1.001 1,1 ")
 	}, "-=0.15");
 	// Whilst t1 is happening, we can have another element change, which will have the images go up and down
@@ -199,11 +202,11 @@ watch(replicants.teams[0].score, (n, o) => {
 	if (!isLighter(replicants.teams[0].primaryColor.value, linearGradient)) {
 		teamColor2.value = replicants.teams[0].primaryColor.value;
 		teamColor1.value = linearGradient;
-		nameColor.value =  isDarkColor(teamColor2.value) ? "white" : "black";
+		nameColor.value =  isLightColor(teamColor2.value) ? "white" : "black";
 	} else {
 		teamColor1.value = replicants.teams[0].primaryColor.value;
 		teamColor2.value = linearGradient;
-		nameColor.value =  isDarkColor(teamColor1.value) ? "white" : "black";
+		nameColor.value =  isLightColor(teamColor1.value) ? "white" : "black";
 	}
 	runAnimation();
 })
@@ -217,11 +220,11 @@ watch(replicants.teams[1].score, (n, o) => {
 	if (!isLighter(replicants.teams[1].primaryColor.value, linearGradient)) {
 		teamColor2.value = replicants.teams[1].primaryColor.value;
 		teamColor1.value = linearGradient;
-		nameColor.value =  isDarkColor(teamColor2.value) ? "white" : "black";
+		nameColor.value =  isLightColor(teamColor2.value) ? "white" : "black";
 	} else {
 		teamColor1.value = replicants.teams[1].primaryColor.value;
 		teamColor2.value = linearGradient;
-		nameColor.value =  isDarkColor(teamColor1.value) ? "white" : "black";
+		nameColor.value =  isLightColor(teamColor1.value) ? "white" : "black";
 	}
 	runAnimation();
 });
@@ -233,22 +236,22 @@ const possessionColors = computed(() => {
 		if (!isLighter(replicants.teams[0].primaryColor.value, linearGradient)) {
 			colors[0] = replicants.teams[0].primaryColor.value;
 			colors[1] = linearGradient;
-			colors[2] = isDarkColor(colors[0]) ? "white" : "black";
+			colors[2] = isLightColor(colors[0]) ? "white" : "black";
 		} else {
 			colors[1] = replicants.teams[0].primaryColor.value;
 			colors[0] = linearGradient;
-			colors[2] =  isDarkColor(colors[1]) ? "white" : "black";
+			colors[2] =  isLightColor(colors[1]) ? "white" : "black";
 		}
 	} else if (replicants.scoreboard.possession.value === '>') {
 		const linearGradient = calcLinearGrad(replicants.teams[1].primaryColor.value);
 		if (!isLighter(replicants.teams[1].primaryColor.value, linearGradient)) {
 			colors[0] = replicants.teams[1].primaryColor.value;
 			colors[1] = linearGradient;
-			colors[2] = isDarkColor(colors[0]) ? "white" : "black";
+			colors[2] = isLightColor(colors[0]) ? "white" : "black";
 		} else {
 			colors[1] = replicants.teams[1].primaryColor.value;
 			colors[0] = linearGradient;
-			colors[2] =  isDarkColor(colors[1]) ? "white" : "black";
+			colors[2] =  isLightColor(colors[1]) ? "white" : "black";
 		}
 	}
 	return colors;
@@ -346,6 +349,7 @@ const possessionColors = computed(() => {
 
 .announcement {
 	background: linear-gradient(v-bind(backgroundColor1), v-bind(backgroundColor2));
+	color: v-bind(announcementTextColor);
 }
 
 .down {
