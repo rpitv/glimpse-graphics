@@ -1,8 +1,7 @@
 <template>
-	<v-card class="shootouts">
+	<v-card class="shootouts" >
 		<div v-if="block" >
-			<h1 v-if="replicants.gameSettings.periods.shootouts.value &&
-				replicants.scoreboard.period.value !==
+			<h1 v-if="replicants.scoreboard.period.value !==
 				replicants.gameSettings.periods.count.value +
 				replicants.gameSettings.periods.overtime.count.value + 1">
 				Shootouts are currently not ready yet

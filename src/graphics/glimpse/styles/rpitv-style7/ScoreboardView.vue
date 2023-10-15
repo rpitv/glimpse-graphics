@@ -701,7 +701,7 @@ onMounted(() => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	left: 14.5vw;
+	left: 16.5vw;
 	background: linear-gradient(v-bind(team1Color1), v-bind(team1Color2));
 	color: v-bind(team1FontColor);
 }
