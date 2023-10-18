@@ -77,7 +77,7 @@ const replicants = await loadReplicants();
 
 const clock = replicants.scoreboard.clock;
 const period = replicants.scoreboard.period;
-const announcementsPos = ref("17vw");
+const announcementsPos = ref("21vw");
 const team1Pos = ref("11.5vh");
 const team2Pos = ref("11.5vh");
 const scoreboardColor = ref("black");
@@ -93,14 +93,14 @@ function showGlobal() {
 	const t1 = gsap.timeline();
 	const t2 = gsap.timeline();
 	t1.to(".global-announcements", {opacity: 1, duration: 1});
-	t2.to(announcementsPos, {value: "25vw", duration: 1.5});
+	t2.to(announcementsPos, {value: "29vw", duration: 1.5});
 }
 
 function hideGlobal() {
 	const t1 = gsap.timeline();
 	const t2 = gsap.timeline();
 	t1.to(".global-announcements", {opacity: 0, duration: 1});
-	t2.to(announcementsPos, {value: "17vw", duration: 1.5});
+	t2.to(announcementsPos, {value: "21vw", duration: 1.5});
 }
 
 function showTeam(teamPos: Ref<string>, element: string) {
