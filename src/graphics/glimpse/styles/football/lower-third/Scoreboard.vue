@@ -32,8 +32,10 @@ watch(replicants.lowerThird.scoreboard, (newValue, oldValue) => {
 		team1Score.value = replicants.teams[1].score.value;
 		const scoreboardPeriod = replicants.scoreboard.period.value;
 		if (scoreboardPeriod <= 2)
-			period.value = "End of First Half";
-		else if (scoreboardPeriod <= 4)
+			period.value = "Halftime";
+		else if (scoreboardPeriod <= 4 && replicants.gameSettings.periods.overtime.length.value >= 1)
+			period.value = "Overtime";
+		else
 			period.value = "Final";
 	}
 });
