@@ -1,7 +1,13 @@
 <template>
 	<img :src="commentators" :style="{'bottom': `${offset}vh`}">
-	<div id="leftPerson" :style="{'bottom': `${offset + 17.5}vh`}">{{replicants.lowerThird.commentators.leftPerson.value}}</div>
-	<div id="rightPerson" :style="{'bottom': `${offset + 17.5}vh`}">{{replicants.lowerThird.commentators.rightPerson.value}}</div>
+	<div :class="replicants.lowerThird.commentators.rightPerson.value ? 'leftPerson' : 'center'"
+		 :style="{'bottom': `${offset + 17.5}vh`}">
+		{{replicants.lowerThird.commentators.leftPerson.value}}
+	</div>
+	<div :class="replicants.lowerThird.commentators.leftPerson.value ? 'rightPerson' : 'center'"
+		 :style="{'bottom': `${offset + 17.5}vh`}">
+		{{replicants.lowerThird.commentators.rightPerson.value}}
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -37,15 +43,22 @@ img {
 	height: 100vh;
 	transition: opacity 1s;
 }
-#leftPerson {
+.leftPerson {
 	left: 14vw;
 	width: 36vw;
 	text-align: center;
 	font-size: 3.5vh;
 }
-#rightPerson {
+.rightPerson {
 	left: 50vw;
 	width: 36.5vw;
+	text-align: center;
+	font-size: 3.5vh;
+}
+
+.center {
+	width: 100vw;
+	left: 0vw;
 	text-align: center;
 	font-size: 3.5vh;
 }

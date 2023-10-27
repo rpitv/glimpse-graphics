@@ -96,9 +96,11 @@ const sportsPresetList = ref([
 	}
 ]);
 
+
+
 // auto reloads all pages associate with glimpse-graphics when style switches
 watch(replicants.gameSettings.style, (n, o) => {
-	window.socket.emit('graphic:requestBundleRefresh', 'glimpse-graphics');
+	(window as any).socket.emit('graphic:requestBundleRefresh', 'glimpse-graphics');
 });
 
 </script>
