@@ -24,7 +24,7 @@
 		</n-grid>
 
 		<div v-if="isTeamEnabled">
-			<v-combobox label="Schools"
+			<v-combobox label="Enter a school name"
 						class="mt-10" density="comfortable"
 						:items="schoolNames"
 						item-title="name"
@@ -112,6 +112,7 @@ try {
 			abbr: "RPI",
 			abbr14: "Rensselaer",
 			logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/RPI_Engineers.svg/1200px-RPI_Engineers.svg.png",
+			lowerThirdLogo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4f/Rensselaer_at_Hartford_Seal.svg/1200px-Rensselaer_at_Hartford_Seal.svg.png",
 			name: "Rensselaer Polytechnic Institute",
 			primaryColor: "#d6001c",
 			secondaryColor: "#ab2328",
@@ -150,8 +151,6 @@ const teamPrimaryColor = team.primaryColor;
 const teamSecondaryColor = team.secondaryColor;
 const teamLogo = team.logo;
 
-console.log(teamName);
-
 const syncName = replicants.sync.values.teams[props.id].name;
 const syncAbbreviation = replicants.sync.values.teams[props.id].abbreviation;
 const syncScore = replicants.sync.values.teams[props.id].score;
@@ -159,6 +158,8 @@ const syncShots = replicants.sync.values.teams[props.id].shots;
 const syncTimeouts = replicants.sync.values.teams[props.id].timeouts;
 
 const availableSchools = ref();
+
+const lowerThirdSchool = props.id === 1 ? replicants.lowerThird.school1Logo : replicants.lowerThird.school2Logo;
 
 async function saveSchool() {
 	if (!availableSchools.value || !teamAbbr.value || !teamSchoolName.value ||
@@ -168,6 +169,11 @@ async function saveSchool() {
 		msg.value = "One of the fields is empty. Make sure all the fields are filled in order to save."
 		return;
 	}
+	if (!lowerThirdSchool.value) {
+		subtitle.value = "Error";
+		color.value = "red";
+		msg.value = "The lower third logo for this team is empty"
+	}
 	// If we can reach the database...
 	try {
 		// Add it to database
@@ -176,6 +182,7 @@ async function saveSchool() {
 			abbr: teamAbbr.value,
 			abbr14: teamSchoolName.value,
 			logo: teamLogo.value,
+			lowerThirdLogo: lowerThirdSchool.value,
 			name: availableSchools.value,
 			primaryColor: teamPrimaryColor.value,
 			secondaryColor: teamSecondaryColor.value,
@@ -193,6 +200,7 @@ async function saveSchool() {
 				schools.value[middle].abbr = teamAbbr.value;
 				schools.value[middle].abbr14 = teamSchoolName.value;
 				schools.value[middle].logo = teamLogo.value;
+				schools.value[middle].lowerThirdLogo = lowerThirdSchool.value;
 				schools.value[middle].primaryColor = teamPrimaryColor.value;
 				schools.value[middle].secondaryColor = teamSecondaryColor.value;
 				schools.value[middle].teamName = teamName.value;
@@ -224,6 +232,7 @@ async function saveSchool() {
 			abbr: teamAbbr.value,
 			abbr14: teamSchoolName.value,
 			logo: teamLogo.value,
+			lowerThirdSchool: lowerThirdSchool.value,
 			name: availableSchools.value,
 			primaryColor: teamPrimaryColor.value,
 			secondaryColor: teamSecondaryColor.value,
@@ -261,12 +270,13 @@ function loadSchool() {
 	while (left <= right) {
 		let middle = Math.floor((left + right) / 2);
 		if (availableSchools.value === schools.value[middle].name) {
-			teamAbbr.value = schools.value[middle].abbr
-			teamSchoolName.value = schools.value[middle].abbr14
-			teamLogo.value = schools.value[middle].logo
-			teamPrimaryColor.value = schools.value[middle].primaryColor
-			teamSecondaryColor.value = schools.value[middle].secondaryColor
-			teamName.value = schools.value[middle].teamName
+			teamAbbr.value = schools.value[middle].abbr;
+			teamSchoolName.value = schools.value[middle].abbr14;
+			teamLogo.value = schools.value[middle].logo;
+			teamPrimaryColor.value = schools.value[middle].primaryColor;
+			teamSecondaryColor.value = schools.value[middle].secondaryColor;
+			teamName.value = schools.value[middle].teamName;
+			lowerThirdSchool.value = schools.value[middle].lowerThirdLogo;
 			subtitle.value = "Success";
 			color.value = "green";
 			msg.value = "School exists, successfully loaded its values.";

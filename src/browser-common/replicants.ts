@@ -153,6 +153,7 @@ export async function loadReplicants() {
 			commentators: {
 				show: await replicant<boolean>("show", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
 				leftPerson: await replicant<string>("leftPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Fridgen"}),
+				centerPerson: await replicant<string>("centerPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan"}),
 				rightPerson: await replicant<string>("rightPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Bahl"}),
 				offset: {
 					enabled: await replicant<boolean>("enabled", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),

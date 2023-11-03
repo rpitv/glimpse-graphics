@@ -17,7 +17,7 @@
 			>
 				{{ replicants.lowerThird.scoreboard.value ? "Hide" : "Show" }}
 			</v-btn>
-			Display Scoreboard
+			Display Scoreboard (Scoreboard values are updated once when the scoreboard (not lower third) is hidden)
 		</h2>
 		<br>
 		<h2>
@@ -42,12 +42,12 @@
 		<br>
 		<v-row>
 			<v-col cols="6">
-				<v-text-field label="Home/Left Team Logo (Only input trusted URLS)"
-							  v-model="replicants.lowerThird.school1Logo.value"
+				<v-text-field label="Home/Left Team Logo (Only input trusted URLS)" variant="outlined"
+					  v-model="replicants.lowerThird.school1Logo.value"
 				/>
 			</v-col>
 			<v-col cols="6">
-				<v-text-field label="Away/Right Team Logo (Only input trusted URLS)"
+				<v-text-field label="Away/Right Team Logo (Only input trusted URLS)" variant="outlined"
 							  v-model="replicants.lowerThird.school2Logo.value"/>
 			</v-col>
 		</v-row>
@@ -77,13 +77,17 @@
 			</h2>
 			<br>
 			<v-row>
-				<v-col cols="6">
+				<v-col cols="4">
 					<v-text-field v-model="replicants.lowerThird.commentators.leftPerson.value"
-								  label="Left Person"/>
+						  label="Left Person" variant="outlined"/>
 				</v-col>
-				<v-col cols="6">
+				<v-col cols="4">
+					<v-text-field v-model="replicants.lowerThird.commentators.centerPerson.value"
+						  label="Center Person" variant="outlined"/>
+				</v-col>
+				<v-col cols="4">
 					<v-text-field v-model="replicants.lowerThird.commentators.rightPerson.value"
-								  label="Right Person"/>
+						  label="Right Person" variant="outlined"/>
 				</v-col>
 			</v-row>
 		</div>
@@ -128,7 +132,7 @@
 			<div>
 				<br>
 				<v-text-field v-model="replicants.lowerThird.endGraphics.title.value" style="max-width: 40%"
-							  label="End Graphics Title"/>
+						  label="End Graphics Title" variant="outlined"/>
 			</div>
 			<div>
 				<br>

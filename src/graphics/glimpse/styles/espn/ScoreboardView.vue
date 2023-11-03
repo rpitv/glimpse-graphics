@@ -1,7 +1,7 @@
 <template>
 	<div :class="'scoreboard ' + (replicants.scoreboard.visible.value ? '' : 'hidden')">
 		<div class="team2-section">
-			<TeamView class="bordered" v-if="teamTwo.enabled.value" :team-id="1" />
+			<TeamView class="bordered" v-if="teamTwo.enabled.value" :team-id="1" style="height: 90%" />
 			<p v-if="announcementType === 'away'" class="announcement-section team2">
 				{{ powerPlayStatus }} {{ powerPlayClock }}
 			</p>
@@ -14,7 +14,7 @@
 		</div>
 
 		<div class="team1-section">
-			<TeamView class="bordered no-left-border" v-if="teamOne.enabled.value" :team-id="0" />
+			<TeamView class="bordered no-left-border" v-if="teamOne.enabled.value" :team-id="0" style="height: 90%" />
 			<p v-if="announcementType === 'home'" class="announcement-section team1">
 				{{ powerPlayStatus }} {{ powerPlayClock }}
 			</p>
@@ -226,8 +226,7 @@ const powerPlayStatus = computed(() => {
 	if (replicants.gameSettings.periods.count.value >= 5 && replicants.gameSettings.periods.shootouts.value)
 		return "";
 	// If we are in overtime
-	if (replicants.gameSettings.periods.count.value === 4 || (replicants.gameSettings.periods.count.value === 5 &&
-		replicants.gameSettings.periods.shootouts.value !== true)) {
+	if (replicants.gameSettings.periods.count.value === 4 || (replicants.gameSettings.periods.count.value === 5 && !replicants.gameSettings.periods.shootouts.value)) {
 		// If two away players are on penalty...
 		if (replicants.teams[1].player1PenaltyNumber.value && replicants.teams[1].player2PenaltyNumber.value) {
 			// If two home players are on penalty
@@ -356,7 +355,6 @@ const powerPlayClock = computed(() => {
 	align-items: center;
 	font-family: 'Roboto', sans-serif;
 	background-color: rgb(220, 220, 220);
-	height: 3.7vh;
 
 	hr {
 		height: 50%;

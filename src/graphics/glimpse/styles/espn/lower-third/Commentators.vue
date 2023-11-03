@@ -1,12 +1,15 @@
 <template>
 	<img :src="commentators" :style="{'bottom': `${offset}vh`}">
-	<div :class="replicants.lowerThird.commentators.rightPerson.value ? 'leftPerson' : 'center'"
-		 :style="{'bottom': `${offset + 17.5}vh`}">
-		{{replicants.lowerThird.commentators.leftPerson.value}}
-	</div>
-	<div :class="replicants.lowerThird.commentators.leftPerson.value ? 'rightPerson' : 'center'"
-		 :style="{'bottom': `${offset + 17.5}vh`}">
-		{{replicants.lowerThird.commentators.rightPerson.value}}
+	<div class="commentators-container">
+		<p v-if="replicants.lowerThird.commentators.leftPerson.value" :style="{'bottom': `${offset}vh`}">
+			{{ replicants.lowerThird.commentators.leftPerson.value }}
+		</p>
+		<p v-if="replicants.lowerThird.commentators.centerPerson.value" :style="{'bottom': `${offset}vh`}">
+			{{ replicants.lowerThird.commentators.centerPerson.value }}
+		</p>
+		<p v-if="replicants.lowerThird.commentators.rightPerson.value" :style="{'bottom': `${offset}vh`}">
+			{{ replicants.lowerThird.commentators.rightPerson.value }}
+		</p>
 	</div>
 </template>
 
@@ -43,23 +46,15 @@ img {
 	height: 100vh;
 	transition: opacity 1s;
 }
-.leftPerson {
-	left: 14vw;
-	width: 36vw;
-	text-align: center;
-	font-size: 3.5vh;
-}
-.rightPerson {
-	left: 50vw;
-	width: 36.5vw;
-	text-align: center;
-	font-size: 3.5vh;
-}
 
-.center {
-	width: 100vw;
-	left: 0vw;
-	text-align: center;
+.commentators-container {
+	position: absolute;
+	left: 14vw;
+	bottom: 20vh;
+	width: 72vw;
+	height: 5vh;
+	display: flex;
+	justify-content: space-evenly;
 	font-size: 3.5vh;
 }
 </style>

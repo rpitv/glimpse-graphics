@@ -146,6 +146,7 @@ export const replicants = {
 		commentators: {
 			show: nodecg().Replicant<boolean>("show", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
 			leftPerson: nodecg().Replicant<string>("leftPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Fridgen"}),
+			centerPerson: nodecg().Replicant<string>("centerPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan"}),
 			rightPerson: nodecg().Replicant<string>("rightPerson", `glimpse-graphics.images.lowerThird`, {defaultValue: "Dan Bahl"}),
 			offset: {
 				enabled: nodecg().Replicant<boolean>("enabled", `glimpse-graphics.images.lowerThird`, {defaultValue: false}),
