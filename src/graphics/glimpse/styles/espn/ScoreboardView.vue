@@ -41,12 +41,6 @@
 				{{ computedMessage(replicants.announcements.global.value[0]).value }}
 			</p>
 		</div>
-		<div class="left-team-score">
-			{{ replicants.teams[1].score.value }}
-		</div>
-		<div class="right-team-score">
-			{{ replicants.teams[0].score.value }}
-		</div>
 	</div>
 </template>
 
@@ -408,28 +402,5 @@ const powerPlayClock = computed(() => {
 		width: calc(21.5vw - 1em);
 		transform: translateX(-0.075vw);
 	}
-}
-.left-team-score {
-	position: absolute;
-	left: 0;
-	width: 44.4%;
-	height: 90%;
-	font-weight: 900;
-	font-size: 220%;
-	text-align: right;
-	font-family: 'Roboto', sans-serif;
-	color: rgb(73,73,68);
-}
-
-.right-team-score {
-	position: absolute;
-	left: 0;
-	width: 66%;
-	height: 90%;
-	font-weight: 900;
-	font-size: 220%;
-	text-align: right;
-	font-family: 'Roboto', sans-serif;
-	color: rgb(73,73,68);
 }
 </style>
