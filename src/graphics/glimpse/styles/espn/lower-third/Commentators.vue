@@ -54,7 +54,7 @@ img {
 	width: 72vw;
 	height: 5vh;
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: space-around;
 	font-size: 3.5vh;
 }
 </style>
