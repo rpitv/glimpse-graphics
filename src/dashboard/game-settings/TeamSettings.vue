@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import {defineProps, ref} from "vue";
 import {v4} from "uuid";
-import {NCheckbox, NInput, NInputGroup, NColorPicker, NGrid, NGridItem, NButton} from "naive-ui";
+import {NCheckbox, NInputGroup, NColorPicker, NGrid, NGridItem, NButton} from "naive-ui";
 import {loadReplicants} from "../../browser-common/replicants";
 import { collection, query, getDocs, doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -90,6 +90,8 @@ const color = ref<string>();
 const msg = ref<string>();
 const schoolNames = ref<string[]>([]);
 const schools = ref<any[]>([]);
+
+const emit = defineEmits(['save, load, delete']);
 
 
 // Get the schools from the database
@@ -159,7 +161,7 @@ const syncTimeouts = replicants.sync.values.teams[props.id].timeouts;
 
 const availableSchools = ref();
 
-const lowerThirdSchool = props.id === 1 ? replicants.lowerThird.school1Logo : replicants.lowerThird.school2Logo;
+const lowerThirdSchool = (props.id === 0) ? replicants.lowerThird.school1Logo : replicants.lowerThird.school2Logo;
 
 async function saveSchool() {
 	if (!availableSchools.value || !teamAbbr.value || !teamSchoolName.value ||
@@ -255,8 +257,6 @@ async function saveSchool() {
 		}
 	}
 }
-
-
 
 function loadSchool() {
 	if (!availableSchools.value) {
