@@ -1,3 +1,7 @@
+# Notice: This project has been relocated to the [rpitv/glimpse](https://github.com/rpitv/glimpse) monorepo
+
+---
+
 # Glimpse Graphics
 
 NodeCG bundle designed for use with the RPI TV Glimpse infrastructure.
